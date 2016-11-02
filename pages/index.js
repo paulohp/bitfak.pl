@@ -33,7 +33,6 @@ export default class extends React.Component {
   }
   handleSubmit(event){
     event.preventDefault();
-
     let immediatelyAvailableReference = base.push('requests', {
       data: { 
         beneficiary_name: this.state.beneficiary_name,
