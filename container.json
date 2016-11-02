@@ -2,7 +2,7 @@
 	"id": "nodejs",
 	"type": "wedeploy/nodejs",
 	"hooks": {
-		"build": "npm install && next build",
+		"build": "npm install && npm install -g next && next build",
         "start": "next start"
 	}
 }
