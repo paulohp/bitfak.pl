@@ -4,35 +4,35 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _inherits2 = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\babel-runtime/helpers/inherits');
+var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _getPrototypeOf = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\babel-runtime/core-js/object/get-prototype-of');
+var _getPrototypeOf = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\babel-runtime/helpers/classCallCheck');
+var _classCallCheck2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\babel-runtime/helpers/createClass');
+var _createClass2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\babel-runtime/helpers/possibleConstructorReturn');
+var _possibleConstructorReturn2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/possibleConstructorReturn');
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _react = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\react\\react.js');
+var _react = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/react/react.js');
 
 var _react2 = _interopRequireDefault(_react);
 
 var _reBulma = require('re-bulma');
 
-var _css = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\next\\dist\\lib\\css.js');
+var _css = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/next/dist/lib/css.js');
 
-var _link = require('C:\\Users\\Paulo_Pires\\Workspaces\\Github\\bitfak-frontend\\node_modules\\next\\dist\\lib\\link.js');
+var _link = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/next/dist/lib/link.js');
 
 var _link2 = _interopRequireDefault(_link);
 
@@ -83,7 +83,6 @@ var _class = function (_React$Component) {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
-
       var immediatelyAvailableReference = base.push('requests', {
         data: {
           beneficiary_name: this.state.beneficiary_name,
@@ -231,11 +230,3 @@ var styles = {
     padding: '40px 40px 80px 0px'
   }
 };
-    if (module.hot) {
-      module.hot.accept()
-      if (module.hot.status() !== 'idle') {
-        var Component = module.exports.default || module.exports
-        next.router.update('/', Component)
-      }
-    }
-  

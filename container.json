@@ -3,6 +3,6 @@
 	"type": "wedeploy/nodejs",
 	"hooks": {
 		"build": "npm install && npm install -g next && next build",
-        "start": "next start"
+        "start": "next start -p 80"
 	}
 }
