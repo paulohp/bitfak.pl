@@ -44,13 +44,9 @@ var _reBase = require('re-base');
 
 var _reBase2 = _interopRequireDefault(_reBase);
 
-var _bitgo = require('bitgo');
-
-var _bitgo2 = _interopRequireDefault(_bitgo);
+require('whatwg-fetch');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var bitgo = new _bitgo2.default({ accessToken: '88c1399d63594eb14a745de6d0abd3e7831300fc596a8c39d9b48a989e814f17' });
 
 var base = _reBase2.default.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -88,23 +84,31 @@ var _class = function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
+      var _this2 = this;
+
       event.preventDefault();
-      var immediatelyAvailableReference = base.push('requests', {
-        data: {
-          beneficiary_name: this.state.beneficiary_name,
-          beneficiary_address: this.state.beneficiary_address,
-          account: this.state.account,
-          amount: this.state.amount,
-          description: this.state.description
-        },
-        then: function then(err) {
-          if (!err) {
-            Router.transitionTo('dashboard');
+      fetch('http://localhost:3000/api/v1/address/create', { method: 'POST' }).then(function (result) {
+        return result.json();
+      }).then(function (address) {
+        console.log(address);
+        var immediatelyAvailableReference = base.push('requests', {
+          data: {
+            beneficiary_name: _this2.state.beneficiary_name,
+            beneficiary_address: _this2.state.beneficiary_address,
+            account: _this2.state.account,
+            amount: _this2.state.amount,
+            description: _this2.state.description,
+            address: address
+          },
+          then: function then(err) {
+            if (!err) {
+              Router.transitionTo('dashboard');
+            }
           }
-        }
+        });
+        //available immediately, you don't have to wait for the callback to be called
+        var generatedKey = immediatelyAvailableReference.key;
       });
-      //available immediately, you don't have to wait for the callback to be called
-      var generatedKey = immediatelyAvailableReference.key;
     }
   }, {
     key: 'render',
