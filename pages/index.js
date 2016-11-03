@@ -4,6 +4,9 @@ import { style } from 'next/css'
 import Link from 'next/link'
 import Recaptcha from 'react-recaptcha';
 import Rebase from 're-base';
+import BitGo from 'bitgo';
+
+const bitgo = new BitGo({accessToken: '88c1399d63594eb14a745de6d0abd3e7831300fc596a8c39d9b48a989e814f17'});
 
 const base = Rebase.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",

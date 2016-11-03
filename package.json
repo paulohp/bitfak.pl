@@ -4,11 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bitgo": "^2.0.4",
     "bulma": "^0.2.3",
     "next": "latest",
     "re-base": "^2.2.0",
     "re-bulma": "^0.2.1",
     "react-recaptcha": "^2.2.4",
+    "sha3": "^1.2.0",
     "sweetalert-react": "^0.4.4"
   },
   "scripts": {

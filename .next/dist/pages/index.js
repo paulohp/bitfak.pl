@@ -44,7 +44,13 @@ var _reBase = require('re-base');
 
 var _reBase2 = _interopRequireDefault(_reBase);
 
+var _bitgo = require('bitgo');
+
+var _bitgo2 = _interopRequireDefault(_bitgo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bitgo = new _bitgo2.default({ accessToken: '88c1399d63594eb14a745de6d0abd3e7831300fc596a8c39d9b48a989e814f17' });
 
 var base = _reBase2.default.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -230,3 +236,11 @@ var styles = {
     padding: '40px 40px 80px 0px'
   }
 };
+    if (module.hot) {
+      module.hot.accept()
+      if (module.hot.status() !== 'idle') {
+        var Component = module.exports.default || module.exports
+        next.router.update('/', Component)
+      }
+    }
+  
