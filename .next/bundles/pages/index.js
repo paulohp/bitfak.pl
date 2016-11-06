@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4a03dc2d994316f2565d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "b1a0a97906905251bd8e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -2275,15 +2275,15 @@ module.exports =
 
 	var _link2 = _interopRequireDefault(_link);
 
-	var _reactRecaptcha = __webpack_require__(175);
-
-	var _reactRecaptcha2 = _interopRequireDefault(_reactRecaptcha);
-
-	var _reBase = __webpack_require__(176);
+	var _reBase = __webpack_require__(175);
 
 	var _reBase2 = _interopRequireDefault(_reBase);
 
-	__webpack_require__(184);
+	__webpack_require__(183);
+
+	var _footer = __webpack_require__(184);
+
+	var _footer2 = _interopRequireDefault(_footer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2307,9 +2307,15 @@ module.exports =
 	      beneficiary_address: '',
 	      account: '',
 	      amount: '',
-	      description: ''
+	      description: '',
+	      isOpen: false,
+	      bitcoinPrice: '',
+	      totalPrice: 0,
+	      totalBtc: 0,
+	      isLoading: false
 	    };
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.openModal = _this.openModal.bind(_this);
 	    return _this;
 	  }
 
@@ -2321,138 +2327,352 @@ module.exports =
 	      this.setState(nextState);
 	    }
 	  }, {
-	    key: 'handleSubmit',
-	    value: function handleSubmit(event) {
+	    key: 'openModal',
+	    value: function openModal(event) {
 	      var _this2 = this;
 
 	      event.preventDefault();
-	      fetch('http://localhost:3000/api/v1/address/create', { method: 'POST' }).then(function (result) {
+	      this.setState({
+	        isOpen: true
+	      });
+	      var totalWithPercentage = Number(this.state.amount) + 5 * Number(this.state.amount) / 100;
+	      fetch('http://localhost:4000/api/v1/ticker/pln?amount=' + totalWithPercentage).then(function (result) {
+	        return result.json();
+	      }).then(function (json) {
+	        return _this2.setState({
+	          bitcoinPrice: json.bitcoinPrice,
+	          totalPrice: totalWithPercentage,
+	          totalBtc: json.totalToPay
+	        });
+	      });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(event) {
+	      var _this3 = this;
+
+	      this.setState({
+	        isLoading: true
+	      });
+	      fetch('http://localhost:4000/api/v1/address/create', { method: 'POST' }).then(function (result) {
 	        return result.json();
 	      }).then(function (address) {
-	        console.log(address);
 	        var immediatelyAvailableReference = base.push('requests', {
 	          data: {
-	            beneficiary_name: _this2.state.beneficiary_name,
-	            beneficiary_address: _this2.state.beneficiary_address,
-	            account: _this2.state.account,
-	            amount: _this2.state.amount,
-	            description: _this2.state.description,
+	            beneficiary_name: _this3.state.beneficiary_name,
+	            beneficiary_address: _this3.state.beneficiary_address,
+	            account: _this3.state.account,
+	            amount: _this3.state.amount,
+	            description: _this3.state.description,
+	            bitcoinPrice: _this3.state.bitcoinPrice,
+	            totalPrice: _this3.state.totalPrice,
+	            totalBtc: _this3.state.totalBtc,
 	            address: address
 	          },
 	          then: function then(err) {
 	            if (!err) {
-	              Router.transitionTo('dashboard');
+	              window.location = '/pay?id=' + immediatelyAvailableReference.key;
 	            }
 	          }
 	        });
-	        //available immediately, you don't have to wait for the callback to be called
-	        var generatedKey = immediatelyAvailableReference.key;
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this4 = this;
+
 	      return _react2.default.createElement(
-	        _reBulma.Container,
-	        { className: (0, _css.style)(styles.container) },
+	        'div',
+	        null,
 	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-	        ),
-	        _react2.default.createElement(
-	          _reBulma.Section,
-	          { className: (0, _css.style)(styles.section) },
+	          _reBulma.Container,
+	          { className: (0, _css.style)(styles.container) },
 	          _react2.default.createElement(
 	            'div',
-	            { className: (0, _css.style)(styles.header) },
-	            _react2.default.createElement(
-	              _reBulma.Title,
-	              { size: 'is3' },
-	              'Pay your bill with Bitcoin'
-	            ),
-	            _react2.default.createElement(
-	              _reBulma.Subtitle,
-	              null,
-	              'We only accept ',
-	              _react2.default.createElement('img', { src: 'static/bitcoin_logo.png', width: '70' })
-	            )
+	            null,
+	            _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
 	          ),
 	          _react2.default.createElement(
-	            'form',
-	            { onSubmit: this.handleSubmit },
+	            _reBulma.Section,
+	            { className: (0, _css.style)(styles.section) },
 	            _react2.default.createElement(
-	              _reBulma.Columns,
-	              null,
+	              'div',
+	              { className: (0, _css.style)(styles.header) },
 	              _react2.default.createElement(
-	                _reBulma.Column,
-	                null,
-	                _react2.default.createElement(
-	                  _reBulma.Label,
-	                  null,
-	                  'Beneficiary Name'
-	                ),
-	                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
+	                _reBulma.Title,
+	                { size: 'is3' },
+	                'Pay your bill with Bitcoin'
 	              ),
 	              _react2.default.createElement(
-	                _reBulma.Column,
+	                _reBulma.Subtitle,
 	                null,
-	                _react2.default.createElement(
-	                  _reBulma.Label,
-	                  null,
-	                  'Beneficiary Address'
-	                ),
-	                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_address'), value: this.state.beneficiary_address, type: 'text', placeholder: 'Beneficiary Address' })
+	                'We only accept ',
+	                _react2.default.createElement('img', { src: 'static/bitcoin_logo.png', width: '70' })
 	              )
 	            ),
 	            _react2.default.createElement(
-	              _reBulma.Columns,
-	              null,
+	              'form',
+	              { onSubmit: this.openModal },
 	              _react2.default.createElement(
-	                _reBulma.Column,
+	                _reBulma.Columns,
 	                null,
 	                _react2.default.createElement(
-	                  _reBulma.Label,
+	                  _reBulma.Column,
 	                  null,
-	                  'Account'
+	                  _react2.default.createElement(
+	                    _reBulma.Label,
+	                    null,
+	                    'Beneficiary Name'
+	                  ),
+	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
 	                ),
-	                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
+	                _react2.default.createElement(
+	                  _reBulma.Column,
+	                  null,
+	                  _react2.default.createElement(
+	                    _reBulma.Label,
+	                    null,
+	                    'Beneficiary Address'
+	                  ),
+	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_address'), value: this.state.beneficiary_address, type: 'text', placeholder: 'Beneficiary Address' })
+	                )
 	              ),
 	              _react2.default.createElement(
-	                _reBulma.Column,
+	                _reBulma.Columns,
 	                null,
 	                _react2.default.createElement(
-	                  _reBulma.Label,
+	                  _reBulma.Column,
 	                  null,
-	                  'Amount'
+	                  _react2.default.createElement(
+	                    _reBulma.Label,
+	                    null,
+	                    'Account'
+	                  ),
+	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
 	                ),
-	                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _reBulma.Columns,
-	              null,
+	                _react2.default.createElement(
+	                  _reBulma.Column,
+	                  null,
+	                  _react2.default.createElement(
+	                    _reBulma.Label,
+	                    null,
+	                    'Amount'
+	                  ),
+	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
+	                )
+	              ),
 	              _react2.default.createElement(
-	                _reBulma.Column,
+	                _reBulma.Columns,
 	                null,
 	                _react2.default.createElement(
-	                  _reBulma.Label,
+	                  _reBulma.Column,
 	                  null,
-	                  'Description of payment'
-	                ),
-	                _react2.default.createElement(_reBulma.Textarea, { onChange: this.handleChange.bind(this, 'description'), value: this.state.description, placeholder: 'Details about the payment', help: {
-	                    text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
-	                    color: 'isInfo'
-	                  } })
+	                  _react2.default.createElement(
+	                    _reBulma.Label,
+	                    null,
+	                    'Description of payment'
+	                  ),
+	                  _react2.default.createElement(_reBulma.Textarea, { onChange: this.handleChange.bind(this, 'description'), value: this.state.description, placeholder: 'Details about the payment', help: {
+	                      text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
+	                      color: 'isInfo'
+	                    } })
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _reBulma.Button,
+	                { type: 'submit', color: 'isInfo' },
+	                'Procced'
 	              )
 	            ),
 	            _react2.default.createElement(
-	              _reBulma.Button,
-	              { type: 'submit', color: 'isInfo' },
-	              'Procced'
+	              _reBulma.Modal,
+	              {
+	                type: 'card',
+	                headerContent: 'Are you sure?',
+	                footerContent: _react2.default.createElement(
+	                  'div',
+	                  { style: { padding: '20px' } },
+	                  this.state.isLoading && _react2.default.createElement(
+	                    _reBulma.Button,
+	                    { state: 'isLoading', color: 'isPrimary' },
+	                    'Loading'
+	                  ),
+	                  !this.state.isLoading && _react2.default.createElement(
+	                    _reBulma.Button,
+	                    { color: 'isInfo', onClick: this.handleSubmit },
+	                    'Let\'s do it.'
+	                  )
+	                ),
+	                isActive: this.state.isOpen,
+	                onCloseRequest: function onCloseRequest() {
+	                  return _this4.setState({ isOpen: false, isLoading: false });
+	                }
+	              },
+	              _react2.default.createElement(
+	                _reBulma.Content,
+	                null,
+	                _react2.default.createElement(
+	                  _reBulma.Table,
+	                  null,
+	                  _react2.default.createElement(
+	                    _reBulma.Tbody,
+	                    null,
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Beneficary Name:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.beneficiary_name
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Beneficary Address:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.beneficiary_address
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Account:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.account
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Amount:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.amount
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Description:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.description
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Bitcoin Price:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.bitcoinPrice
+	                        )
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Taxes:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          '5%'
+	                        )
+	                      )
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    _reBulma.Tfoot,
+	                    null,
+	                    _react2.default.createElement(
+	                      _reBulma.Tr,
+	                      null,
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        'Total:'
+	                      ),
+	                      _react2.default.createElement(
+	                        _reBulma.Td,
+	                        null,
+	                        _react2.default.createElement(
+	                          'strong',
+	                          null,
+	                          this.state.totalPrice
+	                        )
+	                      )
+	                    )
+	                  )
+	                )
+	              )
 	            )
 	          )
-	        )
+	        ),
+	        _react2.default.createElement(_footer2.default, null)
 	      );
 	    }
 	  }]);
@@ -8804,23 +9024,17 @@ module.exports =
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	!function(e,t){ true?module.exports=t(__webpack_require__(87)):"function"==typeof define&&define.amd?define(["react"],t):"object"==typeof exports?exports.ReactRecaptcha=t(require("react")):e.ReactRecaptcha=t(e.React)}(this,function(e){return function(e){function t(a){if(r[a])return r[a].exports;var o=r[a]={exports:{},id:a,loaded:!1};return e[a].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){"use strict";function a(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var r=0;r<t.length;r++){var a=t[r];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,r,a){return r&&e(t.prototype,r),a&&e(t,a),t}}(),s=r(1),c=a(s),l={className:s.PropTypes.string,onloadCallbackName:s.PropTypes.string,elementID:s.PropTypes.string,onloadCallback:s.PropTypes.func,verifyCallback:s.PropTypes.func,expiredCallback:s.PropTypes.func,render:s.PropTypes.string,sitekey:s.PropTypes.string,theme:s.PropTypes.string,type:s.PropTypes.string,verifyCallbackName:s.PropTypes.string,expiredCallbackName:s.PropTypes.string,size:s.PropTypes.string,tabindex:s.PropTypes.string},d={elementID:"g-recaptcha",onloadCallback:void 0,onloadCallbackName:"onloadCallback",verifyCallback:void 0,verifyCallbackName:"verifyCallback",expiredCallback:void 0,expiredCallbackName:"expiredCallback",render:"onload",theme:"light",type:"image",size:"normal",tabindex:"0"},u=function(){return"undefined"!=typeof window&&"undefined"!=typeof window.grecaptcha},f=void 0,y=function(e){function t(e){o(this,t);var r=n(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return r._renderGrecaptcha=r._renderGrecaptcha.bind(r),r.reset=r.reset.bind(r),r.state={ready:u()},r.state.ready||(f=setInterval(r._updateReadyState.bind(r),1e3)),r}return i(t,e),p(t,[{key:"componentDidMount",value:function(){this.state.ready&&this._renderGrecaptcha()}},{key:"componentDidUpdate",value:function(e,t){var r=this.props,a=r.render,o=r.onloadCallback;"explicit"===a&&o&&this.state.ready&&!t.ready&&this._renderGrecaptcha()}},{key:"reset",value:function(){this.state.ready&&grecaptcha.reset()}},{key:"_updateReadyState",value:function(){u()&&(this.setState({ready:!0}),clearInterval(f))}},{key:"_renderGrecaptcha",value:function(){grecaptcha.render(this.props.elementID,{sitekey:this.props.sitekey,callback:this.props.verifyCallback?this.props.verifyCallback:void 0,theme:this.props.theme,type:this.props.type,size:this.props.size,tabindex:this.props.tabindex,"expired-callback":this.props.expiredCallback?this.props.expiredCallback:void 0}),this.props.onloadCallback()}},{key:"render",value:function(){return"explicit"===this.props.render&&this.props.onloadCallback?c["default"].createElement("div",{id:this.props.elementID,"data-onloadcallbackname":this.props.onloadCallbackName,"data-verifycallbackname":this.props.verifyCallbackName}):c["default"].createElement("div",{className:"g-recaptcha","data-sitekey":this.props.sitekey,"data-theme":this.props.theme,"data-type":this.props.type,"data-size":this.props.size,"data-tabindex":this.props.tabindex})}}]),t}(s.Component);t["default"]=y,y.propTypes=l,y.defaultProps=d,e.exports=t["default"]},function(t,r){t.exports=e}])});
+	module.exports = __webpack_require__(176);
+
+
 
 /***/ },
 /* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(177);
-
-
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
-			module.exports = factory(__webpack_require__(178));
+			module.exports = factory(__webpack_require__(177));
 		else if(typeof define === 'function' && define.amd)
 			define(["firebase"], factory);
 		else {
@@ -9953,7 +10167,7 @@ module.exports =
 	;
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -9963,16 +10177,16 @@ module.exports =
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(179);
+	var firebase = __webpack_require__(178);
+	__webpack_require__(179);
 	__webpack_require__(180);
 	__webpack_require__(181);
 	__webpack_require__(182);
-	__webpack_require__(183);
 	module.exports = firebase;
 
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.5.3
@@ -10009,10 +10223,10 @@ module.exports =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(179);
+	var firebase = __webpack_require__(178);
 	/*! @license Firebase v3.5.3
 	    Build: 3.5.3-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -10229,10 +10443,10 @@ module.exports =
 
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(179);
+	var firebase = __webpack_require__(178);
 	/*! @license Firebase v3.5.3
 	    Build: 3.5.3-rc.3
 	    Terms: https://developers.google.com/terms
@@ -10496,10 +10710,10 @@ module.exports =
 
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(179);
+	var firebase = __webpack_require__(178);
 	/*! @license Firebase v3.5.3
 	    Build: 3.5.3-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -10608,10 +10822,10 @@ module.exports =
 
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(179);
+	var firebase = __webpack_require__(178);
 	/*! @license Firebase v3.5.3
 	    Build: 3.5.3-rc.3
 	    Terms: https://developers.google.com/terms */
@@ -10650,7 +10864,7 @@ module.exports =
 
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -11087,6 +11301,60 @@ module.exports =
 	  self.fetch.polyfill = true
 	})(typeof self !== 'undefined' ? self : this);
 
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(87);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reBulma = __webpack_require__(95);
+
+	var _css = __webpack_require__(91);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function () {
+	    return _react2.default.createElement(
+	        _reBulma.Footer,
+	        { style: { marginTop: '30px' } },
+	        _react2.default.createElement(
+	            _reBulma.Container,
+	            null,
+	            _react2.default.createElement(
+	                _reBulma.Content,
+	                null,
+	                _react2.default.createElement(
+	                    'p',
+	                    { style: { textAlign: 'center' } },
+	                    _react2.default.createElement(
+	                        'strong',
+	                        null,
+	                        'bitfak.pl'
+	                    ),
+	                    ' are secured with BitGo\u2122'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    { style: { textAlign: 'center' } },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { style: { borderBottom: '0px' }, href: 'https://bitgo.com' },
+	                        _react2.default.createElement('img', { style: { width: '100px' }, src: 'static/BitGo_Secured_Color.png' })
+	                    )
+	                )
+	            )
+	        )
+	    );
+	};
 
 /***/ }
 /******/ ]);

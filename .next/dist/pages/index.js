@@ -36,15 +36,15 @@ var _link = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modu
 
 var _link2 = _interopRequireDefault(_link);
 
-var _reactRecaptcha = require('react-recaptcha');
-
-var _reactRecaptcha2 = _interopRequireDefault(_reactRecaptcha);
-
 var _reBase = require('re-base');
 
 var _reBase2 = _interopRequireDefault(_reBase);
 
 require('whatwg-fetch');
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68,9 +68,15 @@ var _class = function (_React$Component) {
       beneficiary_address: '',
       account: '',
       amount: '',
-      description: ''
+      description: '',
+      isOpen: false,
+      bitcoinPrice: '',
+      totalPrice: 0,
+      totalBtc: 0,
+      isLoading: false
     };
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.openModal = _this.openModal.bind(_this);
     return _this;
   }
 
@@ -82,138 +88,352 @@ var _class = function (_React$Component) {
       this.setState(nextState);
     }
   }, {
-    key: 'handleSubmit',
-    value: function handleSubmit(event) {
+    key: 'openModal',
+    value: function openModal(event) {
       var _this2 = this;
 
       event.preventDefault();
-      fetch('http://localhost:3000/api/v1/address/create', { method: 'POST' }).then(function (result) {
+      this.setState({
+        isOpen: true
+      });
+      var totalWithPercentage = Number(this.state.amount) + 5 * Number(this.state.amount) / 100;
+      fetch('http://localhost:4000/api/v1/ticker/pln?amount=' + totalWithPercentage).then(function (result) {
+        return result.json();
+      }).then(function (json) {
+        return _this2.setState({
+          bitcoinPrice: json.bitcoinPrice,
+          totalPrice: totalWithPercentage,
+          totalBtc: json.totalToPay
+        });
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      var _this3 = this;
+
+      this.setState({
+        isLoading: true
+      });
+      fetch('http://localhost:4000/api/v1/address/create', { method: 'POST' }).then(function (result) {
         return result.json();
       }).then(function (address) {
-        console.log(address);
         var immediatelyAvailableReference = base.push('requests', {
           data: {
-            beneficiary_name: _this2.state.beneficiary_name,
-            beneficiary_address: _this2.state.beneficiary_address,
-            account: _this2.state.account,
-            amount: _this2.state.amount,
-            description: _this2.state.description,
+            beneficiary_name: _this3.state.beneficiary_name,
+            beneficiary_address: _this3.state.beneficiary_address,
+            account: _this3.state.account,
+            amount: _this3.state.amount,
+            description: _this3.state.description,
+            bitcoinPrice: _this3.state.bitcoinPrice,
+            totalPrice: _this3.state.totalPrice,
+            totalBtc: _this3.state.totalBtc,
             address: address
           },
           then: function then(err) {
             if (!err) {
-              Router.transitionTo('dashboard');
+              window.location = '/pay?id=' + immediatelyAvailableReference.key;
             }
           }
         });
-        //available immediately, you don't have to wait for the callback to be called
-        var generatedKey = immediatelyAvailableReference.key;
       });
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
       return _react2.default.createElement(
-        _reBulma.Container,
-        { className: (0, _css.style)(styles.container) },
+        'div',
+        null,
         _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-        ),
-        _react2.default.createElement(
-          _reBulma.Section,
-          { className: (0, _css.style)(styles.section) },
+          _reBulma.Container,
+          { className: (0, _css.style)(styles.container) },
           _react2.default.createElement(
             'div',
-            { className: (0, _css.style)(styles.header) },
-            _react2.default.createElement(
-              _reBulma.Title,
-              { size: 'is3' },
-              'Pay your bill with Bitcoin'
-            ),
-            _react2.default.createElement(
-              _reBulma.Subtitle,
-              null,
-              'We only accept ',
-              _react2.default.createElement('img', { src: 'static/bitcoin_logo.png', width: '70' })
-            )
+            null,
+            _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
           ),
           _react2.default.createElement(
-            'form',
-            { onSubmit: this.handleSubmit },
+            _reBulma.Section,
+            { className: (0, _css.style)(styles.section) },
             _react2.default.createElement(
-              _reBulma.Columns,
-              null,
+              'div',
+              { className: (0, _css.style)(styles.header) },
               _react2.default.createElement(
-                _reBulma.Column,
-                null,
-                _react2.default.createElement(
-                  _reBulma.Label,
-                  null,
-                  'Beneficiary Name'
-                ),
-                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
+                _reBulma.Title,
+                { size: 'is3' },
+                'Pay your bill with Bitcoin'
               ),
               _react2.default.createElement(
-                _reBulma.Column,
+                _reBulma.Subtitle,
                 null,
-                _react2.default.createElement(
-                  _reBulma.Label,
-                  null,
-                  'Beneficiary Address'
-                ),
-                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_address'), value: this.state.beneficiary_address, type: 'text', placeholder: 'Beneficiary Address' })
+                'We only accept ',
+                _react2.default.createElement('img', { src: 'static/bitcoin_logo.png', width: '70' })
               )
             ),
             _react2.default.createElement(
-              _reBulma.Columns,
-              null,
+              'form',
+              { onSubmit: this.openModal },
               _react2.default.createElement(
-                _reBulma.Column,
+                _reBulma.Columns,
                 null,
                 _react2.default.createElement(
-                  _reBulma.Label,
+                  _reBulma.Column,
                   null,
-                  'Account'
+                  _react2.default.createElement(
+                    _reBulma.Label,
+                    null,
+                    'Beneficiary Name'
+                  ),
+                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
                 ),
-                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
+                _react2.default.createElement(
+                  _reBulma.Column,
+                  null,
+                  _react2.default.createElement(
+                    _reBulma.Label,
+                    null,
+                    'Beneficiary Address'
+                  ),
+                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_address'), value: this.state.beneficiary_address, type: 'text', placeholder: 'Beneficiary Address' })
+                )
               ),
               _react2.default.createElement(
-                _reBulma.Column,
+                _reBulma.Columns,
                 null,
                 _react2.default.createElement(
-                  _reBulma.Label,
+                  _reBulma.Column,
                   null,
-                  'Amount'
+                  _react2.default.createElement(
+                    _reBulma.Label,
+                    null,
+                    'Account'
+                  ),
+                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
                 ),
-                _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
-              )
-            ),
-            _react2.default.createElement(
-              _reBulma.Columns,
-              null,
+                _react2.default.createElement(
+                  _reBulma.Column,
+                  null,
+                  _react2.default.createElement(
+                    _reBulma.Label,
+                    null,
+                    'Amount'
+                  ),
+                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
+                )
+              ),
               _react2.default.createElement(
-                _reBulma.Column,
+                _reBulma.Columns,
                 null,
                 _react2.default.createElement(
-                  _reBulma.Label,
+                  _reBulma.Column,
                   null,
-                  'Description of payment'
-                ),
-                _react2.default.createElement(_reBulma.Textarea, { onChange: this.handleChange.bind(this, 'description'), value: this.state.description, placeholder: 'Details about the payment', help: {
-                    text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
-                    color: 'isInfo'
-                  } })
+                  _react2.default.createElement(
+                    _reBulma.Label,
+                    null,
+                    'Description of payment'
+                  ),
+                  _react2.default.createElement(_reBulma.Textarea, { onChange: this.handleChange.bind(this, 'description'), value: this.state.description, placeholder: 'Details about the payment', help: {
+                      text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
+                      color: 'isInfo'
+                    } })
+                )
+              ),
+              _react2.default.createElement(
+                _reBulma.Button,
+                { type: 'submit', color: 'isInfo' },
+                'Procced'
               )
             ),
             _react2.default.createElement(
-              _reBulma.Button,
-              { type: 'submit', color: 'isInfo' },
-              'Procced'
+              _reBulma.Modal,
+              {
+                type: 'card',
+                headerContent: 'Are you sure?',
+                footerContent: _react2.default.createElement(
+                  'div',
+                  { style: { padding: '20px' } },
+                  this.state.isLoading && _react2.default.createElement(
+                    _reBulma.Button,
+                    { state: 'isLoading', color: 'isPrimary' },
+                    'Loading'
+                  ),
+                  !this.state.isLoading && _react2.default.createElement(
+                    _reBulma.Button,
+                    { color: 'isInfo', onClick: this.handleSubmit },
+                    'Let\'s do it.'
+                  )
+                ),
+                isActive: this.state.isOpen,
+                onCloseRequest: function onCloseRequest() {
+                  return _this4.setState({ isOpen: false, isLoading: false });
+                }
+              },
+              _react2.default.createElement(
+                _reBulma.Content,
+                null,
+                _react2.default.createElement(
+                  _reBulma.Table,
+                  null,
+                  _react2.default.createElement(
+                    _reBulma.Tbody,
+                    null,
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Beneficary Name:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.beneficiary_name
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Beneficary Address:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.beneficiary_address
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Account:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.account
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Amount:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.amount
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Description:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.description
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Bitcoin Price:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.bitcoinPrice
+                        )
+                      )
+                    ),
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Taxes:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          '5%'
+                        )
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    _reBulma.Tfoot,
+                    null,
+                    _react2.default.createElement(
+                      _reBulma.Tr,
+                      null,
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        'Total:'
+                      ),
+                      _react2.default.createElement(
+                        _reBulma.Td,
+                        null,
+                        _react2.default.createElement(
+                          'strong',
+                          null,
+                          this.state.totalPrice
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
-        )
+        ),
+        _react2.default.createElement(_footer2.default, null)
       );
     }
   }]);

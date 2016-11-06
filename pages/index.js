@@ -1,10 +1,10 @@
 import React from 'react'
-import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Textarea  } from 're-bulma'
+import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Textarea, Modal, Content, Tr, Td, Tbody, Table, Tfoot  } from 're-bulma'
 import { style } from 'next/css'
 import Link from 'next/link'
-import Recaptcha from 'react-recaptcha';
 import Rebase from 're-base';
 import 'whatwg-fetch';
+import Footer from '../components/footer';
 
 const base = Rebase.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -24,22 +24,43 @@ export default class extends React.Component {
       account: '',
       amount: '',
       description:'',
+      isOpen:  false,
+      bitcoinPrice: '',
+      totalPrice: 0,
+      totalBtc: 0,
+      isLoading: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
   handleChange(field, event) {
     let nextState = {}
     nextState[field] = event.target.value
     this.setState(nextState)
   }
-  handleSubmit(event){
+  openModal(event){
     event.preventDefault();
-    fetch('http://localhost:3000/api/v1/address/create', {method: 'POST'})
+    this.setState({
+      isOpen: true,
+    });
+    const totalWithPercentage = Number(this.state.amount) + (5 * Number(this.state.amount)) / 100;
+    fetch(`http://localhost:4000/api/v1/ticker/pln?amount=${totalWithPercentage}`)
+      .then(result => result.json())
+      .then(json => this.setState({
+        bitcoinPrice: json.bitcoinPrice,
+        totalPrice: totalWithPercentage,
+        totalBtc : json.totalToPay
+      }))
+  }
+  handleSubmit(event){
+    this.setState({
+      isLoading: true
+    })
+    fetch('http://localhost:4000/api/v1/address/create', {method: 'POST'})
       .then((result) => {
         return result.json()
       })
       .then((address) => {
-        console.log(address);
         let immediatelyAvailableReference = base.push('requests', {
           data: { 
             beneficiary_name: this.state.beneficiary_name,
@@ -47,63 +68,127 @@ export default class extends React.Component {
             account: this.state.account,
             amount:this.state.amount,
             description: this.state.description,
+            bitcoinPrice: this.state.bitcoinPrice,
+            totalPrice: this.state.totalPrice,
+            totalBtc: this.state.totalBtc,
             address
           },
           then(err){
             if(!err){
-              Router.transitionTo('dashboard');
+              window.location = `/pay?id=${immediatelyAvailableReference.key}`;
             }
           }
         });
-        //available immediately, you don't have to wait for the callback to be called
-        let generatedKey = immediatelyAvailableReference.key;
     })
   }
   render() {
     return (
-      <Container className={style(styles.container)}>
-        <div>
-          <img className={style(styles.logo)} src="static/logo.png" />
-        </div>
-        <Section className={style(styles.section)}>
-          <div className={style(styles.header)}>
-            <Title size="is3">Pay your bill with Bitcoin</Title>
-            <Subtitle>We only accept <img src="static/bitcoin_logo.png" width="70"/></Subtitle>
+      <div>
+        <Container className={style(styles.container)}>
+          <div>
+            <img className={style(styles.logo)} src="static/logo.png" />
           </div>
-          <form onSubmit={this.handleSubmit}>
-            <Columns>
-              <Column>
-                <Label>Beneficiary Name</Label>
-                <Input onChange={this.handleChange.bind(this, 'beneficiary_name')} value={this.state.beneficiary_name} type="text" placeholder="Beneficiary Name" />
-              </Column>
-              <Column>
-                <Label>Beneficiary Address</Label>
-                <Input onChange={this.handleChange.bind(this, 'beneficiary_address')} value={this.state.beneficiary_address} type="text" placeholder="Beneficiary Address" />
-              </Column>
-            </Columns>
-            <Columns>
-              <Column>
-                <Label>Account</Label>
-                <Input onChange={this.handleChange.bind(this, 'account')} value={this.state.account} type="number" placeholder="Account" />
-              </Column>
-              <Column>
-                <Label>Amount</Label>
-                <Input onChange={this.handleChange.bind(this, 'amount')} value={this.state.amount} type="number" placeholder="Amount" />
-              </Column>
-            </Columns>
-            <Columns>
-              <Column>
-                <Label>Description of payment</Label>
-                <Textarea onChange={this.handleChange.bind(this, 'description')} value={this.state.description} placeholder="Details about the payment" help={{
-                  text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
-                  color: 'isInfo',
-                }} />
-              </Column>
-            </Columns>
-            <Button type="submit" color="isInfo">Procced</Button> 
-          </form>
-        </Section>
-      </Container>
+          <Section className={style(styles.section)}>
+            <div className={style(styles.header)}>
+              <Title size="is3">Pay your bill with Bitcoin</Title>
+              <Subtitle>We only accept <img src="static/bitcoin_logo.png" width="70"/></Subtitle>
+            </div>
+            <form onSubmit={this.openModal}>
+              <Columns>
+                <Column>
+                  <Label>Beneficiary Name</Label>
+                  <Input onChange={this.handleChange.bind(this, 'beneficiary_name')} value={this.state.beneficiary_name} type="text" placeholder="Beneficiary Name" />
+                </Column>
+                <Column>
+                  <Label>Beneficiary Address</Label>
+                  <Input onChange={this.handleChange.bind(this, 'beneficiary_address')} value={this.state.beneficiary_address} type="text" placeholder="Beneficiary Address" />
+                </Column>
+              </Columns>
+              <Columns>
+                <Column>
+                  <Label>Account</Label>
+                  <Input onChange={this.handleChange.bind(this, 'account')} value={this.state.account} type="number" placeholder="Account" />
+                </Column>
+                <Column>
+                  <Label>Amount</Label>
+                  <Input onChange={this.handleChange.bind(this, 'amount')} value={this.state.amount} type="number" placeholder="Amount" />
+                </Column>
+              </Columns>
+              <Columns>
+                <Column>
+                  <Label>Description of payment</Label>
+                  <Textarea onChange={this.handleChange.bind(this, 'description')} value={this.state.description} placeholder="Details about the payment" help={{
+                    text: 'Here you can put addtional details that the receiver should know as name your name or contact.',
+                    color: 'isInfo',
+                  }} />
+                </Column>
+              </Columns>
+              <Button type="submit" color="isInfo">Procced</Button> 
+            </form>
+            <Modal
+              type="card"
+              headerContent="Are you sure?"
+              footerContent={
+                <div style={{ padding: '20px'}} >
+                  {this.state.isLoading &&
+                    <Button state="isLoading" color="isPrimary">Loading</Button>} 
+                  {!this.state.isLoading &&
+                    <Button color="isInfo" onClick={this.handleSubmit}>Let's do it.</Button>}
+                </div>}
+              isActive={this.state.isOpen}
+              onCloseRequest={() => this.setState({ isOpen: false, isLoading: false })}
+            >
+              <Content>
+                <Table>
+                  <Tbody>
+                    <Tr>
+                      <Td>Beneficary Name:</Td>
+                      <Td><strong>{this.state.beneficiary_name}</strong></Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Beneficary Address:</Td>
+                      <Td><strong>{this.state.beneficiary_address}</strong></Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Account:</Td>
+                      <Td><strong>{this.state.account}</strong></Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Amount:</Td>
+                      <Td><strong>{this.state.amount}</strong></Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Description:</Td>
+                      <Td><strong>{this.state.description}</strong></Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Bitcoin Price:</Td>
+                      <Td>
+                        <strong>{this.state.bitcoinPrice}</strong>
+                      </Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Taxes:</Td>
+                      <Td>
+                        <strong>5%</strong>
+                      </Td>
+                    </Tr>
+                  </Tbody>
+                  <Tfoot>
+                    <Tr>
+                      <Td>Total:</Td>
+                      <Td>
+                        <strong>{this.state.totalPrice}</strong>
+                      </Td>
+                    </Tr>
+                  </Tfoot>
+                </Table>
+              </Content>
+            </Modal>
+          </Section>
+        </Container>
+        <Footer />
+      </div>
     )
   }
 }
