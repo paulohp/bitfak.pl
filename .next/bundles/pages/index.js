@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b1a0a97906905251bd8e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "0fe7229caa423f7b462a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -2127,7 +2127,12 @@ module.exports =
 /***/ },
 /* 88 */,
 /* 89 */,
-/* 90 */,
+/* 90 */
+/***/ function(module, exports) {
+
+	module.exports = require("next/head");
+
+/***/ },
 /* 91 */
 /***/ function(module, exports) {
 
@@ -2285,6 +2290,10 @@ module.exports =
 
 	var _footer2 = _interopRequireDefault(_footer);
 
+	var _header = __webpack_require__(185);
+
+	var _header2 = _interopRequireDefault(_header);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass({
@@ -2388,11 +2397,7 @@ module.exports =
 	        _react2.default.createElement(
 	          _reBulma.Container,
 	          { className: (0, _css.style)(styles.container) },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-	          ),
+	          _react2.default.createElement(_header2.default, { pageTitle: 'What do you want to do?' }),
 	          _react2.default.createElement(
 	            _reBulma.Section,
 	            { className: (0, _css.style)(styles.section) },
@@ -2413,7 +2418,7 @@ module.exports =
 	            ),
 	            _react2.default.createElement(
 	              'form',
-	              { onSubmit: this.openModal },
+	              { noValidate: true, onSubmit: this.openModal },
 	              _react2.default.createElement(
 	                _reBulma.Columns,
 	                null,
@@ -2425,7 +2430,7 @@ module.exports =
 	                    null,
 	                    'Beneficiary Name'
 	                  ),
-	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
+	                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
 	                ),
 	                _react2.default.createElement(
 	                  _reBulma.Column,
@@ -2449,7 +2454,7 @@ module.exports =
 	                    null,
 	                    'Account'
 	                  ),
-	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
+	                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
 	                ),
 	                _react2.default.createElement(
 	                  _reBulma.Column,
@@ -2459,7 +2464,7 @@ module.exports =
 	                    null,
 	                    'Amount'
 	                  ),
-	                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
+	                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
 	                )
 	              ),
 	              _react2.default.createElement(
@@ -2481,8 +2486,8 @@ module.exports =
 	              ),
 	              _react2.default.createElement(
 	                _reBulma.Button,
-	                { type: 'submit', color: 'isInfo' },
-	                'Procced'
+	                { state: (!this.state.beneficiary_name || !this.state.account || !this.state.amount) && 'isDisabled', type: 'submit', color: 'isInfo' },
+	                'Checkout'
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -2684,11 +2689,7 @@ module.exports =
 
 	var styles = {
 	  container: {
-	    width: '960px',
 	    padding: '10px'
-	  },
-	  logo: {
-	    width: '120px'
 	  },
 	  section: {
 	    marginTop: '40px',
@@ -11340,7 +11341,7 @@ module.exports =
 	                        null,
 	                        'bitfak.pl'
 	                    ),
-	                    ' are secured with BitGo\u2122'
+	                    ' are secured with BitGo \u2122'
 	                ),
 	                _react2.default.createElement(
 	                    'p',
@@ -11354,6 +11355,58 @@ module.exports =
 	            )
 	        )
 	    );
+	};
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(87);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _css = __webpack_require__(91);
+
+	var _head = __webpack_require__(90);
+
+	var _head2 = _interopRequireDefault(_head);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	  var pageTitle = _ref.pageTitle;
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      _head2.default,
+	      null,
+	      _react2.default.createElement(
+	        'title',
+	        null,
+	        'bitfak - ',
+	        pageTitle
+	      ),
+	      _react2.default.createElement('meta', { name: 'viewport', content: 'initial-scale=1.0, width=device-width' })
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
+	    )
+	  );
+	};
+
+	var styles = {
+	  logo: {
+	    width: '120px'
+	  }
 	};
 
 /***/ }

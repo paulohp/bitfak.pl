@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b1a0a97906905251bd8e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "0fe7229caa423f7b462a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -585,7 +585,7 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(92);
-	module.exports = __webpack_require__(185);
+	module.exports = __webpack_require__(186);
 
 
 /***/ },
@@ -2127,7 +2127,12 @@ module.exports =
 /***/ },
 /* 88 */,
 /* 89 */,
-/* 90 */,
+/* 90 */
+/***/ function(module, exports) {
+
+	module.exports = require("next/head");
+
+/***/ },
 /* 91 */
 /***/ function(module, exports) {
 
@@ -10866,7 +10871,7 @@ module.exports =
 	                        null,
 	                        'bitfak.pl'
 	                    ),
-	                    ' are secured with BitGo\u2122'
+	                    ' are secured with BitGo \u2122'
 	                ),
 	                _react2.default.createElement(
 	                    'p',
@@ -10889,6 +10894,58 @@ module.exports =
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(87);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _css = __webpack_require__(91);
+
+	var _head = __webpack_require__(90);
+
+	var _head2 = _interopRequireDefault(_head);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	  var pageTitle = _ref.pageTitle;
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      _head2.default,
+	      null,
+	      _react2.default.createElement(
+	        'title',
+	        null,
+	        'bitfak - ',
+	        pageTitle
+	      ),
+	      _react2.default.createElement('meta', { name: 'viewport', content: 'initial-scale=1.0, width=device-width' })
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
+	    )
+	  );
+	};
+
+	var styles = {
+	  logo: {
+	    width: '120px'
+	  }
+	};
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
@@ -10896,11 +10953,11 @@ module.exports =
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _regenerator = __webpack_require__(186);
+	var _regenerator = __webpack_require__(187);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _asyncToGenerator2 = __webpack_require__(190);
+	var _asyncToGenerator2 = __webpack_require__(191);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
@@ -10942,6 +10999,14 @@ module.exports =
 
 	var _footer2 = _interopRequireDefault(_footer);
 
+	var _header = __webpack_require__(185);
+
+	var _header2 = _interopRequireDefault(_header);
+
+	var _qrcode = __webpack_require__(208);
+
+	var _qrcode2 = _interopRequireDefault(_qrcode);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass({
@@ -10974,26 +11039,22 @@ module.exports =
 	                _react2.default.createElement(
 	                    _reBulma.Container,
 	                    { className: (0, _css.style)(styles.container) },
-	                    _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-	                    ),
+	                    _react2.default.createElement(_header2.default, { pageTitle: 'Checkout' }),
 	                    _react2.default.createElement(
 	                        _reBulma.Section,
 	                        { className: (0, _css.style)(styles.section) },
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: (0, _css.style)(styles.centerContent) },
-	                            _react2.default.createElement('img', { src: 'static/bitcoin_logo_ball.png', className: (0, _css.style)(styles.btc) })
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
+	                            { className: (0, _css.style)(styles.centerToTop) },
+	                            _react2.default.createElement('img', { src: 'static/bitcoin_logo_ball.png', className: (0, _css.style)(styles.btc) }),
 	                            _react2.default.createElement(
-	                                _reBulma.Title,
-	                                { className: (0, _css.style)(styles.centerContent), size: 'is1' },
-	                                'Pay with Bitcoin'
+	                                'div',
+	                                null,
+	                                _react2.default.createElement(
+	                                    _reBulma.Title,
+	                                    { className: (0, _css.style)(styles.centerContent), size: 'is1' },
+	                                    'Pay with Bitcoin'
+	                                )
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -11039,13 +11100,21 @@ module.exports =
 	                            _react2.default.createElement(
 	                                _reBulma.Column,
 	                                null,
-	                                _react2.default.createElement('img', { src: 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.totalBtc })
+	                                _react2.default.createElement(_qrcode2.default, { className: (0, _css.style)(styles.centerContent), amount: this.props.payment.totalBtc, address: this.props.payment.address.address })
 	                            ),
 	                            _react2.default.createElement(
 	                                _reBulma.Column,
 	                                null,
-	                                'Details Total Zl: ',
-	                                this.props.payment.totalPrice
+	                                _react2.default.createElement(
+	                                    _reBulma.Heading,
+	                                    null,
+	                                    'Total Zl:'
+	                                ),
+	                                _react2.default.createElement(
+	                                    _reBulma.Title,
+	                                    null,
+	                                    this.props.payment.totalPrice
+	                                )
 	                            )
 	                        )
 	                    )
@@ -11097,11 +11166,7 @@ module.exports =
 
 	var styles = {
 	    container: {
-	        width: '960px',
 	        padding: '10px'
-	    },
-	    logo: {
-	        width: '120px'
 	    },
 	    section: {
 	        marginTop: '40px',
@@ -11115,7 +11180,10 @@ module.exports =
 	        textAlign: 'center'
 	    },
 	    btc: {
-	        width: '120px',
+	        width: '120px'
+	    },
+	    centerToTop: {
+	        textAlign: 'center',
 	        position: 'relative',
 	        top: '-100px'
 	    }
@@ -11130,14 +11198,14 @@ module.exports =
 	  
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(187);
+	module.exports = __webpack_require__(188);
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// This method of obtaining a reference to the global object needs to be
@@ -11158,7 +11226,7 @@ module.exports =
 	// Force reevalutation of runtime.js.
 	g.regeneratorRuntime = undefined;
 
-	module.exports = __webpack_require__(188);
+	module.exports = __webpack_require__(189);
 
 	if (hadRuntime) {
 	  // Restore the original runtime.
@@ -11175,7 +11243,7 @@ module.exports =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -11847,10 +11915,10 @@ module.exports =
 	  typeof self === "object" ? self : this
 	);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(189)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(190)))
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -12036,14 +12104,14 @@ module.exports =
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _promise = __webpack_require__(191);
+	var _promise = __webpack_require__(192);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
@@ -12079,38 +12147,38 @@ module.exports =
 	};
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(192), __esModule: true };
+	module.exports = { "default": __webpack_require__(193), __esModule: true };
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(74);
 	__webpack_require__(47);
 	__webpack_require__(58);
-	__webpack_require__(193);
+	__webpack_require__(194);
 	module.exports = __webpack_require__(7).Promise;
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	var LIBRARY            = __webpack_require__(50)
 	  , global             = __webpack_require__(6)
 	  , ctx                = __webpack_require__(8)
-	  , classof            = __webpack_require__(194)
+	  , classof            = __webpack_require__(195)
 	  , $export            = __webpack_require__(5)
 	  , isObject           = __webpack_require__(13)
 	  , aFunction          = __webpack_require__(9)
-	  , anInstance         = __webpack_require__(195)
-	  , forOf              = __webpack_require__(196)
-	  , speciesConstructor = __webpack_require__(200)
-	  , task               = __webpack_require__(201).set
-	  , microtask          = __webpack_require__(203)()
+	  , anInstance         = __webpack_require__(196)
+	  , forOf              = __webpack_require__(197)
+	  , speciesConstructor = __webpack_require__(201)
+	  , task               = __webpack_require__(202).set
+	  , microtask          = __webpack_require__(204)()
 	  , PROMISE            = 'Promise'
 	  , TypeError          = global.TypeError
 	  , process            = global.process
@@ -12302,7 +12370,7 @@ module.exports =
 	    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
 	    this._n = false;          // <- notify
 	  };
-	  Internal.prototype = __webpack_require__(204)($Promise.prototype, {
+	  Internal.prototype = __webpack_require__(205)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
 	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -12329,7 +12397,7 @@ module.exports =
 
 	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
 	__webpack_require__(54)($Promise, PROMISE);
-	__webpack_require__(205)(PROMISE);
+	__webpack_require__(206)(PROMISE);
 	Wrapper = __webpack_require__(7)[PROMISE];
 
 	// statics
@@ -12353,7 +12421,7 @@ module.exports =
 	    return capability.promise;
 	  }
 	});
-	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(206)(function(iter){
+	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(207)(function(iter){
 	  $Promise.all(iter)['catch'](empty);
 	})), PROMISE, {
 	  // 25.4.4.1 Promise.all(iterable)
@@ -12399,7 +12467,7 @@ module.exports =
 	});
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
@@ -12427,7 +12495,7 @@ module.exports =
 	};
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	module.exports = function(it, Constructor, name, forbiddenField){
@@ -12437,15 +12505,15 @@ module.exports =
 	};
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ctx         = __webpack_require__(8)
-	  , call        = __webpack_require__(197)
-	  , isArrayIter = __webpack_require__(198)
+	  , call        = __webpack_require__(198)
+	  , isArrayIter = __webpack_require__(199)
 	  , anObject    = __webpack_require__(12)
 	  , toLength    = __webpack_require__(36)
-	  , getIterFn   = __webpack_require__(199)
+	  , getIterFn   = __webpack_require__(200)
 	  , BREAK       = {}
 	  , RETURN      = {};
 	var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
@@ -12467,7 +12535,7 @@ module.exports =
 	exports.RETURN = RETURN;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
@@ -12484,7 +12552,7 @@ module.exports =
 	};
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
@@ -12497,10 +12565,10 @@ module.exports =
 	};
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(194)
+	var classof   = __webpack_require__(195)
 	  , ITERATOR  = __webpack_require__(55)('iterator')
 	  , Iterators = __webpack_require__(52);
 	module.exports = __webpack_require__(7).getIteratorMethod = function(it){
@@ -12510,7 +12578,7 @@ module.exports =
 	};
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
@@ -12523,11 +12591,11 @@ module.exports =
 	};
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ctx                = __webpack_require__(8)
-	  , invoke             = __webpack_require__(202)
+	  , invoke             = __webpack_require__(203)
 	  , html               = __webpack_require__(43)
 	  , cel                = __webpack_require__(17)
 	  , global             = __webpack_require__(6)
@@ -12603,7 +12671,7 @@ module.exports =
 	};
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -12624,11 +12692,11 @@ module.exports =
 	};
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var global    = __webpack_require__(6)
-	  , macrotask = __webpack_require__(201).set
+	  , macrotask = __webpack_require__(202).set
 	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
 	  , process   = global.process
 	  , Promise   = global.Promise
@@ -12697,7 +12765,7 @@ module.exports =
 	};
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var hide = __webpack_require__(10);
@@ -12709,7 +12777,7 @@ module.exports =
 	};
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12728,7 +12796,7 @@ module.exports =
 	};
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ITERATOR     = __webpack_require__(55)('iterator')
@@ -12751,6 +12819,30 @@ module.exports =
 	    exec(arr);
 	  } catch(e){ /* empty */ }
 	  return safe;
+	};
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(87);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var address = _ref.address,
+	        amount = _ref.amount,
+	        className = _ref.className;
+	    return _react2.default.createElement('img', { className: className,
+	        src: 'https://chart.googleapis.com/chart?chs=360x360&cht=qr&chl=bitcoin:' + address + '?amount=' + amount });
 	};
 
 /***/ }

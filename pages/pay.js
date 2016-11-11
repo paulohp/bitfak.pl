@@ -2,9 +2,11 @@ import React from 'react'
 import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Heading  } from 're-bulma'
 import { style } from 'next/css'
 import Link from 'next/link'
-import Rebase from 're-base';
-import 'whatwg-fetch';
-import Footer from '../components/footer';
+import Rebase from 're-base'
+import 'whatwg-fetch'
+import Footer from '../components/footer'
+import Header from '../components/header'
+import QRCode from '../components/qrcode'
 
 const base = Rebase.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -36,15 +38,13 @@ export default class extends React.Component {
         return(
             <div>
                 <Container className={style(styles.container)}>
-                    <div>
-                        <img className={style(styles.logo)} src="static/logo.png" />
-                    </div>
+                    <Header pageTitle="Checkout" />
                     <Section className={style(styles.section)}>
-                        <div className={style(styles.centerContent)}>
+                        <div className={style(styles.centerToTop)}>
                             <img src="static/bitcoin_logo_ball.png" className={style(styles.btc)}/>
-                        </div>
-                        <div>
-                            <Title className={style(styles.centerContent)} size="is1">Pay with Bitcoin</Title>
+                            <div>
+                                <Title className={style(styles.centerContent)} size="is1">Pay with Bitcoin</Title>
+                            </div>
                         </div>
                         <Columns>
                             <Column>
@@ -59,13 +59,12 @@ export default class extends React.Component {
                                 <a href={`bitcoin:${this.props.payment.address.address}?amount=${this.props.payment.totalBtc}`}>Open Wallet</a>
                             </Column>
                             <Column>
-                                <img src={`https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=bitcoin:${this.props.payment.address.address}?amount=${this.props.totalBtc}`} />
+                                <QRCode className={style(styles.centerContent)} amount={this.props.payment.totalBtc} address={this.props.payment.address.address} />
                             </Column>
                             <Column>
-                                Details
-                                Total Zl: {this.props.payment.totalPrice}  
+                                <Heading>Total Zl:</Heading>
+                                <Title>{this.props.payment.totalPrice}</Title>  
                             </Column>
-                            
                         </Columns>
                     </Section>
                 </Container>
@@ -76,11 +75,7 @@ export default class extends React.Component {
 }
 const styles = {
   container: {
-    width: '960px',
     padding: '10px'
-  },
-  logo: {
-    width: '120px'
   },
   section: {
     marginTop: '40px',
@@ -95,6 +90,9 @@ const styles = {
   },
   btc: {
     width: '120px',
+  },
+  centerToTop: {
+    textAlign: 'center',
     position: 'relative',
     top: '-100px'
   }

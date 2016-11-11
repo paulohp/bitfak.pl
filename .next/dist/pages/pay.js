@@ -54,6 +54,14 @@ var _footer = require('../components/footer');
 
 var _footer2 = _interopRequireDefault(_footer);
 
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _qrcode = require('../components/qrcode');
+
+var _qrcode2 = _interopRequireDefault(_qrcode);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var base = _reBase2.default.createClass({
@@ -86,26 +94,22 @@ var _class = function (_React$Component) {
                 _react2.default.createElement(
                     _reBulma.Container,
                     { className: (0, _css.style)(styles.container) },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-                    ),
+                    _react2.default.createElement(_header2.default, { pageTitle: 'Checkout' }),
                     _react2.default.createElement(
                         _reBulma.Section,
                         { className: (0, _css.style)(styles.section) },
                         _react2.default.createElement(
                             'div',
-                            { className: (0, _css.style)(styles.centerContent) },
-                            _react2.default.createElement('img', { src: 'static/bitcoin_logo_ball.png', className: (0, _css.style)(styles.btc) })
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            null,
+                            { className: (0, _css.style)(styles.centerToTop) },
+                            _react2.default.createElement('img', { src: 'static/bitcoin_logo_ball.png', className: (0, _css.style)(styles.btc) }),
                             _react2.default.createElement(
-                                _reBulma.Title,
-                                { className: (0, _css.style)(styles.centerContent), size: 'is1' },
-                                'Pay with Bitcoin'
+                                'div',
+                                null,
+                                _react2.default.createElement(
+                                    _reBulma.Title,
+                                    { className: (0, _css.style)(styles.centerContent), size: 'is1' },
+                                    'Pay with Bitcoin'
+                                )
                             )
                         ),
                         _react2.default.createElement(
@@ -151,13 +155,21 @@ var _class = function (_React$Component) {
                             _react2.default.createElement(
                                 _reBulma.Column,
                                 null,
-                                _react2.default.createElement('img', { src: 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.totalBtc })
+                                _react2.default.createElement(_qrcode2.default, { className: (0, _css.style)(styles.centerContent), amount: this.props.payment.totalBtc, address: this.props.payment.address.address })
                             ),
                             _react2.default.createElement(
                                 _reBulma.Column,
                                 null,
-                                'Details Total Zl: ',
-                                this.props.payment.totalPrice
+                                _react2.default.createElement(
+                                    _reBulma.Heading,
+                                    null,
+                                    'Total Zl:'
+                                ),
+                                _react2.default.createElement(
+                                    _reBulma.Title,
+                                    null,
+                                    this.props.payment.totalPrice
+                                )
                             )
                         )
                     )
@@ -209,11 +221,7 @@ exports.default = _class;
 
 var styles = {
     container: {
-        width: '960px',
         padding: '10px'
-    },
-    logo: {
-        width: '120px'
     },
     section: {
         marginTop: '40px',
@@ -227,7 +235,10 @@ var styles = {
         textAlign: 'center'
     },
     btc: {
-        width: '120px',
+        width: '120px'
+    },
+    centerToTop: {
+        textAlign: 'center',
         position: 'relative',
         top: '-100px'
     }

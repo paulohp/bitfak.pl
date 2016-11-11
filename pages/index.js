@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Rebase from 're-base';
 import 'whatwg-fetch';
 import Footer from '../components/footer';
+import Header from '../components/header';
 
 const base = Rebase.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -85,19 +86,17 @@ export default class extends React.Component {
     return (
       <div>
         <Container className={style(styles.container)}>
-          <div>
-            <img className={style(styles.logo)} src="static/logo.png" />
-          </div>
+          <Header pageTitle="What do you want to do?" />
           <Section className={style(styles.section)}>
             <div className={style(styles.header)}>
               <Title size="is3">Pay your bill with Bitcoin</Title>
               <Subtitle>We only accept <img src="static/bitcoin_logo.png" width="70"/></Subtitle>
             </div>
-            <form onSubmit={this.openModal}>
+            <form noValidate onSubmit={this.openModal}>
               <Columns>
                 <Column>
                   <Label>Beneficiary Name</Label>
-                  <Input onChange={this.handleChange.bind(this, 'beneficiary_name')} value={this.state.beneficiary_name} type="text" placeholder="Beneficiary Name" />
+                  <Input required onChange={this.handleChange.bind(this, 'beneficiary_name')} value={this.state.beneficiary_name} type="text" placeholder="Beneficiary Name" />
                 </Column>
                 <Column>
                   <Label>Beneficiary Address</Label>
@@ -107,11 +106,11 @@ export default class extends React.Component {
               <Columns>
                 <Column>
                   <Label>Account</Label>
-                  <Input onChange={this.handleChange.bind(this, 'account')} value={this.state.account} type="number" placeholder="Account" />
+                  <Input required onChange={this.handleChange.bind(this, 'account')} value={this.state.account} type="number" placeholder="Account" />
                 </Column>
                 <Column>
                   <Label>Amount</Label>
-                  <Input onChange={this.handleChange.bind(this, 'amount')} value={this.state.amount} type="number" placeholder="Amount" />
+                  <Input required onChange={this.handleChange.bind(this, 'amount')} value={this.state.amount} type="number" placeholder="Amount" />
                 </Column>
               </Columns>
               <Columns>
@@ -123,7 +122,7 @@ export default class extends React.Component {
                   }} />
                 </Column>
               </Columns>
-              <Button type="submit" color="isInfo">Procced</Button> 
+              <Button state={(!this.state.beneficiary_name || !this.state.account || !this.state.amount) && 'isDisabled'} type="submit" color="isInfo">Checkout</Button> 
             </form>
             <Modal
               type="card"
@@ -195,11 +194,7 @@ export default class extends React.Component {
 
 const styles = {
   container: {
-    width: '960px',
     padding: '10px'
-  },
-  logo: {
-    width: '120px'
   },
   section: {
     marginTop: '40px',

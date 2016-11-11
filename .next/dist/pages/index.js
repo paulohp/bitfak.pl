@@ -46,6 +46,10 @@ var _footer = require('../components/footer');
 
 var _footer2 = _interopRequireDefault(_footer);
 
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var base = _reBase2.default.createClass({
@@ -149,11 +153,7 @@ var _class = function (_React$Component) {
         _react2.default.createElement(
           _reBulma.Container,
           { className: (0, _css.style)(styles.container) },
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement('img', { className: (0, _css.style)(styles.logo), src: 'static/logo.png' })
-          ),
+          _react2.default.createElement(_header2.default, { pageTitle: 'What do you want to do?' }),
           _react2.default.createElement(
             _reBulma.Section,
             { className: (0, _css.style)(styles.section) },
@@ -174,7 +174,7 @@ var _class = function (_React$Component) {
             ),
             _react2.default.createElement(
               'form',
-              { onSubmit: this.openModal },
+              { noValidate: true, onSubmit: this.openModal },
               _react2.default.createElement(
                 _reBulma.Columns,
                 null,
@@ -186,7 +186,7 @@ var _class = function (_React$Component) {
                     null,
                     'Beneficiary Name'
                   ),
-                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
+                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'beneficiary_name'), value: this.state.beneficiary_name, type: 'text', placeholder: 'Beneficiary Name' })
                 ),
                 _react2.default.createElement(
                   _reBulma.Column,
@@ -210,7 +210,7 @@ var _class = function (_React$Component) {
                     null,
                     'Account'
                   ),
-                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
+                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'account'), value: this.state.account, type: 'number', placeholder: 'Account' })
                 ),
                 _react2.default.createElement(
                   _reBulma.Column,
@@ -220,7 +220,7 @@ var _class = function (_React$Component) {
                     null,
                     'Amount'
                   ),
-                  _react2.default.createElement(_reBulma.Input, { onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
+                  _react2.default.createElement(_reBulma.Input, { required: true, onChange: this.handleChange.bind(this, 'amount'), value: this.state.amount, type: 'number', placeholder: 'Amount' })
                 )
               ),
               _react2.default.createElement(
@@ -242,8 +242,8 @@ var _class = function (_React$Component) {
               ),
               _react2.default.createElement(
                 _reBulma.Button,
-                { type: 'submit', color: 'isInfo' },
-                'Procced'
+                { state: (!this.state.beneficiary_name || !this.state.account || !this.state.amount) && 'isDisabled', type: 'submit', color: 'isInfo' },
+                'Checkout'
               )
             ),
             _react2.default.createElement(
@@ -445,11 +445,7 @@ exports.default = _class;
 
 var styles = {
   container: {
-    width: '960px',
     padding: '10px'
-  },
-  logo: {
-    width: '120px'
   },
   section: {
     marginTop: '40px',
