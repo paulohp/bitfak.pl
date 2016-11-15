@@ -7,7 +7,7 @@ export default () => (
         <Container>
             <Content>
             <p style={{ textAlign: 'center'}}>
-                <strong>bitfak.pl</strong> are secured with BitGo ™
+                <strong>bitfak.pl</strong> are secured with BitGo.
             </p>
             <p style={{ textAlign: 'center'}}>
                 <a style={{borderBottom: '0px'}} href="https://bitgo.com">

@@ -147,9 +147,31 @@ var _class = function (_React$Component) {
                                     )
                                 ),
                                 _react2.default.createElement(
-                                    'a',
-                                    { href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
-                                    'Open Wallet'
+                                    'div',
+                                    null,
+                                    _react2.default.createElement(
+                                        _reBulma.Button,
+                                        null,
+                                        _react2.default.createElement(
+                                            'a',
+                                            { href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
+                                            'Open Wallet'
+                                        )
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    null,
+                                    _react2.default.createElement(
+                                        _reBulma.Heading,
+                                        null,
+                                        'Expires in:'
+                                    ),
+                                    _react2.default.createElement(
+                                        _reBulma.Title,
+                                        null,
+                                        '20:00 minutes'
+                                    )
                                 )
                             ),
                             _react2.default.createElement(
@@ -163,11 +185,12 @@ var _class = function (_React$Component) {
                                 _react2.default.createElement(
                                     _reBulma.Heading,
                                     null,
-                                    'Total Zl:'
+                                    'Payment details:'
                                 ),
                                 _react2.default.createElement(
                                     _reBulma.Title,
                                     null,
+                                    'Total Zl: ',
                                     this.props.payment.totalPrice
                                 )
                             )
@@ -182,14 +205,16 @@ var _class = function (_React$Component) {
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(_ref2) {
                 var req = _ref2.req;
-                var match, id;
+                var match, match2, id, type;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 match = RegExp('[?&]' + 'id' + '=([^&]*)').exec(req.url);
+                                match2 = RegExp('[?&]' + 'type' + '=([^&]*)').exec(req.url);
                                 id = decodeURIComponent(match[1].replace(/\+/g, ' '));
-                                return _context.abrupt('return', base.fetch('requests', {
+                                type = decodeURIComponent(match2[1].replace(/\+/g, ' '));
+                                return _context.abrupt('return', base.fetch(type, {
                                     context: {},
                                     asArray: true
                                 }).then(function (data) {
@@ -199,7 +224,7 @@ var _class = function (_React$Component) {
                                     return { payment: filteredData[0] };
                                 }));
 
-                            case 3:
+                            case 5:
                             case 'end':
                                 return _context.stop();
                         }

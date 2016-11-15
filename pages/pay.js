@@ -1,5 +1,5 @@
 import React from 'react'
-import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Heading  } from 're-bulma'
+import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Heading, Icon } from 're-bulma'
 import { style } from 'next/css'
 import Link from 'next/link'
 import Rebase from 're-base'
@@ -19,13 +19,16 @@ export default class extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            paymentId: ''
+            paymentId: '',
         }
     }
     static async getInitialProps ({ req }) {
         let match = RegExp('[?&]' + 'id' + '=([^&]*)').exec(req.url)
+        let match2 = RegExp('[?&]' + 'type' + '=([^&]*)').exec(req.url)
         let id = decodeURIComponent(match[1].replace(/\+/g, ' '))
-        return base.fetch('requests', {
+        let type = decodeURIComponent(match2[1].replace(/\+/g, ' '))
+
+        return base.fetch(type, {
             context: {},
             asArray: true
         }).then(data => {
@@ -33,6 +36,7 @@ export default class extends React.Component {
             return {payment: filteredData[0]}
         })
     }
+
 
     render() {
         return(
@@ -56,14 +60,22 @@ export default class extends React.Component {
                                     <Heading>To:</Heading>
                                     <Title>{this.props.payment.address.address}</Title>
                                 </div>
-                                <a href={`bitcoin:${this.props.payment.address.address}?amount=${this.props.payment.totalBtc}`}>Open Wallet</a>
+                                <div>
+                                  <Button>
+                                    <a href={`bitcoin:${this.props.payment.address.address}?amount=${this.props.payment.totalBtc}`}>Open Wallet</a>
+                                  </Button>
+                                </div>
+                                <div>
+                                  <Heading>Expires in:</Heading>
+                                  <Title>20:00 minutes</Title>
+                                </div>
                             </Column>
                             <Column>
                                 <QRCode className={style(styles.centerContent)} amount={this.props.payment.totalBtc} address={this.props.payment.address.address} />
                             </Column>
                             <Column>
-                                <Heading>Total Zl:</Heading>
-                                <Title>{this.props.payment.totalPrice}</Title>  
+                                <Heading>Payment details:</Heading>
+                                <Title>Total Zl: {this.props.payment.totalPrice}</Title>  
                             </Column>
                         </Columns>
                     </Section>

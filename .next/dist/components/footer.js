@@ -32,7 +32,7 @@ exports.default = function () {
                         null,
                         'bitfak.pl'
                     ),
-                    ' are secured with BitGo \u2122'
+                    ' are secured with BitGo.'
                 ),
                 _react2.default.createElement(
                     'p',
