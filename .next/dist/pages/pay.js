@@ -44,11 +44,11 @@ var _link = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modu
 
 var _link2 = _interopRequireDefault(_link);
 
+require('isomorphic-fetch');
+
 var _reBase = require('re-base');
 
 var _reBase2 = _interopRequireDefault(_reBase);
-
-require('whatwg-fetch');
 
 var _footer = require('../components/footer');
 
@@ -146,31 +146,19 @@ var _class = function (_React$Component) {
                                         this.props.payment.address.address
                                     )
                                 ),
+                                _react2.default.createElement('br', null),
                                 _react2.default.createElement(
                                     'div',
                                     null,
                                     _react2.default.createElement(
                                         _reBulma.Button,
-                                        null,
+                                        { color: 'isInfo' },
                                         _react2.default.createElement(
                                             'a',
-                                            { href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
-                                            'Open Wallet'
+                                            { className: (0, _css.style)(styles.normalizeLink), href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
+                                            'Open Wallet ',
+                                            _react2.default.createElement('i', { className: 'fa fa-btc' })
                                         )
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    null,
-                                    _react2.default.createElement(
-                                        _reBulma.Heading,
-                                        null,
-                                        'Expires in:'
-                                    ),
-                                    _react2.default.createElement(
-                                        _reBulma.Title,
-                                        null,
-                                        '20:00 minutes'
                                     )
                                 )
                             ),
@@ -183,15 +171,29 @@ var _class = function (_React$Component) {
                                 _reBulma.Column,
                                 null,
                                 _react2.default.createElement(
-                                    _reBulma.Heading,
+                                    'div',
                                     null,
-                                    'Payment details:'
+                                    _react2.default.createElement(
+                                        _reBulma.Heading,
+                                        null,
+                                        'Payment details:'
+                                    ),
+                                    _react2.default.createElement(
+                                        _reBulma.Title,
+                                        null,
+                                        'Total Zl: ',
+                                        this.props.payment.totalPrice
+                                    )
                                 ),
                                 _react2.default.createElement(
-                                    _reBulma.Title,
+                                    'div',
                                     null,
-                                    'Total Zl: ',
-                                    this.props.payment.totalPrice
+                                    _react2.default.createElement(
+                                        _reBulma.Heading,
+                                        null,
+                                        'Expires at:'
+                                    ),
+                                    _react2.default.createElement(_reBulma.Title, null)
                                 )
                             )
                         )
@@ -221,7 +223,14 @@ var _class = function (_React$Component) {
                                     var filteredData = data.filter(function (d) {
                                         return d.key === id;
                                     });
-                                    return { payment: filteredData[0] };
+                                    return fetch('http://localhost:4000/api/v1/address/' + filteredData[0].address.address + '/transactions').then(function (res) {
+                                        return res.json();
+                                    }).then(function (transactions) {
+                                        console.log(transactions);
+                                        var paymentData = filteredData[0];
+                                        paymentData.transactions = transactions;
+                                        return { payment: paymentData };
+                                    });
                                 }));
 
                             case 5:
@@ -266,13 +275,27 @@ var styles = {
         textAlign: 'center',
         position: 'relative',
         top: '-100px'
+    },
+    normalizeLink: {
+        color: 'white',
+        textDecoration: 'none'
     }
 };
     if (module.hot) {
       module.hot.accept()
+
+      var Component = module.exports.default || module.exports
+      Component.__route = "/pay"
+
       if (module.hot.status() !== 'idle') {
-        var Component = module.exports.default || module.exports
-        next.router.update('/pay', Component)
+        var components = next.router.components
+        for (var r in components) {
+          if (!components.hasOwnProperty(r)) continue
+
+          if (components[r].Component.__route === "/pay") {
+            next.router.update(r, Component)
+          }
+        }
       }
     }
   

@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c78ca05430877bd358fc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -584,7 +584,7 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(92);
+	__webpack_require__(91);
 	module.exports = __webpack_require__(94);
 
 
@@ -682,20 +682,19 @@ module.exports =
 
 /***/ },
 /* 88 */,
-/* 89 */,
-/* 90 */
+/* 89 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/head");
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/css");
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -735,7 +734,7 @@ module.exports =
 					check();
 				}
 
-				__webpack_require__(93)(updatedModules, updatedModules);
+				__webpack_require__(92)(updatedModules, updatedModules);
 
 				if(upToDate()) {
 					console.log("[HMR] App is up to date.");
@@ -764,7 +763,7 @@ module.exports =
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports) {
 
 	/*
@@ -795,6 +794,7 @@ module.exports =
 
 
 /***/ },
+/* 93 */,
 /* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -810,7 +810,7 @@ module.exports =
 
 	var _reBulma = __webpack_require__(95);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	var _link = __webpack_require__(174);
 
@@ -913,9 +913,19 @@ module.exports =
 	};
 	    if (true) {
 	      module.hot.accept()
+
+	      var Component = module.exports.default || module.exports
+	      Component.__route = "/"
+
 	      if (module.hot.status() !== 'idle') {
-	        var Component = module.exports.default || module.exports
-	        next.router.update('/', Component)
+	        var components = next.router.components
+	        for (var r in components) {
+	          if (!components.hasOwnProperty(r)) continue
+
+	          if (components[r].Component.__route === "/") {
+	            next.router.update(r, Component)
+	          }
+	        }
 	      }
 	    }
 	  
@@ -7248,7 +7258,7 @@ module.exports =
 
 	var _reBulma = __webpack_require__(95);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7300,9 +7310,9 @@ module.exports =
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
-	var _head = __webpack_require__(90);
+	var _head = __webpack_require__(89);
 
 	var _head2 = _interopRequireDefault(_head);
 

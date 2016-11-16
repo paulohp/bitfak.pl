@@ -2,8 +2,8 @@ import React from 'react'
 import { Columns , Column, Container, Input, Label, Section, Title, Subtitle, Button, Heading, Icon } from 're-bulma'
 import { style } from 'next/css'
 import Link from 'next/link'
+import 'isomorphic-fetch'
 import Rebase from 're-base'
-import 'whatwg-fetch'
 import Footer from '../components/footer'
 import Header from '../components/header'
 import QRCode from '../components/qrcode'
@@ -33,10 +33,16 @@ export default class extends React.Component {
             asArray: true
         }).then(data => {
             const filteredData = data.filter(d => d.key === id)
-            return {payment: filteredData[0]}
+            return fetch(`http://localhost:4000/api/v1/address/${filteredData[0].address.address}/transactions`)
+              .then(res => res.json())
+              .then(transactions => {
+                console.log(transactions)
+                let paymentData = filteredData[0]
+                paymentData.transactions = transactions 
+                return {payment: paymentData}
+              })
         })
     }
-
 
     render() {
         return(
@@ -52,30 +58,35 @@ export default class extends React.Component {
                         </div>
                         <Columns>
                             <Column>
-                                <div>
-                                    <Heading>Send exacly:</Heading>
-                                    <Title>{this.props.payment.totalBtc}</Title>
-                                </div>
-                                <div>
-                                    <Heading>To:</Heading>
-                                    <Title>{this.props.payment.address.address}</Title>
-                                </div>
-                                <div>
-                                  <Button>
-                                    <a href={`bitcoin:${this.props.payment.address.address}?amount=${this.props.payment.totalBtc}`}>Open Wallet</a>
-                                  </Button>
-                                </div>
-                                <div>
-                                  <Heading>Expires in:</Heading>
-                                  <Title>20:00 minutes</Title>
-                                </div>
+                              <div>
+                                  <Heading>Send exacly:</Heading>
+                                  <Title>{this.props.payment.totalBtc}</Title>
+                              </div>
+                              <div>
+                                  <Heading>To:</Heading>
+                                  <Title>{this.props.payment.address.address}</Title>
+                              </div>
+                              <br />
+                              <div>
+                                <Button color="isInfo">
+                                  <a className={style(styles.normalizeLink)} href={`bitcoin:${this.props.payment.address.address}?amount=${this.props.payment.totalBtc}`}>Open Wallet <i className="fa fa-btc"></i></a>
+                                </Button>
+                              </div>
                             </Column>
                             <Column>
                                 <QRCode className={style(styles.centerContent)} amount={this.props.payment.totalBtc} address={this.props.payment.address.address} />
                             </Column>
                             <Column>
+                              <div>
                                 <Heading>Payment details:</Heading>
-                                <Title>Total Zl: {this.props.payment.totalPrice}</Title>  
+                                <Title>Total Zl: {this.props.payment.totalPrice}</Title>
+                              </div>
+                              <div>
+                                <Heading>Expires at:</Heading>
+                                <Title>
+
+                                </Title>
+                                </div>  
                             </Column>
                         </Columns>
                     </Section>
@@ -107,5 +118,9 @@ const styles = {
     textAlign: 'center',
     position: 'relative',
     top: '-100px'
+  },
+  normalizeLink: {
+    color: 'white',
+    textDecoration: 'none'
   }
 }

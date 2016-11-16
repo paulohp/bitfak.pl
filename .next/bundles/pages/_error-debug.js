@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c78ca05430877bd358fc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -614,19 +614,21 @@ module.exports =
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stripAnsi = __webpack_require__(88);
+	var _ansiHtml = __webpack_require__(88);
 
-	var _stripAnsi2 = _interopRequireDefault(_stripAnsi);
+	var _ansiHtml2 = _interopRequireDefault(_ansiHtml);
 
-	var _head = __webpack_require__(90);
+	var _head = __webpack_require__(89);
 
 	var _head2 = _interopRequireDefault(_head);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	var _css2 = _interopRequireDefault(_css);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	var ErrorDebug = function (_React$Component) {
 	  (0, _inherits3.default)(ErrorDebug, _React$Component);
@@ -643,27 +645,7 @@ module.exports =
 	          message = _props.message,
 	          path = _props.path;
 
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: styles.errorDebug },
-	        _react2.default.createElement(
-	          _head2.default,
-	          null,
-	          _react2.default.createElement('style', { dangerouslySetInnerHTML: { __html: '\n          body {\n            background: #dc0067;\n            margin: 0;\n          }\n        ' } })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: styles.heading },
-	          'Error in ',
-	          path
-	        ),
-	        _react2.default.createElement(
-	          'pre',
-	          { className: styles.message },
-	          (0, _stripAnsi2.default)(message)
-	        )
-	      );
+	      return _react2.default.createElement('div', { className: styles.errorDebug }, _react2.default.createElement(_head2.default, null, _react2.default.createElement('style', { dangerouslySetInnerHTML: { __html: '\n          body {\n            background: #a6004c;\n            margin: 0;\n          }\n        ' } })), _react2.default.createElement('div', { className: styles.heading }, 'Error in ', path), _react2.default.createElement('pre', { className: styles.message, dangerouslySetInnerHTML: { __html: (0, _ansiHtml2.default)(encodeHtml(message)) } }));
 	    }
 	  }], [{
 	    key: 'getInitialProps',
@@ -680,10 +662,13 @@ module.exports =
 
 	exports.default = ErrorDebug;
 
+	var encodeHtml = function encodeHtml(str) {
+	  return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	};
 
 	var styles = {
 	  body: (0, _css2.default)({
-	    background: '#dc0067',
+	    background: '#a6004c',
 	    margin: 0
 	  }),
 
@@ -694,20 +679,52 @@ module.exports =
 	  }),
 
 	  message: (0, _css2.default)({
-	    fontFamily: 'menlo-regular',
+	    fontFamily: '"SF Mono", "Roboto Mono", "Fira Mono", menlo-regular, monospace',
 	    fontSize: '10px',
-	    color: '#fff',
+	    color: '#fbe7f1',
 	    margin: 0
 	  }),
 
 	  heading: (0, _css2.default)({
-	    fontFamily: 'sans-serif',
+	    fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif',
 	    fontSize: '13px',
 	    fontWeight: 'bold',
-	    color: '#ff90c6',
+	    color: '#ff84bf',
 	    marginBottom: '20px'
 	  })
 	};
+
+	// see color definitions of babel-code-frame:
+	// https://github.com/babel/babel/blob/master/packages/babel-code-frame/src/index.js
+
+	_ansiHtml2.default.setColors({
+	  reset: 'fff',
+	  darkgrey: 'e54590',
+	  yellow: 'ee8cbb',
+	  green: 'f2a2c7',
+	  magenta: 'fbe7f1',
+	  blue: 'fff',
+	  cyan: 'ef8bb9',
+	  red: 'fff'
+	});
+	    if (true) {
+	      module.hot.accept()
+
+	      var Component = module.exports.default || module.exports
+	      Component.__route = "/_error-debug"
+
+	      if (module.hot.status() !== 'idle') {
+	        var components = next.router.components
+	        for (var r in components) {
+	          if (!components.hasOwnProperty(r)) continue
+
+	          if (components[r].Component.__route === "/_error-debug") {
+	            next.router.update(r, Component)
+	          }
+	        }
+	      }
+	    }
+	  
 
 /***/ },
 /* 1 */
@@ -2247,34 +2264,194 @@ module.exports =
 
 /***/ },
 /* 88 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-	var ansiRegex = __webpack_require__(89)();
+	'use strict'
 
-	module.exports = function (str) {
-		return typeof str === 'string' ? str.replace(ansiRegex, '') : str;
-	};
+	module.exports = ansiHTML
+
+	// Reference to https://github.com/sindresorhus/ansi-regex
+	var _regANSI = /(?:(?:\u001b\[)|\u009b)(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])|\u001b[A-M]/
+
+	var _defColors = {
+	  reset: ['fff', '000'], // [FOREGROUD_COLOR, BACKGROUND_COLOR]
+	  black: '000',
+	  red: 'ff0000',
+	  green: '209805',
+	  yellow: 'e8bf03',
+	  blue: '0000ff',
+	  magenta: 'ff00ff',
+	  cyan: '00ffee',
+	  lightgrey: 'f0f0f0',
+	  darkgrey: '888'
+	}
+	var _styles = {
+	  30: 'black',
+	  31: 'red',
+	  32: 'green',
+	  33: 'yellow',
+	  34: 'blue',
+	  35: 'magenta',
+	  36: 'cyan',
+	  37: 'lightgrey'
+	}
+	var _openTags = {
+	  '1': 'font-weight:bold', // bold
+	  '2': 'opacity:0.8', // dim
+	  '3': '<i>', // italic
+	  '4': '<u>', // underscore
+	  '8': 'display:none', // hidden
+	  '9': '<del>' // delete
+	}
+	var _closeTags = {
+	  '23': '</i>', // reset italic
+	  '24': '</u>', // reset underscore
+	  '29': '</del>' // reset delete
+	}
+
+	;[0, 21, 22, 27, 28, 39, 49].forEach(function (n) {
+	  _closeTags[n] = '</span>'
+	})
+
+	/**
+	 * Converts text with ANSI color codes to HTML markup.
+	 * @param {String} text
+	 * @returns {*}
+	 */
+	function ansiHTML (text) {
+	  // Returns the text if the string has no ANSI escape code.
+	  if (!_regANSI.test(text)) {
+	    return text
+	  }
+
+	  // Cache opened sequence.
+	  var ansiCodes = []
+	  // Replace with markup.
+	  var ret = text.replace(/\033\[(\d+)*m/g, function (match, seq) {
+	    var ot = _openTags[seq]
+	    if (ot) {
+	      // If current sequence has been opened, close it.
+	      if (!!~ansiCodes.indexOf(seq)) { // eslint-disable-line no-extra-boolean-cast
+	        ansiCodes.pop()
+	        return '</span>'
+	      }
+	      // Open tag.
+	      ansiCodes.push(seq)
+	      return ot[0] === '<' ? ot : '<span style="' + ot + ';">'
+	    }
+
+	    var ct = _closeTags[seq]
+	    if (ct) {
+	      // Pop sequence
+	      ansiCodes.pop()
+	      return ct
+	    }
+	    return ''
+	  })
+
+	  // Make sure tags are closed.
+	  var l = ansiCodes.length
+	  ;(l > 0) && (ret += Array(l + 1).join('</span>'))
+
+	  return ret
+	}
+
+	/**
+	 * Customize colors.
+	 * @param {Object} colors reference to _defColors
+	 */
+	ansiHTML.setColors = function (colors) {
+	  if (typeof colors !== 'object') {
+	    throw new Error('`colors` parameter must be an Object.')
+	  }
+
+	  var _finalColors = {}
+	  for (var key in _defColors) {
+	    var hex = colors.hasOwnProperty(key) ? colors[key] : null
+	    if (!hex) {
+	      _finalColors[key] = _defColors[key]
+	      continue
+	    }
+	    if ('reset' === key) {
+	      if (typeof hex === 'string') {
+	        hex = [hex]
+	      }
+	      if (!Array.isArray(hex) || hex.length === 0 || hex.some(function (h) {
+	        return typeof h !== 'string'
+	      })) {
+	        throw new Error('The value of `' + key + '` property must be an Array and each item could only be a hex string, e.g.: FF0000')
+	      }
+	      var defHexColor = _defColors[key]
+	      if (!hex[0]) {
+	        hex[0] = defHexColor[0]
+	      }
+	      if (hex.length === 1 || !hex[1]) {
+	        hex = [hex[0]]
+	        hex.push(defHexColor[1])
+	      }
+
+	      hex = hex.slice(0, 2)
+	    } else if (typeof hex !== 'string') {
+	      throw new Error('The value of `' + key + '` property must be a hex string, e.g.: FF0000')
+	    }
+	    _finalColors[key] = hex
+	  }
+	  _setTags(_finalColors)
+	}
+
+	/**
+	 * Reset colors.
+	 */
+	ansiHTML.reset = function () {
+	  _setTags(_defColors)
+	}
+
+	/**
+	 * Expose tags, including open and close.
+	 * @type {Object}
+	 */
+	ansiHTML.tags = {}
+
+	if (Object.defineProperty) {
+	  Object.defineProperty(ansiHTML.tags, 'open', {
+	    get: function () { return _openTags }
+	  })
+	  Object.defineProperty(ansiHTML.tags, 'close', {
+	    get: function () { return _closeTags }
+	  })
+	} else {
+	  ansiHTML.tags.open = _openTags
+	  ansiHTML.tags.close = _closeTags
+	}
+
+	function _setTags (colors) {
+	  // reset all
+	  _openTags['0'] = 'font-weight:normal;opacity:1;color:#' + colors.reset[0] + ';background:#' + colors.reset[1]
+	  // inverse
+	  _openTags['7'] = 'color:#' + colors.reset[1] + ';background:#' + colors.reset[0]
+	  // dark grey
+	  _openTags['90'] = 'color:#' + colors.darkgrey
+
+	  for (var code in _styles) {
+	    var color = _styles[code]
+	    var oriColor = colors[color] || '000'
+	    _openTags[code] = 'color:#' + oriColor
+	    code = parseInt(code)
+	    _openTags[(code + 10).toString()] = 'background:#' + oriColor
+	  }
+	}
+
+	ansiHTML.reset()
 
 
 /***/ },
 /* 89 */
 /***/ function(module, exports) {
 
-	'use strict';
-	module.exports = function () {
-		return /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
-	};
-
-
-/***/ },
-/* 90 */
-/***/ function(module, exports) {
-
 	module.exports = require("next/head");
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/css");

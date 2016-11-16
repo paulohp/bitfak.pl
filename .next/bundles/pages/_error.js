@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c78ca05430877bd358fc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -584,137 +584,9 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	__webpack_require__(91);
+	module.exports = __webpack_require__(93);
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _inherits2 = __webpack_require__(1);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _getPrototypeOf = __webpack_require__(77);
-
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-	var _classCallCheck2 = __webpack_require__(81);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _createClass2 = __webpack_require__(82);
-
-	var _createClass3 = _interopRequireDefault(_createClass2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(86);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _react = __webpack_require__(87);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _css = __webpack_require__(91);
-
-	var _css2 = _interopRequireDefault(_css);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Error = function (_React$Component) {
-	  (0, _inherits3.default)(Error, _React$Component);
-
-	  function Error() {
-	    (0, _classCallCheck3.default)(this, Error);
-	    return (0, _possibleConstructorReturn3.default)(this, (Error.__proto__ || (0, _getPrototypeOf2.default)(Error)).apply(this, arguments));
-	  }
-
-	  (0, _createClass3.default)(Error, [{
-	    key: 'render',
-	    value: function render() {
-	      var statusCode = this.props.statusCode;
-
-	      var title = statusCode === 404 ? 'This page could not be found' : 'Internal Server Error';
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: (0, _css.merge)(styles.error, styles['error_' + statusCode]) },
-	        _react2.default.createElement(
-	          'div',
-	          { className: styles.text },
-	          _react2.default.createElement(
-	            'h1',
-	            { className: styles.h1 },
-	            statusCode
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: styles.desc },
-	            _react2.default.createElement(
-	              'h2',
-	              { className: styles.h2 },
-	              title,
-	              '.'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }], [{
-	    key: 'getInitialProps',
-	    value: function getInitialProps(_ref) {
-	      var res = _ref.res,
-	          xhr = _ref.xhr;
-
-	      var statusCode = res ? res.statusCode : xhr.status;
-	      return { statusCode: statusCode };
-	    }
-	  }]);
-	  return Error;
-	}(_react2.default.Component);
-
-	exports.default = Error;
-
-
-	var styles = {
-	  error: (0, _css2.default)({
-	    color: '#000',
-	    background: '#fff',
-	    top: 0,
-	    bottom: 0,
-	    left: 0,
-	    right: 0,
-	    position: 'absolute',
-	    fontFamily: '-apple-system, "SF UI Text", "Helvetica Neue", "Lucida Grande", sans-serif',
-	    textAlign: 'center',
-	    paddingTop: '20%'
-	  }),
-
-	  desc: (0, _css2.default)({
-	    display: 'inline-block',
-	    textAlign: 'left',
-	    lineHeight: '49px',
-	    height: '49px',
-	    verticalAlign: 'middle'
-	  }),
-
-	  h1: (0, _css2.default)({
-	    display: 'inline-block',
-	    borderRight: '1px solid rgba(0, 0, 0,.3)',
-	    margin: 0,
-	    marginRight: '20px',
-	    padding: '10px 23px',
-	    fontSize: '24px',
-	    fontWeight: 500,
-	    verticalAlign: 'top'
-	  }),
-
-	  h2: (0, _css2.default)({
-	    fontSize: '14px',
-	    fontWeight: 'normal',
-	    margin: 0,
-	    padding: 0
-	  })
-	};
 
 /***/ },
 /* 1 */
@@ -2255,11 +2127,243 @@ module.exports =
 /***/ },
 /* 88 */,
 /* 89 */,
-/* 90 */,
-/* 91 */
+/* 90 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/css");
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	/*globals window __webpack_hash__ */
+	if(true) {
+		var lastData;
+		var upToDate = function upToDate() {
+			return lastData.indexOf(__webpack_require__.h()) >= 0;
+		};
+		var check = function check() {
+			module.hot.check(true, function(err, updatedModules) {
+				if(err) {
+					if(module.hot.status() in {
+							abort: 1,
+							fail: 1
+						}) {
+						console.warn("[HMR] Cannot apply update. Need to do a full reload!");
+						console.warn("[HMR] " + err.stack || err.message);
+						window.location.reload();
+					} else {
+						console.warn("[HMR] Update failed: " + err.stack || err.message);
+					}
+					return;
+				}
+
+				if(!updatedModules) {
+					console.warn("[HMR] Cannot find update. Need to do a full reload!");
+					console.warn("[HMR] (Probably because of restarting the webpack-dev-server)");
+					window.location.reload();
+					return;
+				}
+
+				if(!upToDate()) {
+					check();
+				}
+
+				__webpack_require__(92)(updatedModules, updatedModules);
+
+				if(upToDate()) {
+					console.log("[HMR] App is up to date.");
+				}
+
+			});
+		};
+		var addEventListener = window.addEventListener ? function(eventName, listener) {
+			window.addEventListener(eventName, listener, false);
+		} : function(eventName, listener) {
+			window.attachEvent("on" + eventName, listener);
+		};
+		addEventListener("message", function(event) {
+			if(typeof event.data === "string" && event.data.indexOf("webpackHotUpdate") === 0) {
+				lastData = event.data;
+				if(!upToDate() && module.hot.status() === "idle") {
+					console.log("[HMR] Checking for updates on the server...");
+					check();
+				}
+			}
+		});
+		console.log("[HMR] Waiting for update signal from WDS...");
+	} else {
+		throw new Error("[HMR] Hot Module Replacement is disabled.");
+	}
+
+
+/***/ },
+/* 92 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	module.exports = function(updatedModules, renewedModules) {
+		var unacceptedModules = updatedModules.filter(function(moduleId) {
+			return renewedModules && renewedModules.indexOf(moduleId) < 0;
+		});
+
+		if(unacceptedModules.length > 0) {
+			console.warn("[HMR] The following modules couldn't be hot updated: (They would need a full reload!)");
+			unacceptedModules.forEach(function(moduleId) {
+				console.warn("[HMR]  - " + moduleId);
+			});
+		}
+
+		if(!renewedModules || renewedModules.length === 0) {
+			console.log("[HMR] Nothing hot updated.");
+		} else {
+			console.log("[HMR] Updated modules:");
+			renewedModules.forEach(function(moduleId) {
+				console.log("[HMR]  - " + moduleId);
+			});
+		}
+	};
+
+
+/***/ },
+/* 93 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _inherits2 = __webpack_require__(1);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _getPrototypeOf = __webpack_require__(77);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(81);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(82);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(86);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _react = __webpack_require__(87);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _css = __webpack_require__(90);
+
+	var _css2 = _interopRequireDefault(_css);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var Error = function (_React$Component) {
+	  (0, _inherits3.default)(Error, _React$Component);
+
+	  function Error() {
+	    (0, _classCallCheck3.default)(this, Error);
+	    return (0, _possibleConstructorReturn3.default)(this, (Error.__proto__ || (0, _getPrototypeOf2.default)(Error)).apply(this, arguments));
+	  }
+
+	  (0, _createClass3.default)(Error, [{
+	    key: 'render',
+	    value: function render() {
+	      var statusCode = this.props.statusCode;
+
+	      var title = statusCode === 404 ? 'This page could not be found' : 'Internal Server Error';
+
+	      return _react2.default.createElement('div', { className: (0, _css.merge)(styles.error, styles['error_' + statusCode]) }, _react2.default.createElement('div', { className: styles.text }, _react2.default.createElement('h1', { className: styles.h1 }, statusCode), _react2.default.createElement('div', { className: styles.desc }, _react2.default.createElement('h2', { className: styles.h2 }, title, '.'))));
+	    }
+	  }], [{
+	    key: 'getInitialProps',
+	    value: function getInitialProps(_ref) {
+	      var res = _ref.res,
+	          xhr = _ref.xhr;
+
+	      var statusCode = res ? res.statusCode : xhr.status;
+	      return { statusCode: statusCode };
+	    }
+	  }]);
+	  return Error;
+	}(_react2.default.Component);
+
+	exports.default = Error;
+
+	var styles = {
+	  error: (0, _css2.default)({
+	    color: '#000',
+	    background: '#fff',
+	    top: 0,
+	    bottom: 0,
+	    left: 0,
+	    right: 0,
+	    position: 'absolute',
+	    fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif',
+	    textAlign: 'center',
+	    paddingTop: '20%'
+	  }),
+
+	  desc: (0, _css2.default)({
+	    display: 'inline-block',
+	    textAlign: 'left',
+	    lineHeight: '49px',
+	    height: '49px',
+	    verticalAlign: 'middle'
+	  }),
+
+	  h1: (0, _css2.default)({
+	    display: 'inline-block',
+	    borderRight: '1px solid rgba(0, 0, 0,.3)',
+	    margin: 0,
+	    marginRight: '20px',
+	    padding: '10px 23px',
+	    fontSize: '24px',
+	    fontWeight: 500,
+	    verticalAlign: 'top'
+	  }),
+
+	  h2: (0, _css2.default)({
+	    fontSize: '14px',
+	    fontWeight: 'normal',
+	    margin: 0,
+	    padding: 0
+	  })
+	};
+	    if (true) {
+	      module.hot.accept()
+
+	      var Component = module.exports.default || module.exports
+	      Component.__route = "/_error"
+
+	      if (module.hot.status() !== 'idle') {
+	        var components = next.router.components
+	        for (var r in components) {
+	          if (!components.hasOwnProperty(r)) continue
+
+	          if (components[r].Component.__route === "/_error") {
+	            next.router.update(r, Component)
+	          }
+	        }
+	      }
+	    }
+	  
 
 /***/ }
 /******/ ]);

@@ -6,6 +6,7 @@
   "dependencies": {
     "bitgo": "^2.0.4",
     "bulma": "^0.2.3",
+    "isomorphic-fetch": "^2.2.1",
     "next": "latest",
     "re-base": "^2.2.0",
     "re-bulma": "^0.2.1",

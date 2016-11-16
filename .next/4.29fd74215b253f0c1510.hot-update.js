@@ -43,17 +43,17 @@ webpackHotUpdate(4,{
 
 	var _reBulma = __webpack_require__(95);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	var _link = __webpack_require__(174);
 
 	var _link2 = _interopRequireDefault(_link);
 
+	__webpack_require__(212);
+
 	var _reBase = __webpack_require__(178);
 
 	var _reBase2 = _interopRequireDefault(_reBase);
-
-	__webpack_require__(186);
 
 	var _footer = __webpack_require__(175);
 
@@ -151,31 +151,19 @@ webpackHotUpdate(4,{
 	                                        this.props.payment.address.address
 	                                    )
 	                                ),
+	                                _react2.default.createElement('br', null),
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    null,
 	                                    _react2.default.createElement(
 	                                        _reBulma.Button,
-	                                        null,
+	                                        { color: 'isInfo' },
 	                                        _react2.default.createElement(
 	                                            'a',
-	                                            { href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
-	                                            'Open Wallet'
+	                                            { className: (0, _css.style)(styles.normalizeLink), href: 'bitcoin:' + this.props.payment.address.address + '?amount=' + this.props.payment.totalBtc },
+	                                            'Open Wallet ',
+	                                            _react2.default.createElement('i', { className: 'fa fa-btc' })
 	                                        )
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        _reBulma.Heading,
-	                                        null,
-	                                        'Expires in:'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        _reBulma.Title,
-	                                        null,
-	                                        '20:00 minutes'
 	                                    )
 	                                )
 	                            ),
@@ -188,15 +176,29 @@ webpackHotUpdate(4,{
 	                                _reBulma.Column,
 	                                null,
 	                                _react2.default.createElement(
-	                                    _reBulma.Heading,
+	                                    'div',
 	                                    null,
-	                                    'Payment details:'
+	                                    _react2.default.createElement(
+	                                        _reBulma.Heading,
+	                                        null,
+	                                        'Payment details:'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        _reBulma.Title,
+	                                        null,
+	                                        'Total Zl: ',
+	                                        this.props.payment.totalPrice
+	                                    )
 	                                ),
 	                                _react2.default.createElement(
-	                                    _reBulma.Title,
+	                                    'div',
 	                                    null,
-	                                    'Total Zl: ',
-	                                    this.props.payment.totalPrice
+	                                    _react2.default.createElement(
+	                                        _reBulma.Heading,
+	                                        null,
+	                                        'Expires at:'
+	                                    ),
+	                                    _react2.default.createElement(_reBulma.Title, null)
 	                                )
 	                            )
 	                        )
@@ -226,7 +228,14 @@ webpackHotUpdate(4,{
 	                                    var filteredData = data.filter(function (d) {
 	                                        return d.key === id;
 	                                    });
-	                                    return { payment: filteredData[0] };
+	                                    return fetch('http://localhost:4000/api/v1/address/' + filteredData[0].address.address + '/transactions').then(function (res) {
+	                                        return res.json();
+	                                    }).then(function (transactions) {
+	                                        console.log(transactions);
+	                                        var paymentData = filteredData[0];
+	                                        paymentData.transactions = transactions;
+	                                        return { payment: paymentData };
+	                                    });
 	                                }));
 
 	                            case 5:
@@ -271,13 +280,27 @@ webpackHotUpdate(4,{
 	        textAlign: 'center',
 	        position: 'relative',
 	        top: '-100px'
+	    },
+	    normalizeLink: {
+	        color: 'white',
+	        textDecoration: 'none'
 	    }
 	};
 	    if (true) {
 	      module.hot.accept()
+
+	      var Component = module.exports.default || module.exports
+	      Component.__route = "/pay"
+
 	      if (module.hot.status() !== 'idle') {
-	        var Component = module.exports.default || module.exports
-	        next.router.update('/pay', Component)
+	        var components = next.router.components
+	        for (var r in components) {
+	          if (!components.hasOwnProperty(r)) continue
+
+	          if (components[r].Component.__route === "/pay") {
+	            next.router.update(r, Component)
+	          }
+	        }
 	      }
 	    }
 	  

@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c78ca05430877bd358fc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -584,7 +584,7 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(92);
+	__webpack_require__(91);
 	module.exports = __webpack_require__(177);
 
 
@@ -2126,20 +2126,19 @@ module.exports =
 
 /***/ },
 /* 88 */,
-/* 89 */,
-/* 90 */
+/* 89 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/head");
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports) {
 
 	module.exports = require("next/css");
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2179,7 +2178,7 @@ module.exports =
 					check();
 				}
 
-				__webpack_require__(93)(updatedModules, updatedModules);
+				__webpack_require__(92)(updatedModules, updatedModules);
 
 				if(upToDate()) {
 					console.log("[HMR] App is up to date.");
@@ -2208,7 +2207,7 @@ module.exports =
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports) {
 
 	/*
@@ -2239,6 +2238,7 @@ module.exports =
 
 
 /***/ },
+/* 93 */,
 /* 94 */,
 /* 95 */
 /***/ function(module, exports, __webpack_require__) {
@@ -8567,7 +8567,7 @@ module.exports =
 
 	var _reBulma = __webpack_require__(95);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8619,9 +8619,9 @@ module.exports =
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
-	var _head = __webpack_require__(90);
+	var _head = __webpack_require__(89);
 
 	var _head2 = _interopRequireDefault(_head);
 
@@ -8694,7 +8694,7 @@ module.exports =
 
 	var _reBulma = __webpack_require__(95);
 
-	var _css = __webpack_require__(91);
+	var _css = __webpack_require__(90);
 
 	var _link = __webpack_require__(174);
 
@@ -9123,9 +9123,19 @@ module.exports =
 	};
 	    if (true) {
 	      module.hot.accept()
+
+	      var Component = module.exports.default || module.exports
+	      Component.__route = "/invoices"
+
 	      if (module.hot.status() !== 'idle') {
-	        var Component = module.exports.default || module.exports
-	        next.router.update('/invoices', Component)
+	        var components = next.router.components
+	        for (var r in components) {
+	          if (!components.hasOwnProperty(r)) continue
+
+	          if (components[r].Component.__route === "/invoices") {
+	            next.router.update(r, Component)
+	          }
+	        }
 	      }
 	    }
 	  
@@ -9207,633 +9217,238 @@ module.exports =
 
 		'use strict';
 
-		var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+		var _firebase = __webpack_require__(2);
 
-		function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+		var _firebase2 = _interopRequireDefault(_firebase);
 
-		function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+		var _utils = __webpack_require__(3);
 
-		module.exports = (function () {
-		  var firebase = __webpack_require__(2);
-		  var Symbol = __webpack_require__(3);
-		  var firebaseApp = null;
-		  var rebase;
-		  var firebaseRefs = new Map();
-		  var firebaseListeners = new Map();
-		  var syncs = new WeakMap();
+		var _validators = __webpack_require__(4);
 
-		  var optionValidators = {
-		    notObject: function notObject(options) {
-		      if (!_isObject(options)) {
-		        _throwError('The options argument must be an object. Instead, got ' + options, 'INVALID_OPTIONS');
-		      }
-		    },
-		    context: function context(options) {
-		      this.notObject(options);
-		      if (!options.context || !_isObject(options.context)) {
-		        this.makeError('context', 'object', options.context);
-		      }
-		    },
-		    state: function state(options) {
-		      this.notObject(options);
-		      if (!options.state || typeof options.state !== 'string') {
-		        this.makeError('state', 'string', options.state);
-		      }
-		    },
-		    then: function then(options) {
-		      this.notObject(options);
-		      if (typeof options.then === 'undefined' || typeof options.then !== 'function') {
-		        this.makeError('then', 'function', options.then);
-		      }
-		    },
-		    data: function data(options) {
-		      this.notObject(options);
-		      if (typeof options.data === 'undefined') {
-		        this.makeError('data', 'ANY', options.data);
-		      }
-		    },
-		    query: function query(options) {
-		      this.notObject(options);
-		      var validQueries = ['limitToFirst', 'limitToLast', 'orderByChild', 'orderByValue', 'orderByKey', 'orderByPriority', 'startAt', 'endAt', 'equalTo'];
-		      var queries = options.queries;
-		      for (var key in queries) {
-		        if (queries.hasOwnProperty(key) && validQueries.indexOf(key) === -1) {
-		          _throwError('The query field must contain valid Firebase queries.  Expected one of [' + validQueries.join(', ') + ']. Instead, got ' + key, 'INVALID_OPTIONS');
-		        }
-		      }
-		    },
-		    makeError: function makeError(prop, type, actual) {
-		      _throwError('The options argument must contain a ' + prop + ' property of type ' + type + '. Instead, got ' + actual, 'INVALID_OPTIONS');
-		    }
-		  };
+		var _push2 = __webpack_require__(5);
 
-		  function _toArray(snapshot) {
-		    var arr = [];
-		    snapshot.forEach(function (childSnapshot) {
-		      var val = childSnapshot.val();
-		      if (_isObject(val)) {
-		        val.key = childSnapshot.key;
-		      }
-		      arr.push(val);
-		    });
-		    return arr;
-		  };
+		var _push3 = _interopRequireDefault(_push2);
 
-		  function _isObject(obj) {
-		    return Object.prototype.toString.call(obj) === '[object Object]' ? true : false;
-		  };
+		var _fetch2 = __webpack_require__(6);
 
-		  function _throwError(msg, code) {
-		    var err = new Error('REBASE: ' + msg);
-		    err.code = code;
-		    throw err;
-		  };
+		var _fetch3 = _interopRequireDefault(_fetch2);
 
-		  function _validateConfig(config) {
-		    var defaultError = 'Rebase.createClass failed.';
-		    var errorMsg;
-		    if (typeof config !== 'object') {
-		      errorMsg = defaultError + ' to migrate from 2.x.x to 3.x.x, the config must be an object. See: https://firebase.google.com/docs/web/setup#add_firebase_to_your_app';
-		    } else if (!config || arguments.length > 1) {
-		      errorMsg = defaultError + ' expects 1 argument.';
-		    }
+		var _post2 = __webpack_require__(7);
 
-		    if (typeof errorMsg !== 'undefined') {
-		      _throwError(errorMsg, "INVALID_CONFIG");
-		    }
-		  };
+		var _post3 = _interopRequireDefault(_post2);
 
-		  function _validateEndpoint(endpoint) {
-		    var defaultError = 'The Firebase endpoint you are trying to listen to';
-		    var errorMsg;
-		    if (typeof endpoint !== 'string') {
-		      errorMsg = defaultError + ' must be a string. Instead, got ' + endpoint;
-		    } else if (endpoint.length === 0) {
-		      errorMsg = defaultError + ' must be a non-empty string. Instead, got ' + endpoint;
-		    } else if (endpoint.length > 768) {
-		      errorMsg = defaultError + ' is too long to be stored in Firebase. It must be less than 768 characters.';
-		    } else if (/^$|[\[\]\#\$]|.{1}[\.]/.test(endpoint)) {
-		      errorMsg = defaultError + ' in invalid. Paths must be non-empty strings and can\'t contain ".", "#", "$", "[", or "]".';
-		    }
+		var _sync2 = __webpack_require__(8);
 
-		    if (typeof errorMsg !== 'undefined') {
-		      _throwError(errorMsg, "INVALID_ENDPOINT");
-		    }
-		  };
+		var _sync3 = _interopRequireDefault(_sync2);
 
-		  function _setState(newState) {
-		    this.setState(newState);
-		  };
+		var _bind2 = __webpack_require__(9);
 
-		  function _returnRef(endpoint, method, id, context) {
-		    return { endpoint: endpoint, method: method, id: id, context: context };
-		  };
+		var _bind3 = _interopRequireDefault(_bind2);
 
-		  function _addSync(context, id, sync) {
-		    var existingSyncs = syncs.get(context) || [];
-		    existingSyncs.push(sync);
-		    syncs.set(context, existingSyncs);
-		  }
-		  function _fetch(endpoint, options) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.context(options);
-		    options.queries && optionValidators.query(options);
-		    var ref = firebase.database().ref(endpoint);
-		    ref = _addQueries(ref, options.queries);
-		    return ref.once('value').then(function (snapshot) {
-		      var data = options.asArray === true ? _toArray(snapshot) : snapshot.val();
-		      if (options.then) {
-		        options.then.call(options.context, data);
-		      }
-		      return data;
-		    }, function (err) {
-		      //call onFailure callback if it exists otherwise return a rejected promise
-		      if (options.onFailure && typeof options.onFailure === 'function') {
-		        options.onFailure.call(options.context, err);
-		      } else {
-		        return firebase.Promise.reject(err);
-		      }
-		    });
-		  };
+		var _update2 = __webpack_require__(10);
 
-		  function _firebaseRefsMixin(id, ref) {
-		    firebaseRefs.set(id, ref);
-		  };
+		var _update3 = _interopRequireDefault(_update2);
 
-		  function _addListener(id, invoker, options, ref) {
-		    ref = _addQueries(ref, options.queries);
-		    firebaseListeners.set(id, ref.on('value', function (snapshot) {
-		      var data = snapshot.val();
-		      data = data === null ? options.asArray === true ? [] : {} : data;
-		      if (invoker === 'listenTo') {
-		        options.asArray === true ? options.then.call(options.context, _toArray(snapshot)) : options.then.call(options.context, data);
-		      } else if (invoker === 'syncState') {
-		        data = options.asArray === true ? _toArray(snapshot) : data;
-		        options.reactSetState.call(options.context, _defineProperty({}, options.state, data));
-		        if (options.then && options.then.called === false) {
-		          options.then.call(options.context);
-		          options.then.called = true;
-		        }
-		      } else if (invoker === 'bindToState') {
-		        var newState = {};
-		        options.asArray === true ? newState[options.state] = _toArray(snapshot) : newState[options.state] = data;
-		        _setState.call(options.context, newState);
-		        if (options.then && options.then.called === false) {
-		          options.then.call(options.context);
-		          options.then.called = true;
-		        }
-		      }
-		    }));
-		  };
+		var _reset2 = __webpack_require__(11);
 
-		  function _bind(endpoint, options, invoker) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.context(options);
-		    invoker === 'listenTo' && optionValidators.then(options);
-		    invoker === 'bindToState' && optionValidators.state(options);
-		    options.queries && optionValidators.query(options);
-		    options.then && (options.then.called = false);
+		var _reset3 = _interopRequireDefault(_reset2);
 
-		    var id = _createHash(endpoint, invoker);
-		    var ref = firebase.database().ref(endpoint);
-		    _firebaseRefsMixin(id, ref);
-		    _addListener(id, invoker, options, ref);
-		    return _returnRef(endpoint, invoker, id, options.context);
-		  };
+		var _removeBinding2 = __webpack_require__(12);
 
-		  function _updateSyncState(ref, data) {
-		    if (_isObject(data)) {
-		      for (var prop in data) {
-		        //allow timestamps to be set
-		        if (prop !== '.sv') {
-		          _updateSyncState(ref.child(prop), data[prop]);
-		        } else {
-		          ref.set(data);
-		        }
-		      }
-		    } else {
-		      ref.set(data);
-		    }
-		  };
+		var _removeBinding3 = _interopRequireDefault(_removeBinding2);
 
-		  function _sync(endpoint, options) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.context(options);
-		    optionValidators.state(options);
-		    options.queries && optionValidators.query(options);
-		    options.then && (options.then.called = false);
+		var _remove2 = __webpack_require__(13);
 
-		    //store reference to react's setState
-		    if (_sync.called !== true) {
-		      _sync.reactSetState = options.context.setState;
-		      _sync.called = true;
-		    }
-		    options.reactSetState = _sync.reactSetState;
+		var _remove3 = _interopRequireDefault(_remove2);
 
-		    var ref = firebase.database().ref(endpoint);
-		    var id = _createHash(endpoint, 'syncState');
-		    _firebaseRefsMixin(id, ref);
-		    _addListener(id, 'syncState', options, ref);
+		var _resetPassword2 = __webpack_require__(14);
 
-		    var sync = {
-		      id: id,
-		      updateFirebase: _updateSyncState.bind(this, ref),
-		      stateKey: options.state
-		    };
-		    _addSync(options.context, id, sync);
+		var _resetPassword3 = _interopRequireDefault(_resetPassword2);
 
-		    options.context.setState = function (data, cb) {
-		      var _this = this;
+		var _createUser2 = __webpack_require__(15);
 
-		      var syncsToCall = syncs.get(this);
-		      syncsToCall.forEach(function (sync) {
-		        for (var key in data) {
-		          if (data.hasOwnProperty(key)) {
-		            if (key === sync.stateKey) {
-		              sync.updateFirebase(data[key]);
+		var _createUser3 = _interopRequireDefault(_createUser2);
+
+		var _authWithPassword2 = __webpack_require__(16);
+
+		var _authWithPassword3 = _interopRequireDefault(_authWithPassword2);
+
+		var _authWithCustomToken2 = __webpack_require__(17);
+
+		var _authWithCustomToken3 = _interopRequireDefault(_authWithCustomToken2);
+
+		var _authWithOAuthPopup2 = __webpack_require__(18);
+
+		var _authWithOAuthPopup3 = _interopRequireDefault(_authWithOAuthPopup2);
+
+		var _getOAuthRedirectResult2 = __webpack_require__(20);
+
+		var _getOAuthRedirectResult3 = _interopRequireDefault(_getOAuthRedirectResult2);
+
+		var _authWithOAuthToken2 = __webpack_require__(21);
+
+		var _authWithOAuthToken3 = _interopRequireDefault(_authWithOAuthToken2);
+
+		var _onAuth2 = __webpack_require__(22);
+
+		var _onAuth3 = _interopRequireDefault(_onAuth2);
+
+		var _unauth2 = __webpack_require__(23);
+
+		var _unauth3 = _interopRequireDefault(_unauth2);
+
+		var _getAuth2 = __webpack_require__(24);
+
+		var _getAuth3 = _interopRequireDefault(_getAuth2);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		//database
+
+
+		//helpers
+		module.exports = function () {
+
+		  var apps = {};
+
+		  function init(app) {
+		    return function () {
+		      var firebaseRefs = new Map();
+		      var firebaseListeners = new Map();
+		      var syncs = new WeakMap();
+
+		      return {
+		        name: app.name,
+		        storage: _firebase2.default.storage,
+		        database: _firebase2.default.database,
+		        auth: _firebase2.default.auth,
+		        messaging: _firebase2.default.messaging,
+		        app: _firebase2.default.app,
+		        initializedApp: app,
+		        listenTo: function listenTo(endpoint, options) {
+		          return _bind3.default.call(this, endpoint, options, 'listenTo', {
+		            db: this.database(this.initializedApp),
+		            refs: firebaseRefs,
+		            listeners: firebaseListeners,
+		            syncs: syncs
+		          });
+		        },
+		        bindToState: function bindToState(endpoint, options) {
+		          return _bind3.default.call(this, endpoint, options, 'bindToState', {
+		            db: this.database(this.initializedApp),
+		            refs: firebaseRefs,
+		            listeners: firebaseListeners
+		          });
+		        },
+		        syncState: function syncState(endpoint, options) {
+		          return _sync3.default.call(this, endpoint, options, {
+		            db: this.database(this.initializedApp),
+		            refs: firebaseRefs,
+		            listeners: firebaseListeners,
+		            syncs: syncs
+		          });
+		        },
+		        fetch: function fetch(endpoint, options) {
+		          return (0, _fetch3.default)(endpoint, options, this.database(this.initializedApp));
+		        },
+		        post: function post(endpoint, options) {
+		          return (0, _post3.default)(endpoint, options, this.database(this.initializedApp));
+		        },
+		        update: function update(endpoint, options) {
+		          return (0, _update3.default)(endpoint, options, {
+		            db: this.database(this.initializedApp)
+		          });
+		        },
+		        push: function push(endpoint, options) {
+		          return (0, _push3.default)(endpoint, options, this.database(this.initializedApp));
+		        },
+		        removeBinding: function removeBinding(endpoint) {
+		          (0, _removeBinding3.default)(endpoint, {
+		            refs: firebaseRefs,
+		            listeners: firebaseListeners,
+		            syncs: syncs
+		          });
+		        },
+		        remove: function remove(endpoint, fn) {
+		          return (0, _remove3.default)(endpoint, this.database(this.initializedApp), fn);
+		        },
+		        reset: function reset() {
+		          return (0, _reset3.default)({
+		            refs: firebaseRefs,
+		            listeners: firebaseListeners,
+		            syncs: syncs
+		          });
+		        },
+		        authWithPassword: function authWithPassword(credentials, fn) {
+		          return (0, _authWithPassword3.default)(credentials, fn, this.auth(this.initializedApp));
+		        },
+		        authWithCustomToken: function authWithCustomToken(token, fn) {
+		          return (0, _authWithCustomToken3.default)(token, fn, this.auth(this.initializedApp));
+		        },
+		        authWithOAuthPopup: function authWithOAuthPopup(provider, fn, settings) {
+		          return (0, _authWithOAuthPopup3.default)(provider, fn, settings, this.auth(this.initializedApp));
+		        },
+		        authWithOAuthRedirect: function authWithOAuthRedirect(provider, fn, settings) {
+		          return (0, _authWithOAuthToken3.default)(provider, fn, settings, this.auth(this.initializedApp));
+		        },
+		        authWithOAuthToken: function authWithOAuthToken(provider, token, fn, settings) {
+		          return (0, _authWithOAuthToken3.default)(provider, token, fn, settings, this.auth(this.initializedApp));
+		        },
+		        authGetOAuthRedirectResult: function authGetOAuthRedirectResult(fn) {
+		          return (0, _getOAuthRedirectResult3.default)(fn, this.auth(this.initializedApp));
+		        },
+		        onAuth: function onAuth(fn) {
+		          return (0, _onAuth3.default)(fn, this.auth(this.initializedApp));
+		        },
+		        unauth: function unauth(fn) {
+		          return (0, _unauth3.default)(this.auth(this.initializedApp));
+		        },
+		        getAuth: function getAuth() {
+		          return (0, _getAuth3.default)(this.auth(this.initializedApp));
+		        },
+		        createUser: function createUser(credentials, fn) {
+		          return (0, _createUser3.default)(credentials, fn, this.auth(this.initializedApp));
+		        },
+		        resetPassword: function resetPassword(credentials, fn) {
+		          return (0, _resetPassword3.default)(credentials, fn, this.auth(this.initializedApp));
+		        },
+		        delete: function _delete(fn) {
+		          var _this = this;
+
+		          delete apps[this.name];
+		          return this.initializedApp.delete().then(function () {
+		            _this.reset();
+		            if (typeof fn === 'function') {
+		              fn.call(null, true);
 		            } else {
-		              _sync.reactSetState.call(_this, data, cb);
+		              return _firebase2.default.Promise.resolve(true);
 		            }
-		          }
+		          });
 		        }
-		      });
-		    };
-		    return _returnRef(endpoint, 'syncState', id, options.context);
-		  };
-
-		  function _post(endpoint, options) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.data(options);
-		    var ref = firebase.database().ref(endpoint);
-		    if (options.then) {
-		      return ref.set(options.data, options.then);
-		    } else {
-		      return ref.set(options.data);
-		    }
-		  };
-
-		  function _update(endpoint, options) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.data(options);
-		    var ref = firebase.database().ref(endpoint);
-		    if (options.then) {
-		      return ref.update(options.data, options.then);
-		    } else {
-		      return ref.update(options.data);
-		    }
-		  };
-
-		  function _push(endpoint, options) {
-		    _validateEndpoint(endpoint);
-		    optionValidators.data(options);
-		    var ref = firebase.database().ref(endpoint);
-		    var returnEndpoint;
-		    if (options.then) {
-		      returnEndpoint = ref.push(options.data, options.then);
-		    } else {
-		      returnEndpoint = ref.push(options.data);
-		    }
-		    return returnEndpoint;
-		  };
-
-		  function _addQueries(ref, queries) {
-		    var needArgs = {
-		      limitToFirst: true,
-		      limitToLast: true,
-		      orderByChild: true,
-		      startAt: true,
-		      endAt: true,
-		      equalTo: true
-		    };
-		    for (var key in queries) {
-		      if (queries.hasOwnProperty(key)) {
-		        if (needArgs[key]) {
-		          ref = ref[key](queries[key]);
-		        } else {
-		          ref = ref[key]();
-		        }
-		      }
-		    }
-		    return ref;
-		  };
-
-		  function _removeBinding(_ref) {
-		    var endpoint = _ref.endpoint;
-		    var method = _ref.method;
-		    var id = _ref.id;
-		    var context = _ref.context;
-
-		    var ref = firebaseRefs.get(id);
-		    var listener = firebaseListeners.get(id);
-		    if (typeof ref === "undefined") {
-		      var errorMsg = 'Unexpected value. Ref was either never bound or has already been unbound.';
-		      _throwError(errorMsg, "UNBOUND_ENDPOINT_VARIABLE");
-		    }
-		    ref.off('value', listener);
-		    firebaseRefs['delete'](id);
-		    firebaseListeners['delete'](id);
-		    var currentSyncs = syncs.get(context);
-		    if (currentSyncs && currentSyncs.length > 0) {
-		      var idx = currentSyncs.findIndex(function (item, index) {
-		        return item.id === id;
-		      });
-		      if (idx !== -1) {
-		        currentSyncs.splice(idx, 1);
-		        syncs.set(context, currentSyncs);
-		      }
-		    }
-		  };
-
-		  function _reset() {
-		    rebase = undefined;
-		    var _iteratorNormalCompletion = true;
-		    var _didIteratorError = false;
-		    var _iteratorError = undefined;
-
-		    try {
-		      for (var _iterator = firebaseRefs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-		        var _step$value = _slicedToArray(_step.value, 2);
-
-		        var id = _step$value[0];
-		        var ref = _step$value[1];
-
-		        ref.off('value', firebaseListeners.get(id));
-		        firebaseRefs = new Map();
-		        firebaseListeners = new Map();
-		        syncs = new WeakMap();
-		      }
-		    } catch (err) {
-		      _didIteratorError = true;
-		      _iteratorError = err;
-		    } finally {
-		      try {
-		        if (!_iteratorNormalCompletion && _iterator['return']) {
-		          _iterator['return']();
-		        }
-		      } finally {
-		        if (_didIteratorError) {
-		          throw _iteratorError;
-		        }
-		      }
-		    }
-		  };
-
-		  function _authWithPassword(credentials, fn) {
-		    var ref = firebase.auth();
-		    var email = credentials.email;
-		    var password = credentials.password;
-
-		    return ref.signInWithEmailAndPassword(email, password).then(function (authData) {
-		      return fn(null, authData);
-		    })['catch'](function (err) {
-		      return fn(err);
-		    });
-		  }
-
-		  function _authWithCustomToken(token, fn) {
-		    var ref = firebase.auth();
-		    return ref.signInWithCustomToken(token).then(function (user) {
-		      return fn(null, user);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  }
-
-		  function _authWithOAuthPopup(provider, fn, settings) {
-		    settings = settings || {};
-		    var authProvider = _getAuthProvider(provider, settings);
-		    var ref = firebase.auth();
-		    return ref.signInWithPopup(authProvider).then(function (authData) {
-		      return fn(null, authData);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  }
-
-		  function _getOAuthRedirectResult(fn) {
-		    var ref = firebase.auth();
-		    return ref.getRedirectResult().then(function (user) {
-		      return fn(null, user);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  }
-
-		  function _authWithOAuthToken(provider, token, fn, settings) {
-		    settings = settings || {};
-		    var authProvider = _getAuthProvider(provider, settings);
-		    var credential = authProvider.credential.apply(authProvider, [token].concat(_toConsumableArray(settings.providerOptions)));
-		    var ref = firebase.auth();
-		    return ref.signInWithCredential(credential).then(function (authData) {
-		      return fn(null, authData);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  }
-
-		  function _authWithOAuthRedirect(provider, fn, settings) {
-		    settings = settings || {};
-		    var authProvider = _getAuthProvider(provider, settings);
-		    var ref = firebase.auth();
-		    return ref.signInWithRedirect(authProvider).then(function () {
-		      return fn(null);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  }
-
-		  function _onAuth(fn) {
-		    var ref = firebase.auth();
-		    return ref.onAuthStateChanged(fn);
-		  }
-
-		  function _unauth() {
-		    var ref = firebase.auth();
-		    return ref.signOut();
-		  }
-
-		  function _getAuth() {
-		    var ref = firebase.auth();
-		    return ref.currentUser;
-		  }
-
-		  function _createUser(credentials, fn) {
-		    var ref = firebase.auth();
-		    var email = credentials.email;
-		    var password = credentials.password;
-
-		    return ref.createUserWithEmailAndPassword(email, password).then(function (authData) {
-		      return fn(null, authData);
-		    })['catch'](function (err) {
-		      return fn(err);
-		    });
-		  };
-
-		  function _resetPassword(credentials, fn) {
-		    var ref = firebase.auth();
-		    var email = credentials.email;
-
-		    return ref.sendPasswordResetEmail(email).then(function () {
-		      return fn(null);
-		    })['catch'](function (error) {
-		      return fn(error);
-		    });
-		  };
-
-		  function _getFacebookProvider(settings) {
-		    var provider = new firebase.auth.FacebookAuthProvider();
-		    if (settings.scope) {
-		      provider = _addScope(settings.scope, provider);
-		    }
-		    return provider;
-		  }
-
-		  function _getTwitterProvider() {
-		    return new firebase.auth.TwitterAuthProvider();
-		  }
-
-		  function _getGithubProvider(settings) {
-		    var provider = new firebase.auth.GithubAuthProvider();
-		    if (settings.scope) {
-		      provider = _addScope(settings.scope, provider);
-		    }
-		    return provider;
-		  };
-
-		  function _getGoogleProvider(settings) {
-		    var provider = new firebase.auth.GoogleAuthProvider();
-		    if (settings.scope) {
-		      provider = _addScope(settings.scope, provider);
-		    }
-		    return provider;
-		  };
-
-		  function _addScope(scope, provider) {
-		    if (Array.isArray(scope)) {
-		      scope.forEach(function (item) {
-		        provider.addScope(item);
-		      });
-		    } else {
-		      provider.addScope(scope);
-		    }
-		    return provider;
-		  }
-
-		  function _createHash(endpoint, invoker) {
-		    var hash = 0;
-		    var str = endpoint + invoker + Date.now();
-		    if (str.length == 0) return hash;
-		    for (var i = 0; i < str.length; i++) {
-		      var char = str.charCodeAt(i);
-		      hash = (hash << 5) - hash + char;
-		      hash = hash & hash;
-		    }
-		    return hash;
-		  }
-
-		  function _getAuthProvider(service, settings) {
-		    switch (service) {
-		      case 'twitter':
-		        return _getTwitterProvider();
-		        break;
-		      case 'google':
-		        return _getGoogleProvider(settings);
-		        break;
-		      case 'facebook':
-		        return _getFacebookProvider(settings);
-		        break;
-		      case 'github':
-		        return _getGithubProvider(settings);
-		        break;
-		      default:
-		        _throwError('Expected auth provider requested. Available auth providers: facebook,twitter,github, google', 'UNKNOWN AUTH PROVIDER');
-		        break;
-		    }
-		  }
-
-		  function init() {
-		    return {
-		      storage: firebase.storage,
-		      database: firebase.database,
-		      auth: firebase.auth,
-		      app: firebase.app,
-		      listenTo: function listenTo(endpoint, options) {
-		        return _bind(endpoint, options, 'listenTo');
-		      },
-		      bindToState: function bindToState(endpoint, options) {
-		        return _bind(endpoint, options, 'bindToState');
-		      },
-		      syncState: function syncState(endpoint, options) {
-		        return _sync(endpoint, options);
-		      },
-		      fetch: function fetch(endpoint, options) {
-		        return _fetch(endpoint, options);
-		      },
-		      post: function post(endpoint, options) {
-		        return _post(endpoint, options);
-		      },
-		      update: function update(endpoint, options) {
-		        return _update(endpoint, options);
-		      },
-		      push: function push(endpoint, options) {
-		        return _push(endpoint, options);
-		      },
-		      removeBinding: function removeBinding(endpoint) {
-		        _removeBinding(endpoint, true);
-		      },
-		      reset: function reset() {
-		        _reset();
-		      },
-		      authWithPassword: function authWithPassword(credentials, fn) {
-		        return _authWithPassword(credentials, fn);
-		      },
-		      authWithCustomToken: function authWithCustomToken(token, fn) {
-		        return _authWithCustomToken(token, fn);
-		      },
-		      authWithOAuthPopup: function authWithOAuthPopup(provider, fn, settings) {
-		        return _authWithOAuthPopup(provider, fn, settings);
-		      },
-		      authWithOAuthRedirect: function authWithOAuthRedirect(provider, fn, settings) {
-		        return _authWithOAuthRedirect(provider, fn, settings);
-		      },
-		      authWithOAuthToken: function authWithOAuthToken(provider, token, fn, settings) {
-		        return _authWithOAuthToken(provider, token, fn, settings);
-		      },
-		      authGetOAuthRedirectResult: function authGetOAuthRedirectResult(fn) {
-		        return _getOAuthRedirectResult(fn);
-		      },
-		      onAuth: function onAuth(fn) {
-		        return _onAuth(fn);
-		      },
-		      unauth: function unauth(fn) {
-		        return _unauth();
-		      },
-		      getAuth: function getAuth() {
-		        return _getAuth();
-		      },
-		      createUser: function createUser(credentials, fn) {
-		        return _createUser(credentials, fn);
-		      },
-		      resetPassword: function resetPassword(credentials, fn) {
-		        return _resetPassword(credentials, fn);
-		      }
-		    };
+		      };
+		    }();
 		  };
 
 		  return {
 		    createClass: function createClass(config) {
-		      if (rebase) {
-		        return rebase;
+		      var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '[DEFAULT]';
+
+		      if (typeof apps[name] !== 'undefined') {
+		        return apps[name];
+		      } else {
+		        (0, _validators._validateConfig)(config);
+		        var app = _firebase2.default.initializeApp(config, name);
 		      }
-		      if (!firebaseApp) {
-		        _validateConfig(config);
-		        firebaseApp = firebase.initializeApp(config);
-		      }
-		      rebase = init();
-		      return rebase;
+		      apps[name] = init(app);
+		      return apps[name];
 		    }
 		  };
-		})();
+		}();
+
+		//auth
+
+
+		//user
 
 	/***/ },
 	/* 2 */
@@ -9843,159 +9458,281 @@ module.exports =
 
 	/***/ },
 	/* 3 */
-	/***/ function(module, exports, __webpack_require__) {
-
-		'use strict';
-
-		module.exports = __webpack_require__(4)() ? Symbol : __webpack_require__(5);
-
-
-	/***/ },
-	/* 4 */
 	/***/ function(module, exports) {
 
 		'use strict';
 
-		var validTypes = { object: true, symbol: true };
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
 
-		module.exports = function () {
-			var symbol;
-			if (typeof Symbol !== 'function') return false;
-			symbol = Symbol('test symbol');
-			try { String(symbol); } catch (e) { return false; }
+		function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-			// Return 'true' also for polyfills
-			if (!validTypes[typeof Symbol.iterator]) return false;
-			if (!validTypes[typeof Symbol.toPrimitive]) return false;
-			if (!validTypes[typeof Symbol.toStringTag]) return false;
-
-			return true;
+		var _isObject = function _isObject(obj) {
+		  return Object.prototype.toString.call(obj) === '[object Object]' ? true : false;
 		};
 
+		var _toArray = function _toArray(snapshot) {
+		  var arr = [];
+		  snapshot.forEach(function (childSnapshot) {
+		    var val = childSnapshot.val();
+		    if (_isObject(val)) {
+		      val.key = childSnapshot.key;
+		    }
+		    arr.push(val);
+		  });
+		  return arr;
+		};
+
+		var _addSync = function _addSync(context, sync, syncs) {
+		  var existingSyncs = syncs.get(context) || [];
+		  existingSyncs.push(sync);
+		  syncs.set(context, existingSyncs);
+		};
+
+		var _throwError = function _throwError(msg, code) {
+		  var err = new Error('REBASE: ' + msg);
+		  err.code = code;
+		  throw err;
+		};
+
+		var _setState = function _setState(newState) {
+		  this.setState(newState);
+		};
+
+		var _returnRef = function _returnRef(endpoint, method, id, context) {
+		  return { endpoint: endpoint, method: method, id: id, context: context };
+		};
+
+		var _addQueries = function _addQueries(ref, queries) {
+		  var needArgs = {
+		    limitToFirst: true,
+		    limitToLast: true,
+		    orderByChild: true,
+		    startAt: true,
+		    endAt: true,
+		    equalTo: true
+		  };
+		  for (var key in queries) {
+		    if (queries.hasOwnProperty(key)) {
+		      if (needArgs[key]) {
+		        ref = ref[key](queries[key]);
+		      } else {
+		        ref = ref[key]();
+		      }
+		    }
+		  }
+		  return ref;
+		};
+
+		var _createHash = function _createHash(endpoint, invoker) {
+		  var hash = 0;
+		  var str = endpoint + invoker + Date.now();
+		  if (str.length == 0) return hash;
+		  for (var i = 0; i < str.length; i++) {
+		    var char = str.charCodeAt(i);
+		    hash = (hash << 5) - hash + char;
+		    hash = hash & hash;
+		  }
+		  return hash;
+		};
+
+		var _addScope = function _addScope(scope, provider) {
+		  if (Array.isArray(scope)) {
+		    scope.forEach(function (item) {
+		      provider.addScope(item);
+		    });
+		  } else {
+		    provider.addScope(scope);
+		  }
+		  return provider;
+		};
+
+		var _firebaseRefsMixin = function _firebaseRefsMixin(id, ref, refs) {
+		  refs.set(id, ref);
+		};
+
+		var _updateSyncState = function _updateSyncState(ref, data) {
+		  if (_isObject(data)) {
+		    for (var prop in data) {
+		      //allow timestamps to be set
+		      if (prop !== '.sv') {
+		        _updateSyncState(ref.child(prop), data[prop]);
+		      } else {
+		        ref.set(data);
+		      }
+		    }
+		  } else {
+		    ref.set(data);
+		  }
+		};
+
+		var _addListener = function _addListener(id, invoker, options, ref, listeners) {
+		  ref = _addQueries(ref, options.queries);
+		  listeners.set(id, ref.on('value', function (snapshot) {
+		    var data = snapshot.val();
+		    data = data === null ? options.asArray === true ? [] : {} : data;
+		    if (invoker === 'listenTo') {
+		      options.asArray === true ? options.then.call(options.context, _toArray(snapshot)) : options.then.call(options.context, data);
+		    } else if (invoker === 'syncState') {
+		      data = options.asArray === true ? _toArray(snapshot) : data;
+		      options.reactSetState.call(options.context, _defineProperty({}, options.state, data));
+		      if (options.then && options.then.called === false) {
+		        options.then.call(options.context);
+		        options.then.called = true;
+		      }
+		    } else if (invoker === 'bindToState') {
+		      var newState = {};
+		      options.asArray === true ? newState[options.state] = _toArray(snapshot) : newState[options.state] = data;
+		      _setState.call(options.context, newState);
+		      if (options.then && options.then.called === false) {
+		        options.then.call(options.context);
+		        options.then.called = true;
+		      }
+		    }
+		  }));
+		};
+
+		exports._addScope = _addScope;
+		exports._createHash = _createHash;
+		exports._addQueries = _addQueries;
+		exports._returnRef = _returnRef;
+		exports._setState = _setState;
+		exports._throwError = _throwError;
+		exports._toArray = _toArray;
+		exports._isObject = _isObject;
+		exports._addSync = _addSync;
+		exports._firebaseRefsMixin = _firebaseRefsMixin;
+		exports._updateSyncState = _updateSyncState;
+		exports._addListener = _addListener;
+
+	/***/ },
+	/* 4 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports._validateEndpoint = exports._validateConfig = exports.optionValidators = undefined;
+
+		var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+		var _utils = __webpack_require__(3);
+
+		var optionValidators = {
+		  notObject: function notObject(options) {
+		    if (!(0, _utils._isObject)(options)) {
+		      (0, _utils._throwError)('The options argument must be an object. Instead, got ' + options, 'INVALID_OPTIONS');
+		    }
+		  },
+		  context: function context(options) {
+		    this.notObject(options);
+		    if (!options.context || !(0, _utils._isObject)(options.context)) {
+		      this.makeError('context', 'object', options.context);
+		    }
+		  },
+		  state: function state(options) {
+		    this.notObject(options);
+		    if (!options.state || typeof options.state !== 'string') {
+		      this.makeError('state', 'string', options.state);
+		    }
+		  },
+		  then: function then(options) {
+		    this.notObject(options);
+		    if (typeof options.then === 'undefined' || typeof options.then !== 'function') {
+		      this.makeError('then', 'function', options.then);
+		    }
+		  },
+		  data: function data(options) {
+		    this.notObject(options);
+		    if (typeof options.data === 'undefined') {
+		      this.makeError('data', 'ANY', options.data);
+		    }
+		  },
+		  query: function query(options) {
+		    this.notObject(options);
+		    var validQueries = ['limitToFirst', 'limitToLast', 'orderByChild', 'orderByValue', 'orderByKey', 'orderByPriority', 'startAt', 'endAt', 'equalTo'];
+		    var queries = options.queries;
+		    for (var key in queries) {
+		      if (queries.hasOwnProperty(key) && validQueries.indexOf(key) === -1) {
+		        (0, _utils._throwError)('The query field must contain valid Firebase queries.  Expected one of [' + validQueries.join(', ') + ']. Instead, got ' + key, 'INVALID_OPTIONS');
+		      }
+		    }
+		  },
+		  makeError: function makeError(prop, type, actual) {
+		    (0, _utils._throwError)('The options argument must contain a ' + prop + ' property of type ' + type + '. Instead, got ' + actual, 'INVALID_OPTIONS');
+		  }
+		};
+
+		var _validateEndpoint = function _validateEndpoint(endpoint) {
+		  var defaultError = 'The Firebase endpoint you are trying to listen to';
+		  var errorMsg;
+		  if (typeof endpoint !== 'string') {
+		    errorMsg = defaultError + ' must be a string. Instead, got ' + endpoint;
+		  } else if (endpoint.length === 0) {
+		    errorMsg = defaultError + ' must be a non-empty string. Instead, got ' + endpoint;
+		  } else if (endpoint.length > 768) {
+		    errorMsg = defaultError + ' is too long to be stored in Firebase. It must be less than 768 characters.';
+		  } else if (/^$|[\[\]\#\$]|.{1}[\.]/.test(endpoint)) {
+		    errorMsg = defaultError + ' in invalid. Paths must be non-empty strings and can\'t contain ".", "#", "$", "[", or "]".';
+		  }
+
+		  if (typeof errorMsg !== 'undefined') {
+		    (0, _utils._throwError)(errorMsg, "INVALID_ENDPOINT");
+		  }
+		};
+
+		var _validateConfig = function _validateConfig(config) {
+		  var defaultError = 'Rebase.createClass failed.';
+		  var errorMsg;
+		  if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
+		    errorMsg = defaultError + ' to migrate from 2.x.x to 3.x.x, the config must be an object. See: https://firebase.google.com/docs/web/setup#add_firebase_to_your_app';
+		  } else if (!config || arguments.length > 1) {
+		    errorMsg = defaultError + ' expects 1 argument.';
+		  }
+
+		  if (typeof errorMsg !== 'undefined') {
+		    (0, _utils._throwError)(errorMsg, "INVALID_CONFIG");
+		  }
+		};
+
+		exports.optionValidators = optionValidators;
+		exports._validateConfig = _validateConfig;
+		exports._validateEndpoint = _validateEndpoint;
 
 	/***/ },
 	/* 5 */
 	/***/ function(module, exports, __webpack_require__) {
 
-		// ES2015 Symbol polyfill for environments that do not support it (or partially support it)
-
 		'use strict';
 
-		var d              = __webpack_require__(6)
-		  , validateSymbol = __webpack_require__(19)
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _push;
 
-		  , create = Object.create, defineProperties = Object.defineProperties
-		  , defineProperty = Object.defineProperty, objPrototype = Object.prototype
-		  , NativeSymbol, SymbolPolyfill, HiddenSymbol, globalSymbols = create(null)
-		  , isNativeSafe;
+		var _firebase = __webpack_require__(2);
 
-		if (typeof Symbol === 'function') {
-			NativeSymbol = Symbol;
-			try {
-				String(NativeSymbol());
-				isNativeSafe = true;
-			} catch (ignore) {}
-		}
+		var _firebase2 = _interopRequireDefault(_firebase);
 
-		var generateName = (function () {
-			var created = create(null);
-			return function (desc) {
-				var postfix = 0, name, ie11BugWorkaround;
-				while (created[desc + (postfix || '')]) ++postfix;
-				desc += (postfix || '');
-				created[desc] = true;
-				name = '@@' + desc;
-				defineProperty(objPrototype, name, d.gs(null, function (value) {
-					// For IE11 issue see:
-					// https://connect.microsoft.com/IE/feedbackdetail/view/1928508/
-					//    ie11-broken-getters-on-dom-objects
-					// https://github.com/medikoo/es6-symbol/issues/12
-					if (ie11BugWorkaround) return;
-					ie11BugWorkaround = true;
-					defineProperty(this, name, d(value));
-					ie11BugWorkaround = false;
-				}));
-				return name;
-			};
-		}());
+		var _validators = __webpack_require__(4);
 
-		// Internal constructor (not one exposed) for creating Symbol instances.
-		// This one is used to ensure that `someSymbol instanceof Symbol` always return false
-		HiddenSymbol = function Symbol(description) {
-			if (this instanceof HiddenSymbol) throw new TypeError('TypeError: Symbol is not a constructor');
-			return SymbolPolyfill(description);
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		function _push(endpoint, options, db) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.data(options);
+		  var ref = db.ref(endpoint);
+		  var returnEndpoint;
+		  if (options.then) {
+		    returnEndpoint = ref.push(options.data, options.then);
+		  } else {
+		    returnEndpoint = ref.push(options.data);
+		  }
+		  return returnEndpoint;
 		};
-
-		// Exposed `Symbol` constructor
-		// (returns instances of HiddenSymbol)
-		module.exports = SymbolPolyfill = function Symbol(description) {
-			var symbol;
-			if (this instanceof Symbol) throw new TypeError('TypeError: Symbol is not a constructor');
-			if (isNativeSafe) return NativeSymbol(description);
-			symbol = create(HiddenSymbol.prototype);
-			description = (description === undefined ? '' : String(description));
-			return defineProperties(symbol, {
-				__description__: d('', description),
-				__name__: d('', generateName(description))
-			});
-		};
-		defineProperties(SymbolPolyfill, {
-			for: d(function (key) {
-				if (globalSymbols[key]) return globalSymbols[key];
-				return (globalSymbols[key] = SymbolPolyfill(String(key)));
-			}),
-			keyFor: d(function (s) {
-				var key;
-				validateSymbol(s);
-				for (key in globalSymbols) if (globalSymbols[key] === s) return key;
-			}),
-
-			// If there's native implementation of given symbol, let's fallback to it
-			// to ensure proper interoperability with other native functions e.g. Array.from
-			hasInstance: d('', (NativeSymbol && NativeSymbol.hasInstance) || SymbolPolyfill('hasInstance')),
-			isConcatSpreadable: d('', (NativeSymbol && NativeSymbol.isConcatSpreadable) ||
-				SymbolPolyfill('isConcatSpreadable')),
-			iterator: d('', (NativeSymbol && NativeSymbol.iterator) || SymbolPolyfill('iterator')),
-			match: d('', (NativeSymbol && NativeSymbol.match) || SymbolPolyfill('match')),
-			replace: d('', (NativeSymbol && NativeSymbol.replace) || SymbolPolyfill('replace')),
-			search: d('', (NativeSymbol && NativeSymbol.search) || SymbolPolyfill('search')),
-			species: d('', (NativeSymbol && NativeSymbol.species) || SymbolPolyfill('species')),
-			split: d('', (NativeSymbol && NativeSymbol.split) || SymbolPolyfill('split')),
-			toPrimitive: d('', (NativeSymbol && NativeSymbol.toPrimitive) || SymbolPolyfill('toPrimitive')),
-			toStringTag: d('', (NativeSymbol && NativeSymbol.toStringTag) || SymbolPolyfill('toStringTag')),
-			unscopables: d('', (NativeSymbol && NativeSymbol.unscopables) || SymbolPolyfill('unscopables'))
-		});
-
-		// Internal tweaks for real symbol producer
-		defineProperties(HiddenSymbol.prototype, {
-			constructor: d(SymbolPolyfill),
-			toString: d('', function () { return this.__name__; })
-		});
-
-		// Proper implementation of methods exposed on Symbol.prototype
-		// They won't be accessible on produced symbol instances as they derive from HiddenSymbol.prototype
-		defineProperties(SymbolPolyfill.prototype, {
-			toString: d(function () { return 'Symbol (' + validateSymbol(this).__description__ + ')'; }),
-			valueOf: d(function () { return validateSymbol(this); })
-		});
-		defineProperty(SymbolPolyfill.prototype, SymbolPolyfill.toPrimitive, d('', function () {
-			var symbol = validateSymbol(this);
-			if (typeof symbol === 'symbol') return symbol;
-			return symbol.toString();
-		}));
-		defineProperty(SymbolPolyfill.prototype, SymbolPolyfill.toStringTag, d('c', 'Symbol'));
-
-		// Proper implementaton of toPrimitive and toStringTag for returned symbol instances
-		defineProperty(HiddenSymbol.prototype, SymbolPolyfill.toStringTag,
-			d('c', SymbolPolyfill.prototype[SymbolPolyfill.toStringTag]));
-
-		// Note: It's important to define `toPrimitive` as last one, as some implementations
-		// implement `toPrimitive` natively without implementing `toStringTag` (or other specified symbols)
-		// And that may invoke error in definition flow:
-		// See: https://github.com/medikoo/es6-symbol/issues/13#issuecomment-164146149
-		defineProperty(HiddenSymbol.prototype, SymbolPolyfill.toPrimitive,
-			d('c', SymbolPolyfill.prototype[SymbolPolyfill.toPrimitive]));
-
 
 	/***/ },
 	/* 6 */
@@ -10003,68 +9740,36 @@ module.exports =
 
 		'use strict';
 
-		var assign        = __webpack_require__(7)
-		  , normalizeOpts = __webpack_require__(14)
-		  , isCallable    = __webpack_require__(15)
-		  , contains      = __webpack_require__(16)
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _fetch;
 
-		  , d;
+		var _validators = __webpack_require__(4);
 
-		d = module.exports = function (dscr, value/*, options*/) {
-			var c, e, w, options, desc;
-			if ((arguments.length < 2) || (typeof dscr !== 'string')) {
-				options = value;
-				value = dscr;
-				dscr = null;
-			} else {
-				options = arguments[2];
-			}
-			if (dscr == null) {
-				c = w = true;
-				e = false;
-			} else {
-				c = contains.call(dscr, 'c');
-				e = contains.call(dscr, 'e');
-				w = contains.call(dscr, 'w');
-			}
+		var _utils = __webpack_require__(3);
 
-			desc = { value: value, configurable: c, enumerable: e, writable: w };
-			return !options ? desc : assign(normalizeOpts(options), desc);
+		function _fetch(endpoint, options, db) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.context(options);
+		  options.queries && _validators.optionValidators.query(options);
+		  var ref = db.ref(endpoint);
+		  ref = (0, _utils._addQueries)(ref, options.queries);
+		  return ref.once('value').then(function (snapshot) {
+		    var data = options.asArray === true ? (0, _utils._toArray)(snapshot) : snapshot.val();
+		    if (options.then) {
+		      options.then.call(options.context, data);
+		    }
+		    return data;
+		  }, function (err) {
+		    //call onFailure callback if it exists otherwise return a rejected promise
+		    if (options.onFailure && typeof options.onFailure === 'function') {
+		      options.onFailure.call(options.context, err);
+		    } else {
+		      return firebase.Promise.reject(err);
+		    }
+		  });
 		};
-
-		d.gs = function (dscr, get, set/*, options*/) {
-			var c, e, options, desc;
-			if (typeof dscr !== 'string') {
-				options = set;
-				set = get;
-				get = dscr;
-				dscr = null;
-			} else {
-				options = arguments[3];
-			}
-			if (get == null) {
-				get = undefined;
-			} else if (!isCallable(get)) {
-				options = get;
-				get = set = undefined;
-			} else if (set == null) {
-				set = undefined;
-			} else if (!isCallable(set)) {
-				options = set;
-				set = undefined;
-			}
-			if (dscr == null) {
-				c = true;
-				e = false;
-			} else {
-				c = contains.call(dscr, 'c');
-				e = contains.call(dscr, 'e');
-			}
-
-			desc = { get: get, set: set, configurable: c, enumerable: e };
-			return !options ? desc : assign(normalizeOpts(options), desc);
-		};
-
 
 	/***/ },
 	/* 7 */
@@ -10072,25 +9777,89 @@ module.exports =
 
 		'use strict';
 
-		module.exports = __webpack_require__(8)()
-			? Object.assign
-			: __webpack_require__(9);
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _post;
 
+		var _firebase = __webpack_require__(2);
+
+		var _validators = __webpack_require__(4);
+
+		function _post(endpoint, options, db) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.data(options);
+		  var ref = db.ref(endpoint);
+		  if (options.then) {
+		    return ref.set(options.data, options.then);
+		  } else {
+		    return ref.set(options.data);
+		  }
+		};
 
 	/***/ },
 	/* 8 */
-	/***/ function(module, exports) {
+	/***/ function(module, exports, __webpack_require__) {
 
 		'use strict';
 
-		module.exports = function () {
-			var assign = Object.assign, obj;
-			if (typeof assign !== 'function') return false;
-			obj = { foo: 'raz' };
-			assign(obj, { bar: 'dwa' }, { trzy: 'trzy' });
-			return (obj.foo + obj.bar + obj.trzy) === 'razdwatrzy';
-		};
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _sync;
 
+		var _validators = __webpack_require__(4);
+
+		var _utils = __webpack_require__(3);
+
+		function _sync(endpoint, options, state) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.context(options);
+		  _validators.optionValidators.state(options);
+		  options.queries && _validators.optionValidators.query(options);
+		  options.then && (options.then.called = false);
+
+		  //store reference to react's setState
+		  if (_sync.called !== true) {
+		    _sync.reactSetState = options.context.setState;
+		    _sync.called = true;
+		  }
+		  options.reactSetState = _sync.reactSetState;
+
+		  var ref = state.db.ref(endpoint);
+		  var id = (0, _utils._createHash)(endpoint, 'syncState');
+		  (0, _utils._firebaseRefsMixin)(id, ref, state.refs);
+		  (0, _utils._addListener)(id, 'syncState', options, ref, state.listeners);
+
+		  var sync = {
+		    id: id,
+		    updateFirebase: _utils._updateSyncState.bind(this, ref),
+		    stateKey: options.state
+		  };
+		  (0, _utils._addSync)(options.context, sync, state.syncs);
+
+		  options.context.setState = function (data, cb) {
+		    var _this = this;
+
+		    var syncsToCall = state.syncs.get(this);
+		    //if sync does not exist, call original Component.setState
+		    if (!syncsToCall || syncsToCall.length === 0) {
+		      return _sync.reactSetState.call(this, data, cb);
+		    }
+		    syncsToCall.forEach(function (sync) {
+		      for (var key in data) {
+		        if (data.hasOwnProperty(key)) {
+		          if (key === sync.stateKey) {
+		            sync.updateFirebase(data[key]);
+		          } else {
+		            _sync.reactSetState.call(_this, data, cb);
+		          }
+		        }
+		      }
+		    });
+		  };
+		  return (0, _utils._returnRef)(endpoint, 'syncState', id, options.context);
+		};
 
 	/***/ },
 	/* 9 */
@@ -10098,27 +9867,29 @@ module.exports =
 
 		'use strict';
 
-		var keys  = __webpack_require__(10)
-		  , value = __webpack_require__(13)
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _bind;
 
-		  , max = Math.max;
+		var _validators = __webpack_require__(4);
 
-		module.exports = function (dest, src/*, …srcn*/) {
-			var error, i, l = max(arguments.length, 2), assign;
-			dest = Object(value(dest));
-			assign = function (key) {
-				try { dest[key] = src[key]; } catch (e) {
-					if (!error) error = e;
-				}
-			};
-			for (i = 1; i < l; ++i) {
-				src = arguments[i];
-				keys(src).forEach(assign);
-			}
-			if (error !== undefined) throw error;
-			return dest;
+		var _utils = __webpack_require__(3);
+
+		function _bind(endpoint, options, invoker, state) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.context(options);
+		  invoker === 'listenTo' && _validators.optionValidators.then(options);
+		  invoker === 'bindToState' && _validators.optionValidators.state(options);
+		  options.queries && _validators.optionValidators.query(options);
+		  options.then && (options.then.called = false);
+
+		  var id = (0, _utils._createHash)(endpoint, invoker);
+		  var ref = state.db.ref(endpoint);
+		  (0, _utils._firebaseRefsMixin)(id, ref, state.refs);
+		  (0, _utils._addListener)(id, invoker, options, ref, state.listeners);
+		  return (0, _utils._returnRef)(endpoint, invoker, id, options.context);
 		};
-
 
 	/***/ },
 	/* 10 */
@@ -10126,10 +9897,23 @@ module.exports =
 
 		'use strict';
 
-		module.exports = __webpack_require__(11)()
-			? Object.keys
-			: __webpack_require__(12);
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _update;
 
+		var _validators = __webpack_require__(4);
+
+		function _update(endpoint, options, state) {
+		  (0, _validators._validateEndpoint)(endpoint);
+		  _validators.optionValidators.data(options);
+		  var ref = state.db.ref(endpoint);
+		  if (options.then) {
+		    return ref.update(options.data, options.then);
+		  } else {
+		    return ref.update(options.data);
+		  }
+		};
 
 	/***/ },
 	/* 11 */
@@ -10137,110 +9921,183 @@ module.exports =
 
 		'use strict';
 
-		module.exports = function () {
-			try {
-				Object.keys('primitive');
-				return true;
-			} catch (e) { return false; }
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _reset;
+		function _reset(state) {
+		  state.refs.forEach(function (ref, id) {
+		    ref.off('value', state.listeners.get(id));
+		  });
+		  state.listeners = new Map();
+		  state.refs = new Map();
+		  state.syncs = new WeakMap();
+		  return null;
 		};
-
 
 	/***/ },
 	/* 12 */
-	/***/ function(module, exports) {
+	/***/ function(module, exports, __webpack_require__) {
 
-		'use strict';
+		"use strict";
 
-		var keys = Object.keys;
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _removeBinding;
 
-		module.exports = function (object) {
-			return keys(object == null ? object : Object(object));
+		var _utils = __webpack_require__(3);
+
+		function _removeBinding(_ref, _ref2) {
+		  var endpoint = _ref.endpoint,
+		      method = _ref.method,
+		      id = _ref.id,
+		      context = _ref.context;
+		  var refs = _ref2.refs,
+		      listeners = _ref2.listeners,
+		      syncs = _ref2.syncs;
+
+		  var ref = refs.get(id);
+		  var listener = listeners.get(id);
+		  if (typeof ref === "undefined") {
+		    var errorMsg = "Unexpected value. Ref was either never bound or has already been unbound.";
+		    (0, _utils._throwError)(errorMsg, "UNBOUND_ENDPOINT_VARIABLE");
+		  }
+		  ref.off('value', listener);
+		  refs.delete(id);
+		  listeners.delete(id);
+		  var currentSyncs = syncs.get(context);
+		  if (currentSyncs && currentSyncs.length > 0) {
+		    var idx = currentSyncs.findIndex(function (item, index) {
+		      return item.id === id;
+		    });
+		    if (idx !== -1) {
+		      currentSyncs.splice(idx, 1);
+		      syncs.set(context, currentSyncs);
+		    }
+		  }
 		};
-
 
 	/***/ },
 	/* 13 */
 	/***/ function(module, exports) {
 
-		'use strict';
+		"use strict";
 
-		module.exports = function (value) {
-			if (value == null) throw new TypeError("Cannot use null or undefined");
-			return value;
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+
+		exports.default = function (endpoint, db, fn) {
+		  return db.ref().child(endpoint).remove(fn);
 		};
-
 
 	/***/ },
 	/* 14 */
 	/***/ function(module, exports) {
 
-		'use strict';
+		"use strict";
 
-		var forEach = Array.prototype.forEach, create = Object.create;
+		Object.defineProperty(exports, "__esModule", {
+		   value: true
+		});
+		exports.default = _resetPassword;
+		function _resetPassword(credentials, fn, auth) {
+		   var email = credentials.email;
 
-		var process = function (src, obj) {
-			var key;
-			for (key in src) obj[key] = src[key];
+		   return auth.sendPasswordResetEmail(email).then(function () {
+		      return fn(null);
+		   }).catch(function (error) {
+		      return fn(error);
+		   });
 		};
-
-		module.exports = function (options/*, …options*/) {
-			var result = create(null);
-			forEach.call(arguments, function (options) {
-				if (options == null) return;
-				process(Object(options), result);
-			});
-			return result;
-		};
-
 
 	/***/ },
 	/* 15 */
 	/***/ function(module, exports) {
 
-		// Deprecated
+		"use strict";
 
-		'use strict';
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _createUser;
+		function _createUser(credentials, fn, auth) {
+		  var email = credentials.email,
+		      password = credentials.password;
 
-		module.exports = function (obj) { return typeof obj === 'function'; };
-
+		  return auth.createUserWithEmailAndPassword(email, password).then(function (authData) {
+		    return fn(null, authData);
+		  }).catch(function (err) {
+		    return fn(err);
+		  });
+		};
 
 	/***/ },
 	/* 16 */
-	/***/ function(module, exports, __webpack_require__) {
+	/***/ function(module, exports) {
 
-		'use strict';
+		"use strict";
 
-		module.exports = __webpack_require__(17)()
-			? String.prototype.contains
-			: __webpack_require__(18);
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _authWithPassword;
+		function _authWithPassword(credentials, fn, auth) {
+		  var email = credentials.email,
+		      password = credentials.password;
 
+		  return auth.signInWithEmailAndPassword(email, password).then(function (authData) {
+		    return fn(null, authData);
+		  }).catch(function (err) {
+		    return fn(err);
+		  });
+		}
 
 	/***/ },
 	/* 17 */
 	/***/ function(module, exports) {
 
-		'use strict';
+		"use strict";
 
-		var str = 'razdwatrzy';
-
-		module.exports = function () {
-			if (typeof str.contains !== 'function') return false;
-			return ((str.contains('dwa') === true) && (str.contains('foo') === false));
-		};
-
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _authWithCustomToken;
+		function _authWithCustomToken(token, fn, auth) {
+		  return auth.signInWithCustomToken(token).then(function (user) {
+		    return fn(null, user);
+		  }).catch(function (error) {
+		    return fn(error);
+		  });
+		}
 
 	/***/ },
 	/* 18 */
-	/***/ function(module, exports) {
+	/***/ function(module, exports, __webpack_require__) {
 
 		'use strict';
 
-		var indexOf = String.prototype.indexOf;
+		Object.defineProperty(exports, "__esModule", {
+		    value: true
+		});
+		exports.default = _authWithOAuthPopup;
 
-		module.exports = function (searchString/*, position*/) {
-			return indexOf.call(this, searchString, arguments[1]) > -1;
-		};
+		var _getAuthProvider2 = __webpack_require__(19);
 
+		var _getAuthProvider3 = _interopRequireDefault(_getAuthProvider2);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		function _authWithOAuthPopup(provider, fn, settings, auth) {
+		    settings = settings || {};
+		    var authProvider = (0, _getAuthProvider3.default)(provider, settings);
+		    return auth.signInWithPopup(authProvider).then(function (authData) {
+		        return fn(null, authData);
+		    }).catch(function (error) {
+		        return fn(error);
+		    });
+		}
 
 	/***/ },
 	/* 19 */
@@ -10248,28 +10105,146 @@ module.exports =
 
 		'use strict';
 
-		var isSymbol = __webpack_require__(20);
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _getAuthProvider;
 
-		module.exports = function (value) {
-			if (!isSymbol(value)) throw new TypeError(value + " is not a symbol");
-			return value;
+		var _utils = __webpack_require__(3);
+
+		var _firebase = __webpack_require__(2);
+
+		function _getFacebookProvider(settings) {
+		  var provider = new _firebase.auth.FacebookAuthProvider();
+		  if (settings.scope) {
+		    provider = (0, _utils._addScope)(settings.scope, provider);
+		  }
+		  return provider;
+		}
+
+		function _getTwitterProvider() {
+		  return new _firebase.auth.TwitterAuthProvider();
+		}
+
+		function _getGithubProvider(settings) {
+		  var provider = new _firebase.auth.GithubAuthProvider();
+		  if (settings.scope) {
+		    provider = (0, _utils._addScope)(settings.scope, provider);
+		  }
+		  return provider;
 		};
 
+		function _getGoogleProvider(settings) {
+		  var provider = new _firebase.auth.GoogleAuthProvider();
+		  if (settings.scope) {
+		    provider = (0, _utils._addScope)(settings.scope, provider);
+		  }
+		  return provider;
+		};
+
+		function _getAuthProvider(service, settings) {
+		  switch (service) {
+		    case 'twitter':
+		      return _getTwitterProvider();
+		      break;
+		    case 'google':
+		      return _getGoogleProvider(settings);
+		      break;
+		    case 'facebook':
+		      return _getFacebookProvider(settings);
+		      break;
+		    case 'github':
+		      return _getGithubProvider(settings);
+		      break;
+		    default:
+		      (0, _utils._throwError)('Expected auth provider requested. Available auth providers: facebook,twitter,github, google', 'UNKNOWN AUTH PROVIDER');
+		      break;
+		  }
+		};
 
 	/***/ },
 	/* 20 */
 	/***/ function(module, exports) {
 
-		'use strict';
+		"use strict";
 
-		module.exports = function (x) {
-			if (!x) return false;
-			if (typeof x === 'symbol') return true;
-			if (!x.constructor) return false;
-			if (x.constructor.name !== 'Symbol') return false;
-			return (x[x.constructor.toStringTag] === 'Symbol');
-		};
+		Object.defineProperty(exports, "__esModule", {
+		    value: true
+		});
+		exports.default = _getOAuthRedirectResult;
+		function _getOAuthRedirectResult(fn, auth) {
+		    return auth.getRedirectResult().then(function (user) {
+		        return fn(null, user);
+		    }).catch(function (error) {
+		        return fn(error);
+		    });
+		}
 
+	/***/ },
+	/* 21 */
+	/***/ function(module, exports) {
+
+		"use strict";
+
+		Object.defineProperty(exports, "__esModule", {
+		    value: true
+		});
+		exports.default = _authWithOAuthToken;
+
+		function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+		function _authWithOAuthToken(provider, token, fn, settings, auth) {
+		    settings = settings || {};
+		    var authProvider = _getAuthProvider(provider, settings);
+		    var credential = authProvider.credential.apply(authProvider, [token].concat(_toConsumableArray(settings.providerOptions)));
+		    return auth.signInWithCredential(credential).then(function (authData) {
+		        return fn(null, authData);
+		    }).catch(function (error) {
+		        return fn(error);
+		    });
+		}
+
+	/***/ },
+	/* 22 */
+	/***/ function(module, exports) {
+
+		"use strict";
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _onAuth;
+		function _onAuth(fn, auth) {
+		  return auth.onAuthStateChanged(fn);
+		}
+
+	/***/ },
+	/* 23 */
+	/***/ function(module, exports) {
+
+		"use strict";
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _unauth;
+		function _unauth(auth) {
+		  return auth.signOut();
+		}
+
+	/***/ },
+	/* 24 */
+	/***/ function(module, exports) {
+
+		"use strict";
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.default = _getAuth;
+		function _getAuth(auth) {
+		  return auth.currentUser;
+		}
 
 	/***/ }
 	/******/ ])
@@ -10299,8 +10274,8 @@ module.exports =
 /* 181 */
 /***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.5.3
-	    Build: 3.5.3-rc.3
+	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.6.0
+	    Build: 3.6.0-rc.3
 	    Terms: https://developers.google.com/terms */
 	var firebase = null; (function() { var aa="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){if(c.get||c.set)throw new TypeError("ES3 does not support getters and setters.");a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)},h="undefined"!=typeof window&&window===this?this:"undefined"!=typeof global&&null!=global?global:this,l=function(){l=function(){};h.Symbol||(h.Symbol=ba)},ca=0,ba=function(a){return"jscomp_symbol_"+(a||"")+ca++},n=function(){l();var a=h.Symbol.iterator;a||(a=h.Symbol.iterator=
 	h.Symbol("iterator"));"function"!=typeof Array.prototype[a]&&aa(Array.prototype,a,{configurable:!0,writable:!0,value:function(){return m(this)}});n=function(){}},m=function(a){var b=0;return da(function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}})},da=function(a){n();a={next:a};a[h.Symbol.iterator]=function(){return this};return a},q=this,r=function(){},t=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);
@@ -10308,26 +10283,27 @@ module.exports =
 	b,c){return a.call.apply(a.bind,arguments)},fa=function(a,b,c){if(!a)throw Error();if(2<arguments.length){var d=Array.prototype.slice.call(arguments,2);return function(){var c=Array.prototype.slice.call(arguments);Array.prototype.unshift.apply(c,d);return a.apply(b,c)}}return function(){return a.apply(b,arguments)}},w=function(a,b,c){w=Function.prototype.bind&&-1!=Function.prototype.bind.toString().indexOf("native code")?ea:fa;return w.apply(null,arguments)},x=function(a,b){var c=Array.prototype.slice.call(arguments,
 	1);return function(){var b=c.slice();b.push.apply(b,arguments);return a.apply(this,b)}},y=function(a,b){function c(){}c.prototype=b.prototype;a.ba=b.prototype;a.prototype=new c;a.prototype.constructor=a;a.aa=function(a,c,f){for(var d=Array(arguments.length-2),e=2;e<arguments.length;e++)d[e-2]=arguments[e];return b.prototype[c].apply(a,d)}};var z;z="undefined"!==typeof window?window:"undefined"!==typeof self?self:global;function __extends(a,b){function c(){this.constructor=a}for(var d in b)b.hasOwnProperty(d)&&(a[d]=b[d]);a.prototype=null===b?Object.create(b):(c.prototype=b.prototype,new c)}
 	function __decorate(a,b,c,d){var e=arguments.length,f=3>e?b:null===d?d=Object.getOwnPropertyDescriptor(b,c):d,g;g=z.Reflect;if("object"===typeof g&&"function"===typeof g.decorate)f=g.decorate(a,b,c,d);else for(var k=a.length-1;0<=k;k--)if(g=a[k])f=(3>e?g(f):3<e?g(b,c,f):g(b,c))||f;return 3<e&&f&&Object.defineProperty(b,c,f),f}function __metadata(a,b){var c=z.Reflect;if("object"===typeof c&&"function"===typeof c.metadata)return c.metadata(a,b)}
-	var __param=function(a,b){return function(c,d){b(c,d,a)}},__awaiter=function(a,b,c,d){return new (c||(c=Promise))(function(e,f){function g(a){try{p(d.next(a))}catch(u){f(u)}}function k(a){try{p(d.throw(a))}catch(u){f(u)}}function p(a){a.done?e(a.value):(new c(function(b){b(a.value)})).then(g,k)}p((d=d.apply(a,b)).next())})};"undefined"!==typeof z.L&&z.L||(z.__extends=__extends,z.__decorate=__decorate,z.__metadata=__metadata,z.__param=__param,z.__awaiter=__awaiter);var A=function(a){if(Error.captureStackTrace)Error.captureStackTrace(this,A);else{var b=Error().stack;b&&(this.stack=b)}a&&(this.message=String(a))};y(A,Error);A.prototype.name="CustomError";var ga=function(a,b){for(var c=a.split("%s"),d="",e=Array.prototype.slice.call(arguments,1);e.length&&1<c.length;)d+=c.shift()+e.shift();return d+c.join("%s")};var B=function(a,b){b.unshift(a);A.call(this,ga.apply(null,b));b.shift()};y(B,A);B.prototype.name="AssertionError";var ha=function(a,b,c,d){var e="Assertion failed";if(c)var e=e+(": "+c),f=d;else a&&(e+=": "+a,f=b);throw new B(""+e,f||[]);},C=function(a,b,c){a||ha("",null,b,Array.prototype.slice.call(arguments,2))},D=function(a,b,c){v(a)||ha("Expected function but got %s: %s.",[t(a),a],b,Array.prototype.slice.call(arguments,2))};var E=function(a,b,c){this.S=c;this.M=a;this.U=b;this.s=0;this.o=null};E.prototype.get=function(){var a;0<this.s?(this.s--,a=this.o,this.o=a.next,a.next=null):a=this.M();return a};E.prototype.put=function(a){this.U(a);this.s<this.S&&(this.s++,a.next=this.o,this.o=a)};var F;a:{var ia=q.navigator;if(ia){var ja=ia.userAgent;if(ja){F=ja;break a}}F=""};var ka=function(a){q.setTimeout(function(){throw a;},0)},G,la=function(){var a=q.MessageChannel;"undefined"===typeof a&&"undefined"!==typeof window&&window.postMessage&&window.addEventListener&&-1==F.indexOf("Presto")&&(a=function(){var a=document.createElement("IFRAME");a.style.display="none";a.src="";document.documentElement.appendChild(a);var b=a.contentWindow,a=b.document;a.open();a.write("");a.close();var c="callImmediate"+Math.random(),d="file:"==b.location.protocol?"*":b.location.protocol+
-	"//"+b.location.host,a=w(function(a){if(("*"==d||a.origin==d)&&a.data==c)this.port1.onmessage()},this);b.addEventListener("message",a,!1);this.port1={};this.port2={postMessage:function(){b.postMessage(c,d)}}});if("undefined"!==typeof a&&-1==F.indexOf("Trident")&&-1==F.indexOf("MSIE")){var b=new a,c={},d=c;b.port1.onmessage=function(){if(void 0!==c.next){c=c.next;var a=c.F;c.F=null;a()}};return function(a){d.next={F:a};d=d.next;b.port2.postMessage(0)}}return"undefined"!==typeof document&&"onreadystatechange"in
+	var __param=function(a,b){return function(c,d){b(c,d,a)}},__awaiter=function(a,b,c,d){return new (c||(c=Promise))(function(e,f){function g(a){try{p(d.next(a))}catch(u){f(u)}}function k(a){try{p(d.throw(a))}catch(u){f(u)}}function p(a){a.done?e(a.value):(new c(function(b){b(a.value)})).then(g,k)}p((d=d.apply(a,b)).next())})};"undefined"!==typeof z.M&&z.M||(z.__extends=__extends,z.__decorate=__decorate,z.__metadata=__metadata,z.__param=__param,z.__awaiter=__awaiter);var A=function(a){if(Error.captureStackTrace)Error.captureStackTrace(this,A);else{var b=Error().stack;b&&(this.stack=b)}a&&(this.message=String(a))};y(A,Error);A.prototype.name="CustomError";var ga=function(a,b){for(var c=a.split("%s"),d="",e=Array.prototype.slice.call(arguments,1);e.length&&1<c.length;)d+=c.shift()+e.shift();return d+c.join("%s")};var B=function(a,b){b.unshift(a);A.call(this,ga.apply(null,b));b.shift()};y(B,A);B.prototype.name="AssertionError";var ha=function(a,b,c,d){var e="Assertion failed";if(c)var e=e+(": "+c),f=d;else a&&(e+=": "+a,f=b);throw new B(""+e,f||[]);},C=function(a,b,c){a||ha("",null,b,Array.prototype.slice.call(arguments,2))},D=function(a,b,c){v(a)||ha("Expected function but got %s: %s.",[t(a),a],b,Array.prototype.slice.call(arguments,2))};var E=function(a,b,c){this.T=c;this.N=a;this.U=b;this.s=0;this.o=null};E.prototype.get=function(){var a;0<this.s?(this.s--,a=this.o,this.o=a.next,a.next=null):a=this.N();return a};E.prototype.put=function(a){this.U(a);this.s<this.T&&(this.s++,a.next=this.o,this.o=a)};var F;a:{var ia=q.navigator;if(ia){var ja=ia.userAgent;if(ja){F=ja;break a}}F=""};var ka=function(a){q.setTimeout(function(){throw a;},0)},G,la=function(){var a=q.MessageChannel;"undefined"===typeof a&&"undefined"!==typeof window&&window.postMessage&&window.addEventListener&&-1==F.indexOf("Presto")&&(a=function(){var a=document.createElement("IFRAME");a.style.display="none";a.src="";document.documentElement.appendChild(a);var b=a.contentWindow,a=b.document;a.open();a.write("");a.close();var c="callImmediate"+Math.random(),d="file:"==b.location.protocol?"*":b.location.protocol+
+	"//"+b.location.host,a=w(function(a){if(("*"==d||a.origin==d)&&a.data==c)this.port1.onmessage()},this);b.addEventListener("message",a,!1);this.port1={};this.port2={postMessage:function(){b.postMessage(c,d)}}});if("undefined"!==typeof a&&-1==F.indexOf("Trident")&&-1==F.indexOf("MSIE")){var b=new a,c={},d=c;b.port1.onmessage=function(){if(void 0!==c.next){c=c.next;var a=c.G;c.G=null;a()}};return function(a){d.next={G:a};d=d.next;b.port2.postMessage(0)}}return"undefined"!==typeof document&&"onreadystatechange"in
 	document.createElement("SCRIPT")?function(a){var b=document.createElement("SCRIPT");b.onreadystatechange=function(){b.onreadystatechange=null;b.parentNode.removeChild(b);b=null;a();a=null};document.documentElement.appendChild(b)}:function(a){q.setTimeout(a,0)}};var H=function(){this.v=this.f=null},ma=new E(function(){return new I},function(a){a.reset()},100);H.prototype.add=function(a,b){var c=ma.get();c.set(a,b);this.v?this.v.next=c:(C(!this.f),this.f=c);this.v=c};H.prototype.remove=function(){var a=null;this.f&&(a=this.f,this.f=this.f.next,this.f||(this.v=null),a.next=null);return a};var I=function(){this.next=this.scope=this.B=null};I.prototype.set=function(a,b){this.B=a;this.scope=b;this.next=null};
-	I.prototype.reset=function(){this.next=this.scope=this.B=null};var M=function(a,b){J||na();L||(J(),L=!0);oa.add(a,b)},J,na=function(){var a=q.Promise;if(-1!=String(a).indexOf("[native code]")){var b=a.resolve(void 0);J=function(){b.then(pa)}}else J=function(){var a=pa;!v(q.setImmediate)||q.Window&&q.Window.prototype&&-1==F.indexOf("Edge")&&q.Window.prototype.setImmediate==q.setImmediate?(G||(G=la()),G(a)):q.setImmediate(a)}},L=!1,oa=new H,pa=function(){for(var a;a=oa.remove();){try{a.B.call(a.scope)}catch(b){ka(b)}ma.put(a)}L=!1};var O=function(a,b){this.b=0;this.K=void 0;this.j=this.g=this.u=null;this.m=this.A=!1;if(a!=r)try{var c=this;a.call(b,function(a){N(c,2,a)},function(a){try{if(a instanceof Error)throw a;throw Error("Promise rejected.");}catch(e){}N(c,3,a)})}catch(d){N(this,3,d)}},qa=function(){this.next=this.context=this.h=this.c=this.child=null;this.w=!1};qa.prototype.reset=function(){this.context=this.h=this.c=this.child=null;this.w=!1};
+	I.prototype.reset=function(){this.next=this.scope=this.B=null};var M=function(a,b){J||na();L||(J(),L=!0);oa.add(a,b)},J,na=function(){var a=q.Promise;if(-1!=String(a).indexOf("[native code]")){var b=a.resolve(void 0);J=function(){b.then(pa)}}else J=function(){var a=pa;!v(q.setImmediate)||q.Window&&q.Window.prototype&&-1==F.indexOf("Edge")&&q.Window.prototype.setImmediate==q.setImmediate?(G||(G=la()),G(a)):q.setImmediate(a)}},L=!1,oa=new H,pa=function(){for(var a;a=oa.remove();){try{a.B.call(a.scope)}catch(b){ka(b)}ma.put(a)}L=!1};var O=function(a,b){this.b=0;this.L=void 0;this.j=this.g=this.u=null;this.m=this.A=!1;if(a!=r)try{var c=this;a.call(b,function(a){N(c,2,a)},function(a){try{if(a instanceof Error)throw a;throw Error("Promise rejected.");}catch(e){}N(c,3,a)})}catch(d){N(this,3,d)}},qa=function(){this.next=this.context=this.h=this.c=this.child=null;this.w=!1};qa.prototype.reset=function(){this.context=this.h=this.c=this.child=null;this.w=!1};
 	var ra=new E(function(){return new qa},function(a){a.reset()},100),sa=function(a,b,c){var d=ra.get();d.c=a;d.h=b;d.context=c;return d},ua=function(a,b,c){ta(a,b,c,null)||M(x(b,a))};O.prototype.then=function(a,b,c){null!=a&&D(a,"opt_onFulfilled should be a function.");null!=b&&D(b,"opt_onRejected should be a function. Did you pass opt_context as the second argument instead of the third?");return va(this,v(a)?a:null,v(b)?b:null,c)};O.prototype.then=O.prototype.then;O.prototype.$goog_Thenable=!0;
 	O.prototype.X=function(a,b){return va(this,null,a,b)};var xa=function(a,b){a.g||2!=a.b&&3!=a.b||wa(a);C(null!=b.c);a.j?a.j.next=b:a.g=b;a.j=b},va=function(a,b,c,d){var e=sa(null,null,null);e.child=new O(function(a,g){e.c=b?function(c){try{var e=b.call(d,c);a(e)}catch(K){g(K)}}:a;e.h=c?function(b){try{var e=c.call(d,b);a(e)}catch(K){g(K)}}:g});e.child.u=a;xa(a,e);return e.child};O.prototype.Y=function(a){C(1==this.b);this.b=0;N(this,2,a)};O.prototype.Z=function(a){C(1==this.b);this.b=0;N(this,3,a)};
-	var N=function(a,b,c){0==a.b&&(a===c&&(b=3,c=new TypeError("Promise cannot resolve to itself")),a.b=1,ta(c,a.Y,a.Z,a)||(a.K=c,a.b=b,a.u=null,wa(a),3!=b||ya(a,c)))},ta=function(a,b,c,d){if(a instanceof O)return null!=b&&D(b,"opt_onFulfilled should be a function."),null!=c&&D(c,"opt_onRejected should be a function. Did you pass opt_context as the second argument instead of the third?"),xa(a,sa(b||r,c||null,d)),!0;var e;if(a)try{e=!!a.$goog_Thenable}catch(g){e=!1}else e=!1;if(e)return a.then(b,c,d),
-	!0;e=typeof a;if("object"==e&&null!=a||"function"==e)try{var f=a.then;if(v(f))return za(a,f,b,c,d),!0}catch(g){return c.call(d,g),!0}return!1},za=function(a,b,c,d,e){var f=!1,g=function(a){f||(f=!0,c.call(e,a))},k=function(a){f||(f=!0,d.call(e,a))};try{b.call(a,g,k)}catch(p){k(p)}},wa=function(a){a.A||(a.A=!0,M(a.O,a))},Aa=function(a){var b=null;a.g&&(b=a.g,a.g=b.next,b.next=null);a.g||(a.j=null);null!=b&&C(null!=b.c);return b};
-	O.prototype.O=function(){for(var a;a=Aa(this);){var b=this.b,c=this.K;if(3==b&&a.h&&!a.w){var d;for(d=this;d&&d.m;d=d.u)d.m=!1}if(a.child)a.child.u=null,Ba(a,b,c);else try{a.w?a.c.call(a.context):Ba(a,b,c)}catch(e){Ca.call(null,e)}ra.put(a)}this.A=!1};var Ba=function(a,b,c){2==b?a.c.call(a.context,c):a.h&&a.h.call(a.context,c)},ya=function(a,b){a.m=!0;M(function(){a.m&&Ca.call(null,b)})},Ca=ka;function P(a,b){if(!(b instanceof Object))return b;switch(b.constructor){case Date:return new Date(b.getTime());case Object:void 0===a&&(a={});break;case Array:a=[];break;default:return b}for(var c in b)b.hasOwnProperty(c)&&(a[c]=P(a[c],b[c]));return a};O.all=function(a){return new O(function(b,c){var d=a.length,e=[];if(d)for(var f=function(a,c){d--;e[a]=c;0==d&&b(e)},g=function(a){c(a)},k=0,p;k<a.length;k++)p=a[k],ua(p,x(f,k),g);else b(e)})};O.resolve=function(a){if(a instanceof O)return a;var b=new O(r);N(b,2,a);return b};O.reject=function(a){return new O(function(b,c){c(a)})};O.prototype["catch"]=O.prototype.X;var Q=O;"undefined"!==typeof Promise&&(Q=Promise);var Da=Q;function Ea(a,b){a=new R(a,b);return a.subscribe.bind(a)}var R=function(a,b){var c=this;this.a=[];this.J=0;this.task=Da.resolve();this.l=!1;this.D=b;this.task.then(function(){a(c)}).catch(function(a){c.error(a)})};R.prototype.next=function(a){S(this,function(b){b.next(a)})};R.prototype.error=function(a){S(this,function(b){b.error(a)});this.close(a)};R.prototype.complete=function(){S(this,function(a){a.complete()});this.close()};
-	R.prototype.subscribe=function(a,b,c){var d=this,e;if(void 0===a&&void 0===b&&void 0===c)throw Error("Missing Observer.");e=Fa(a)?a:{next:a,error:b,complete:c};void 0===e.next&&(e.next=T);void 0===e.error&&(e.error=T);void 0===e.complete&&(e.complete=T);a=this.$.bind(this,this.a.length);this.l&&this.task.then(function(){try{d.G?e.error(d.G):e.complete()}catch(f){}});this.a.push(e);return a};
-	R.prototype.$=function(a){void 0!==this.a&&void 0!==this.a[a]&&(delete this.a[a],--this.J,0===this.J&&void 0!==this.D&&this.D(this))};var S=function(a,b){if(!a.l)for(var c=0;c<a.a.length;c++)Ga(a,c,b)},Ga=function(a,b,c){a.task.then(function(){if(void 0!==a.a&&void 0!==a.a[b])try{c(a.a[b])}catch(d){"undefined"!==typeof console&&console.error&&console.error(d)}})};R.prototype.close=function(a){var b=this;this.l||(this.l=!0,void 0!==a&&(this.G=a),this.task.then(function(){b.a=void 0;b.D=void 0}))};
-	function Fa(a){if("object"!==typeof a||null===a)return!1;var b;b=["next","error","complete"];n();var c=b[Symbol.iterator];b=c?c.call(b):m(b);for(c=b.next();!c.done;c=b.next())if(c=c.value,c in a&&"function"===typeof a[c])return!0;return!1}function T(){};var Ha=Error.captureStackTrace,V=function(a,b){this.code=a;this.message=b;if(Ha)Ha(this,U.prototype.create);else{var c=Error.apply(this,arguments);this.name="FirebaseError";Object.defineProperty(this,"stack",{get:function(){return c.stack}})}};V.prototype=Object.create(Error.prototype);V.prototype.constructor=V;V.prototype.name="FirebaseError";var U=function(a,b,c){this.V=a;this.W=b;this.N=c;this.pattern=/\{\$([^}]+)}/g};
-	U.prototype.create=function(a,b){void 0===b&&(b={});var c=this.N[a];a=this.V+"/"+a;var c=void 0===c?"Error":c.replace(this.pattern,function(a,c){a=b[c];return void 0!==a?a.toString():"<"+c+"?>"}),c=this.W+": "+c+" ("+a+").",c=new V(a,c),d;for(d in b)b.hasOwnProperty(d)&&"_"!==d.slice(-1)&&(c[d]=b[d]);return c};var W=Q,X=function(a,b,c){var d=this;this.H=c;this.I=!1;this.i={};this.C=b;this.T=P(void 0,a);Object.keys(c.INTERNAL.factories).forEach(function(a){var b=c.INTERNAL.useAsService(d,a);null!==b&&(b=d.R.bind(d,b),d[a]=b)})};X.prototype.delete=function(){var a=this;return(new W(function(b){Y(a);b()})).then(function(){a.H.INTERNAL.removeApp(a.C);return W.all(Object.keys(a.i).map(function(b){return a.i[b].INTERNAL.delete()}))}).then(function(){a.I=!0;a.i={}})};
-	X.prototype.R=function(a){Y(this);void 0===this.i[a]&&(this.i[a]=this.H.INTERNAL.factories[a](this,this.P.bind(this)));return this.i[a]};X.prototype.P=function(a){P(this,a)};var Y=function(a){a.I&&Z(Ia("deleted",{name:a.C}))};h.Object.defineProperties(X.prototype,{name:{configurable:!0,enumerable:!0,get:function(){Y(this);return this.C}},options:{configurable:!0,enumerable:!0,get:function(){Y(this);return this.T}}});X.prototype.name&&X.prototype.options||X.prototype.delete||console.log("dc");
+	var N=function(a,b,c){0==a.b&&(a===c&&(b=3,c=new TypeError("Promise cannot resolve to itself")),a.b=1,ta(c,a.Y,a.Z,a)||(a.L=c,a.b=b,a.u=null,wa(a),3!=b||ya(a,c)))},ta=function(a,b,c,d){if(a instanceof O)return null!=b&&D(b,"opt_onFulfilled should be a function."),null!=c&&D(c,"opt_onRejected should be a function. Did you pass opt_context as the second argument instead of the third?"),xa(a,sa(b||r,c||null,d)),!0;var e;if(a)try{e=!!a.$goog_Thenable}catch(g){e=!1}else e=!1;if(e)return a.then(b,c,d),
+	!0;e=typeof a;if("object"==e&&null!=a||"function"==e)try{var f=a.then;if(v(f))return za(a,f,b,c,d),!0}catch(g){return c.call(d,g),!0}return!1},za=function(a,b,c,d,e){var f=!1,g=function(a){f||(f=!0,c.call(e,a))},k=function(a){f||(f=!0,d.call(e,a))};try{b.call(a,g,k)}catch(p){k(p)}},wa=function(a){a.A||(a.A=!0,M(a.P,a))},Aa=function(a){var b=null;a.g&&(b=a.g,a.g=b.next,b.next=null);a.g||(a.j=null);null!=b&&C(null!=b.c);return b};
+	O.prototype.P=function(){for(var a;a=Aa(this);){var b=this.b,c=this.L;if(3==b&&a.h&&!a.w){var d;for(d=this;d&&d.m;d=d.u)d.m=!1}if(a.child)a.child.u=null,Ba(a,b,c);else try{a.w?a.c.call(a.context):Ba(a,b,c)}catch(e){Ca.call(null,e)}ra.put(a)}this.A=!1};var Ba=function(a,b,c){2==b?a.c.call(a.context,c):a.h&&a.h.call(a.context,c)},ya=function(a,b){a.m=!0;M(function(){a.m&&Ca.call(null,b)})},Ca=ka;function P(a,b){if(!(b instanceof Object))return b;switch(b.constructor){case Date:return new Date(b.getTime());case Object:void 0===a&&(a={});break;case Array:a=[];break;default:return b}for(var c in b)b.hasOwnProperty(c)&&(a[c]=P(a[c],b[c]));return a};O.all=function(a){return new O(function(b,c){var d=a.length,e=[];if(d)for(var f=function(a,c){d--;e[a]=c;0==d&&b(e)},g=function(a){c(a)},k=0,p;k<a.length;k++)p=a[k],ua(p,x(f,k),g);else b(e)})};O.resolve=function(a){if(a instanceof O)return a;var b=new O(r);N(b,2,a);return b};O.reject=function(a){return new O(function(b,c){c(a)})};O.prototype["catch"]=O.prototype.X;var Q=O;"undefined"!==typeof Promise&&(Q=Promise);var Da=Q;function Ea(a,b){a=new R(a,b);return a.subscribe.bind(a)}var R=function(a,b){var c=this;this.a=[];this.K=0;this.task=Da.resolve();this.l=!1;this.D=b;this.task.then(function(){a(c)}).catch(function(a){c.error(a)})};R.prototype.next=function(a){S(this,function(b){b.next(a)})};R.prototype.error=function(a){S(this,function(b){b.error(a)});this.close(a)};R.prototype.complete=function(){S(this,function(a){a.complete()});this.close()};
+	R.prototype.subscribe=function(a,b,c){var d=this,e;if(void 0===a&&void 0===b&&void 0===c)throw Error("Missing Observer.");e=Fa(a)?a:{next:a,error:b,complete:c};void 0===e.next&&(e.next=T);void 0===e.error&&(e.error=T);void 0===e.complete&&(e.complete=T);a=this.$.bind(this,this.a.length);this.l&&this.task.then(function(){try{d.H?e.error(d.H):e.complete()}catch(f){}});this.a.push(e);return a};
+	R.prototype.$=function(a){void 0!==this.a&&void 0!==this.a[a]&&(delete this.a[a],--this.K,0===this.K&&void 0!==this.D&&this.D(this))};var S=function(a,b){if(!a.l)for(var c=0;c<a.a.length;c++)Ga(a,c,b)},Ga=function(a,b,c){a.task.then(function(){if(void 0!==a.a&&void 0!==a.a[b])try{c(a.a[b])}catch(d){"undefined"!==typeof console&&console.error&&console.error(d)}})};R.prototype.close=function(a){var b=this;this.l||(this.l=!0,void 0!==a&&(this.H=a),this.task.then(function(){b.a=void 0;b.D=void 0}))};
+	function Fa(a){if("object"!==typeof a||null===a)return!1;var b;b=["next","error","complete"];n();var c=b[Symbol.iterator];b=c?c.call(b):m(b);for(c=b.next();!c.done;c=b.next())if(c=c.value,c in a&&"function"===typeof a[c])return!0;return!1}function T(){};var Ha=Error.captureStackTrace,V=function(a,b){this.code=a;this.message=b;if(Ha)Ha(this,U.prototype.create);else{var c=Error.apply(this,arguments);this.name="FirebaseError";Object.defineProperty(this,"stack",{get:function(){return c.stack}})}};V.prototype=Object.create(Error.prototype);V.prototype.constructor=V;V.prototype.name="FirebaseError";var U=function(a,b,c){this.V=a;this.W=b;this.O=c;this.pattern=/\{\$([^}]+)}/g};
+	U.prototype.create=function(a,b){void 0===b&&(b={});var c=this.O[a];a=this.V+"/"+a;var c=void 0===c?"Error":c.replace(this.pattern,function(a,c){a=b[c];return void 0!==a?a.toString():"<"+c+"?>"}),c=this.W+": "+c+" ("+a+").",c=new V(a,c),d;for(d in b)b.hasOwnProperty(d)&&"_"!==d.slice(-1)&&(c[d]=b[d]);return c};var W=Q,X=function(a,b,c){var d=this;this.I=c;this.J=!1;this.i={};this.C=b;this.F=P(void 0,a);a="serviceAccount"in this.F;("credential"in this.F||a)&&"undefined"!==typeof console&&console.log("The '"+(a?"serviceAccount":"credential")+"' property specified in the first argument to initializeApp() is deprecated and will be removed in the next major version. You should instead use the 'firebase-admin' package. See https://firebase.google.com/docs/admin/setup for details on how to get started.");Object.keys(c.INTERNAL.factories).forEach(function(a){var b=
+	c.INTERNAL.useAsService(d,a);null!==b&&(b=d.S.bind(d,b),d[a]=b)})};X.prototype.delete=function(){var a=this;return(new W(function(b){Y(a);b()})).then(function(){a.I.INTERNAL.removeApp(a.C);return W.all(Object.keys(a.i).map(function(b){return a.i[b].INTERNAL.delete()}))}).then(function(){a.J=!0;a.i={}})};X.prototype.S=function(a){Y(this);void 0===this.i[a]&&(this.i[a]=this.I.INTERNAL.factories[a](this,this.R.bind(this)));return this.i[a]};X.prototype.R=function(a){P(this,a)};
+	var Y=function(a){a.J&&Z(Ia("deleted",{name:a.C}))};h.Object.defineProperties(X.prototype,{name:{configurable:!0,enumerable:!0,get:function(){Y(this);return this.C}},options:{configurable:!0,enumerable:!0,get:function(){Y(this);return this.F}}});X.prototype.name&&X.prototype.options||X.prototype.delete||console.log("dc");
 	function Ja(){function a(a){a=a||"[DEFAULT]";var b=d[a];void 0===b&&Z("noApp",{name:a});return b}function b(a,b){Object.keys(e).forEach(function(d){d=c(a,d);if(null!==d&&f[d])f[d](b,a)})}function c(a,b){if("serverAuth"===b)return null;var c=b;a=a.options;"auth"===b&&(a.serviceAccount||a.credential)&&(c="serverAuth","serverAuth"in e||Z("serverAuthMissing"));return c}var d={},e={},f={},g={__esModule:!0,initializeApp:function(a,c){void 0===c?c="[DEFAULT]":"string"===typeof c&&""!==c||Z("bad-app-name",
 	{name:c+""});void 0!==d[c]&&Z("dupApp",{name:c});a=new X(a,c,g);d[c]=a;b(a,"create");void 0!=a.INTERNAL&&void 0!=a.INTERNAL.getToken||P(a,{INTERNAL:{getToken:function(){return W.resolve(null)},addAuthTokenListener:function(){},removeAuthTokenListener:function(){}}});return a},app:a,apps:null,Promise:W,SDK_VERSION:"0.0.0",INTERNAL:{registerService:function(b,c,d,u){e[b]&&Z("dupService",{name:b});e[b]=c;u&&(f[b]=u);c=function(c){void 0===c&&(c=a());return c[b]()};void 0!==d&&P(c,d);return g[b]=c},createFirebaseNamespace:Ja,
 	extendNamespace:function(a){P(g,a)},createSubscribe:Ea,ErrorFactory:U,removeApp:function(a){b(d[a],"delete");delete d[a]},factories:e,useAsService:c,Promise:O,deepExtend:P}};g["default"]=g;Object.defineProperty(g,"apps",{get:function(){return Object.keys(d).map(function(a){return d[a]})}});a.App=X;return g}function Z(a,b){throw Error(Ia(a,b));}
 	function Ia(a,b){b=b||{};b={noApp:"No Firebase App '"+b.name+"' has been created - call Firebase App.initializeApp().","bad-app-name":"Illegal App name: '"+b.name+"'.",dupApp:"Firebase App named '"+b.name+"' already exists.",deleted:"Firebase App named '"+b.name+"' already deleted.",dupService:"Firebase Service named '"+b.name+"' already registered.",serverAuthMissing:"Initializing the Firebase SDK with a service account is only allowed in a Node.js environment. On client devices, you should instead initialize the SDK with an api key and auth domain."}[a];
 	return void 0===b?"Application Error: ("+a+")":b};"undefined"!==typeof firebase&&(firebase=Ja()); })();
-	firebase.SDK_VERSION = "3.5.3";
+	firebase.SDK_VERSION = "3.6.0";
 	module.exports = firebase;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
@@ -10337,8 +10313,8 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(181);
-	/*! @license Firebase v3.5.3
-	    Build: 3.5.3-rc.3
+	/*! @license Firebase v3.6.0
+	    Build: 3.6.0-rc.3
 	    Terms: https://developers.google.com/terms */
 	(function(){var h,aa=aa||{},l=this,ba=function(){},ca=function(){throw Error("unimplemented abstract method");},m=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=
 	typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";else if("function"==b&&"undefined"==typeof a.call)return"object";return b},da=function(a){return null===a},ea=function(a){return"array"==m(a)},fa=function(a){var b=m(a);return"array"==b||"object"==b&&"number"==typeof a.length},n=function(a){return"string"==typeof a},ga=function(a){return"number"==typeof a},p=function(a){return"function"==m(a)},ha=function(a){var b=typeof a;
@@ -10422,15 +10398,15 @@ module.exports =
 	L.prototype.toString=function(){if(this.J)return this.J;if(!this.g)return"";for(var a=[],b=this.g.ia(),c=0;c<b.length;c++)for(var d=b[c],e=encodeURIComponent(String(d)),d=this.V(d),f=0;f<d.length;f++){var g=e;""!==d[f]&&(g+="="+encodeURIComponent(String(d[f])));a.push(g)}return this.J=a.join("&")};L.prototype.clone=function(){var a=new L;a.J=this.J;this.g&&(a.g=this.g.clone(),a.l=this.l);return a};L.prototype.M=function(a){a=String(a);this.N&&(a=a.toLowerCase());return a};
 	L.prototype.Pc=function(a){a&&!this.N&&(Fe(this),this.J=null,this.g.forEach(function(a,c){var b=c.toLowerCase();c!=b&&(this.remove(c),Ge(this,b,a))},this));this.N=a};var Ie=function(){var a=N();return z&&!!nb&&11==nb||/Edge\/\d+/.test(a)},Je=function(){return l.window&&l.window.location.href||""},Ke=function(a,b){var c=[],d;for(d in a)d in b?typeof a[d]!=typeof b[d]?c.push(d):ea(a[d])?Ta(a[d],b[d])||c.push(d):"object"==typeof a[d]&&null!=a[d]&&null!=b[d]?0<Ke(a[d],b[d]).length&&c.push(d):a[d]!==b[d]&&c.push(d):c.push(d);for(d in b)d in a||c.push(d);return c},Me=function(){var a;a=N();a="Chrome"!=Le(a)?null:(a=a.match(/\sChrome\/(\d+)/i))&&2==a.length?parseInt(a[1],
 	10):null;return a&&30>a?!1:!z||!nb||9<nb},Ne=function(a){a=(a||N()).toLowerCase();return a.match(/android/)||a.match(/webos/)||a.match(/iphone|ipad|ipod/)||a.match(/blackberry/)||a.match(/windows phone/)||a.match(/iemobile/)?!0:!1},Oe=function(a){a=a||l.window;try{a.close()}catch(b){}},Pe=function(a,b,c){var d=Math.floor(1E9*Math.random()).toString();b=b||500;c=c||600;var e=(window.screen.availHeight-c)/2,f=(window.screen.availWidth-b)/2;b={width:b,height:c,top:0<e?e:0,left:0<f?f:0,location:!0,resizable:!0,
-	statusbar:!0,toolbar:!1};d&&(b.target=d);"Firefox"==Le(N())&&(a=a||"http://localhost",b.scrollbars=!0);var g;c=a||"about:blank";(d=b)||(d={});a=window;b=c instanceof B?c:fc("undefined"!=typeof c.href?c.href:String(c));c=d.target||c.target;e=[];for(g in d)switch(g){case "width":case "height":case "top":case "left":e.push(g+"="+d[g]);break;case "target":case "noreferrer":break;default:e.push(g+"="+(d[g]?1:0))}g=e.join(",");(y("iPhone")&&!y("iPod")&&!y("iPad")||y("iPad")||y("iPod"))&&a.navigator&&a.navigator.standalone&&
-	c&&"_self"!=c?(g=a.document.createElement("A"),"undefined"!=typeof HTMLAnchorElement&&"undefined"!=typeof Location&&"undefined"!=typeof Element&&(e=g&&(g instanceof HTMLAnchorElement||!(g instanceof Location||g instanceof Element)),f=ha(g)?g.constructor.displayName||g.constructor.name||Object.prototype.toString.call(g):void 0===g?"undefined":null===g?"null":typeof g,w(e,"Argument is not a HTMLAnchorElement (or a non-Element mock); got: %s",f)),b=b instanceof B?b:fc(b),g.href=cc(b),g.setAttribute("target",
-	c),d.noreferrer&&g.setAttribute("rel","noreferrer"),d=document.createEvent("MouseEvent"),d.initMouseEvent("click",!0,!0,a,1),g.dispatchEvent(d),g={}):d.noreferrer?(g=a.open("",c,g),d=cc(b),g&&(eb&&u(d,";")&&(d="'"+d.replace(/'/g,"%27")+"'"),g.opener=null,a=ac("b/12014412, meta tag with sanitized URL"),va.test(d)&&(-1!=d.indexOf("&")&&(d=d.replace(pa,"&amp;")),-1!=d.indexOf("<")&&(d=d.replace(qa,"&lt;")),-1!=d.indexOf(">")&&(d=d.replace(ra,"&gt;")),-1!=d.indexOf('"')&&(d=d.replace(sa,"&quot;")),-1!=
-	d.indexOf("'")&&(d=d.replace(ta,"&#39;")),-1!=d.indexOf("\x00")&&(d=d.replace(ua,"&#0;"))),d='<META HTTP-EQUIV="refresh" content="0; url='+d+'">',Ba($b(a),"must provide justification"),w(!/^[\s\xa0]*$/.test($b(a)),"must provide non-empty justification"),g.document.write(Ac((new zc).se(d))),g.document.close())):g=a.open(cc(b),c,g);if(g)try{g.focus()}catch(k){}return g},Qe=function(a){return new C(function(b){var c=function(){Yd(2E3).then(function(){if(!a||a.closed)b();else return c()})};return c()})},
-	Re=/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,Se=function(){var a=null;return(new C(function(b){"complete"==l.document.readyState?b():(a=function(){b()},Qb(window,"load",a))})).h(function(b){Sb(window,"load",a);throw b;})},O=function(a){switch(a||l.navigator&&l.navigator.product||""){case "ReactNative":return"ReactNative";default:return"undefined"!==typeof l.process?"Node":"Browser"}},Te=function(){var a=O();return"ReactNative"===a||"Node"===a},Le=function(a){var b=a.toLowerCase();if(u(b,"opera/")||u(b,
-	"opr/")||u(b,"opios/"))return"Opera";if(u(b,"iemobile"))return"IEMobile";if(u(b,"msie")||u(b,"trident/"))return"IE";if(u(b,"edge/"))return"Edge";if(u(b,"firefox/"))return"Firefox";if(u(b,"silk/"))return"Silk";if(u(b,"blackberry"))return"Blackberry";if(u(b,"webos"))return"Webos";if(!u(b,"safari/")||u(b,"chrome/")||u(b,"crios/")||u(b,"android"))if(!u(b,"chrome/")&&!u(b,"crios/")||u(b,"edge/")){if(u(b,"android"))return"Android";if((a=a.match(/([a-zA-Z\d\.]+)\/[a-zA-Z\d\.]*$/))&&2==a.length)return a[1]}else return"Chrome";
-	else return"Safari";return"Other"},Ue=function(a){var b=O(void 0);return("Browser"===b?Le(N()):b)+"/JsCore/"+a},N=function(){return l.navigator&&l.navigator.userAgent||""},Ve=function(a){a=a.split(".");for(var b=l,c=0;c<a.length&&"object"==typeof b&&null!=b;c++)b=b[a[c]];c!=a.length&&(b=void 0);return b},Xe=function(){var a;if(!(a=!l.location||!l.location.protocol||"http:"!=l.location.protocol&&"https:"!=l.location.protocol||Te())){var b;a:{try{var c=l.localStorage,d=We();if(c){c.setItem(d,"1");c.removeItem(d);
-	b=Ie()?!!l.indexedDB:!0;break a}}catch(e){}b=!1}a=!b}return!a},Ye=function(a){a=a||N();return Ne(a)||"Firefox"==Le(a)?!1:!0},Ze=function(a){return"undefined"===typeof a?null:kc(a)},$e=function(a){var b={},c;for(c in a)a.hasOwnProperty(c)&&null!==a[c]&&void 0!==a[c]&&(b[c]=a[c]);return b},af=function(a){if(null!==a){var b;try{b=hc(a)}catch(c){try{b=JSON.parse(a)}catch(d){throw c;}}return b}},We=function(a){return a?a:""+Math.floor(1E9*Math.random()).toString()},bf=function(a){a=a||N();return"Safari"==
-	Le(a)||a.toLowerCase().match(/iphone|ipad|ipod/)?!1:!0},cf=function(){var a=l.___jsl;if(a&&a.H)for(var b in a.H)if(a.H[b].r=a.H[b].r||[],a.H[b].L=a.H[b].L||[],a.H[b].r=a.H[b].L.concat(),a.CP)for(var c=0;c<a.CP.length;c++)a.CP[c]=null},df=function(a,b,c,d){if(a>b)throw Error("Short delay should be less than long delay!");this.Ne=a;this.ze=b;a=d||O();this.te=Ne(c||N())||"ReactNative"===a};df.prototype.get=function(){return this.te?this.ze:this.Ne};var ef;try{var ff={};Object.defineProperty(ff,"abcd",{configurable:!0,enumerable:!0,value:1});Object.defineProperty(ff,"abcd",{configurable:!0,enumerable:!0,value:2});ef=2==ff.abcd}catch(a){ef=!1}
+	statusbar:!0,toolbar:!1};c=N().toLowerCase();d&&(b.target=d,u(c,"crios/")&&(b.target="_blank"));"Firefox"==Le(N())&&(a=a||"http://localhost",b.scrollbars=!0);var g;c=a||"about:blank";(d=b)||(d={});a=window;b=c instanceof B?c:fc("undefined"!=typeof c.href?c.href:String(c));c=d.target||c.target;e=[];for(g in d)switch(g){case "width":case "height":case "top":case "left":e.push(g+"="+d[g]);break;case "target":case "noreferrer":break;default:e.push(g+"="+(d[g]?1:0))}g=e.join(",");(y("iPhone")&&!y("iPod")&&
+	!y("iPad")||y("iPad")||y("iPod"))&&a.navigator&&a.navigator.standalone&&c&&"_self"!=c?(g=a.document.createElement("A"),"undefined"!=typeof HTMLAnchorElement&&"undefined"!=typeof Location&&"undefined"!=typeof Element&&(e=g&&(g instanceof HTMLAnchorElement||!(g instanceof Location||g instanceof Element)),f=ha(g)?g.constructor.displayName||g.constructor.name||Object.prototype.toString.call(g):void 0===g?"undefined":null===g?"null":typeof g,w(e,"Argument is not a HTMLAnchorElement (or a non-Element mock); got: %s",
+	f)),b=b instanceof B?b:fc(b),g.href=cc(b),g.setAttribute("target",c),d.noreferrer&&g.setAttribute("rel","noreferrer"),d=document.createEvent("MouseEvent"),d.initMouseEvent("click",!0,!0,a,1),g.dispatchEvent(d),g={}):d.noreferrer?(g=a.open("",c,g),d=cc(b),g&&(eb&&u(d,";")&&(d="'"+d.replace(/'/g,"%27")+"'"),g.opener=null,a=ac("b/12014412, meta tag with sanitized URL"),va.test(d)&&(-1!=d.indexOf("&")&&(d=d.replace(pa,"&amp;")),-1!=d.indexOf("<")&&(d=d.replace(qa,"&lt;")),-1!=d.indexOf(">")&&(d=d.replace(ra,
+	"&gt;")),-1!=d.indexOf('"')&&(d=d.replace(sa,"&quot;")),-1!=d.indexOf("'")&&(d=d.replace(ta,"&#39;")),-1!=d.indexOf("\x00")&&(d=d.replace(ua,"&#0;"))),d='<META HTTP-EQUIV="refresh" content="0; url='+d+'">',Ba($b(a),"must provide justification"),w(!/^[\s\xa0]*$/.test($b(a)),"must provide non-empty justification"),g.document.write(Ac((new zc).se(d))),g.document.close())):g=a.open(cc(b),c,g);if(g)try{g.focus()}catch(k){}return g},Qe=function(a){return new C(function(b){var c=function(){Yd(2E3).then(function(){if(!a||
+	a.closed)b();else return c()})};return c()})},Re=/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,Se=function(){var a=null;return(new C(function(b){"complete"==l.document.readyState?b():(a=function(){b()},Qb(window,"load",a))})).h(function(b){Sb(window,"load",a);throw b;})},O=function(a){switch(a||l.navigator&&l.navigator.product||""){case "ReactNative":return"ReactNative";default:return"undefined"!==typeof l.process?"Node":"Browser"}},Te=function(){var a=O();return"ReactNative"===a||"Node"===a},Le=function(a){var b=
+	a.toLowerCase();if(u(b,"opera/")||u(b,"opr/")||u(b,"opios/"))return"Opera";if(u(b,"iemobile"))return"IEMobile";if(u(b,"msie")||u(b,"trident/"))return"IE";if(u(b,"edge/"))return"Edge";if(u(b,"firefox/"))return"Firefox";if(u(b,"silk/"))return"Silk";if(u(b,"blackberry"))return"Blackberry";if(u(b,"webos"))return"Webos";if(!u(b,"safari/")||u(b,"chrome/")||u(b,"crios/")||u(b,"android"))if(!u(b,"chrome/")&&!u(b,"crios/")||u(b,"edge/")){if(u(b,"android"))return"Android";if((a=a.match(/([a-zA-Z\d\.]+)\/[a-zA-Z\d\.]*$/))&&
+	2==a.length)return a[1]}else return"Chrome";else return"Safari";return"Other"},Ue=function(a){var b=O(void 0);return("Browser"===b?Le(N()):b)+"/JsCore/"+a},N=function(){return l.navigator&&l.navigator.userAgent||""},Ve=function(a){a=a.split(".");for(var b=l,c=0;c<a.length&&"object"==typeof b&&null!=b;c++)b=b[a[c]];c!=a.length&&(b=void 0);return b},Xe=function(){var a;if(!(a=!l.location||!l.location.protocol||"http:"!=l.location.protocol&&"https:"!=l.location.protocol||Te())){var b;a:{try{var c=l.localStorage,
+	d=We();if(c){c.setItem(d,"1");c.removeItem(d);b=Ie()?!!l.indexedDB:!0;break a}}catch(e){}b=!1}a=!b}return!a},Ye=function(a){a=a||N();return Ne(a)||"Firefox"==Le(a)?!1:!0},Ze=function(a){return"undefined"===typeof a?null:kc(a)},$e=function(a){var b={},c;for(c in a)a.hasOwnProperty(c)&&null!==a[c]&&void 0!==a[c]&&(b[c]=a[c]);return b},af=function(a){if(null!==a){var b;try{b=hc(a)}catch(c){try{b=JSON.parse(a)}catch(d){throw c;}}return b}},We=function(a){return a?a:""+Math.floor(1E9*Math.random()).toString()},
+	bf=function(a){a=a||N();return"Safari"==Le(a)||a.toLowerCase().match(/iphone|ipad|ipod/)?!1:!0},cf=function(){var a=l.___jsl;if(a&&a.H)for(var b in a.H)if(a.H[b].r=a.H[b].r||[],a.H[b].L=a.H[b].L||[],a.H[b].r=a.H[b].L.concat(),a.CP)for(var c=0;c<a.CP.length;c++)a.CP[c]=null},df=function(a,b,c,d){if(a>b)throw Error("Short delay should be less than long delay!");this.Ne=a;this.ze=b;a=d||O();this.te=Ne(c||N())||"ReactNative"===a};df.prototype.get=function(){return this.te?this.ze:this.Ne};var ef;try{var ff={};Object.defineProperty(ff,"abcd",{configurable:!0,enumerable:!0,value:1});Object.defineProperty(ff,"abcd",{configurable:!0,enumerable:!0,value:2});ef=2==ff.abcd}catch(a){ef=!1}
 	var P=function(a,b,c){ef?Object.defineProperty(a,b,{configurable:!0,enumerable:!0,value:c}):a[b]=c},gf=function(a,b){if(b)for(var c in b)b.hasOwnProperty(c)&&P(a,c,b[c])},hf=function(a){var b={},c;for(c in a)a.hasOwnProperty(c)&&(b[c]=a[c]);return b},jf=function(a,b){if(!b||!b.length)return!0;if(!a)return!1;for(var c=0;c<b.length;c++){var d=a[b[c]];if(void 0===d||null===d||""===d)return!1}return!0},kf=function(a){var b=a;if("object"==typeof a&&null!=a){var b="length"in a?[]:{},c;for(c in a)P(b,c,
 	kf(a[c]))}return b};var lf=["client_id","response_type","scope","redirect_uri","state"],mf={Id:{ub:500,tb:600,providerId:"facebook.com",bc:lf},Jd:{ub:500,tb:620,providerId:"github.com",bc:lf},Kd:{ub:515,tb:680,providerId:"google.com",bc:lf},Pd:{ub:485,tb:705,providerId:"twitter.com",bc:"oauth_consumer_key oauth_nonce oauth_signature oauth_signature_method oauth_timestamp oauth_token oauth_version".split(" ")}},nf=function(a){for(var b in mf)if(mf[b].providerId==a)return mf[b];return null},of=function(a){return(a=nf(a))&&
 	a.bc||[]};var Q=function(a,b){this.code="auth/"+a;this.message=b||pf[a]||""};r(Q,Error);Q.prototype.I=function(){return{name:this.code,code:this.code,message:this.message}};
@@ -10557,8 +10533,8 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(181);
-	/*! @license Firebase v3.5.3
-	    Build: 3.5.3-rc.3
+	/*! @license Firebase v3.6.0
+	    Build: 3.6.0-rc.3
 	    Terms: https://developers.google.com/terms
 
 	    ---
@@ -10824,8 +10800,8 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(181);
-	/*! @license Firebase v3.5.3
-	    Build: 3.5.3-rc.3
+	/*! @license Firebase v3.6.0
+	    Build: 3.6.0-rc.3
 	    Terms: https://developers.google.com/terms */
 	(function() {var k,aa=aa||{},l=this,n=function(a){return void 0!==a},ba=function(){},ca=function(){throw Error("unimplemented abstract method");},p=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";
 	if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";else if("function"==b&&"undefined"==typeof a.call)return"object";return b},da=function(a){var b=p(a);return"array"==b||"object"==b&&"number"==typeof a.length},r=function(a){return"string"==typeof a},t=function(a){return"function"==p(a)},ea=function(a){var b=typeof a;return"object"==b&&null!=a||"function"==b},fa="closure_uid_"+(1E9*Math.random()>>>
@@ -10936,8 +10912,8 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(181);
-	/*! @license Firebase v3.5.3
-	    Build: 3.5.3-rc.3
+	/*! @license Firebase v3.6.0
+	    Build: 3.6.0-rc.3
 	    Terms: https://developers.google.com/terms */
 	(function() {var e=function(a,b){function c(){}c.prototype=b.prototype;a.prototype=new c;for(var d in b)if(Object.defineProperties){var f=Object.getOwnPropertyDescriptor(b,d);f&&Object.defineProperty(a,d,f)}else a[d]=b[d]},g=this,h=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=
 	typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";else if("function"==b&&"undefined"==typeof a.call)return"object";return b},k=function(a,b){function c(){}c.prototype=b.prototype;a.ga=b.prototype;a.prototype=new c;a.ca=function(a,c,p){for(var d=Array(arguments.length-2),f=2;f<arguments.length;f++)d[f-2]=arguments[f];
@@ -10997,6 +10973,28 @@ module.exports =
 	    })(),
 	    formData: 'FormData' in self,
 	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+
+	  if (support.arrayBuffer) {
+	    var viewClasses = [
+	      '[object Int8Array]',
+	      '[object Uint8Array]',
+	      '[object Uint8ClampedArray]',
+	      '[object Int16Array]',
+	      '[object Uint16Array]',
+	      '[object Int32Array]',
+	      '[object Uint32Array]',
+	      '[object Float32Array]',
+	      '[object Float64Array]'
+	    ]
+
+	    var isDataView = function(obj) {
+	      return obj && DataView.prototype.isPrototypeOf(obj)
+	    }
+
+	    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+	      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+	    }
 	  }
 
 	  function normalizeName(name) {
@@ -11131,14 +11129,26 @@ module.exports =
 
 	  function readBlobAsArrayBuffer(blob) {
 	    var reader = new FileReader()
+	    var promise = fileReaderReady(reader)
 	    reader.readAsArrayBuffer(blob)
-	    return fileReaderReady(reader)
+	    return promise
 	  }
 
 	  function readBlobAsText(blob) {
 	    var reader = new FileReader()
+	    var promise = fileReaderReady(reader)
 	    reader.readAsText(blob)
-	    return fileReaderReady(reader)
+	    return promise
+	  }
+
+	  function bufferClone(buf) {
+	    if (buf.slice) {
+	      return buf.slice(0)
+	    } else {
+	      var view = new Uint8Array(buf.byteLength)
+	      view.set(new Uint8Array(buf))
+	      return view.buffer
+	    }
 	  }
 
 	  function Body() {
@@ -11146,7 +11156,9 @@ module.exports =
 
 	    this._initBody = function(body) {
 	      this._bodyInit = body
-	      if (typeof body === 'string') {
+	      if (!body) {
+	        this._bodyText = ''
+	      } else if (typeof body === 'string') {
 	        this._bodyText = body
 	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
 	        this._bodyBlob = body
@@ -11154,11 +11166,12 @@ module.exports =
 	        this._bodyFormData = body
 	      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
 	        this._bodyText = body.toString()
-	      } else if (!body) {
-	        this._bodyText = ''
-	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
-	        // Only support ArrayBuffers for POST method.
-	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+	        this._bodyArrayBuffer = bufferClone(body.buffer)
+	        // IE 10-11 can't handle a DataView body.
+	        this._bodyInit = new Blob([this._bodyArrayBuffer])
+	      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+	        this._bodyArrayBuffer = bufferClone(body)
 	      } else {
 	        throw new Error('unsupported BodyInit type')
 	      }
@@ -11183,35 +11196,42 @@ module.exports =
 
 	        if (this._bodyBlob) {
 	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyArrayBuffer) {
+	          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
 	        } else if (this._bodyFormData) {
 	          throw new Error('could not read FormData body as blob')
 	        } else {
 	          return Promise.resolve(new Blob([this._bodyText]))
 	        }
 	      }
+	    }
 
+	    this.text = function() {
+	      var rejected = consumed(this)
+	      if (rejected) {
+	        return rejected
+	      }
+
+	      if (this._bodyBlob) {
+	        return readBlobAsText(this._bodyBlob)
+	      } else if (this._bodyArrayBuffer) {
+	        var view = new Uint8Array(this._bodyArrayBuffer)
+	        var str = String.fromCharCode.apply(null, view)
+	        return Promise.resolve(str)
+	      } else if (this._bodyFormData) {
+	        throw new Error('could not read FormData body as text')
+	      } else {
+	        return Promise.resolve(this._bodyText)
+	      }
+	    }
+
+	    if (support.arrayBuffer) {
 	      this.arrayBuffer = function() {
-	        return this.blob().then(readBlobAsArrayBuffer)
-	      }
-
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-
-	        if (this._bodyBlob) {
-	          return readBlobAsText(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as text')
+	        if (this._bodyArrayBuffer) {
+	          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
 	        } else {
-	          return Promise.resolve(this._bodyText)
+	          return this.blob().then(readBlobAsArrayBuffer)
 	        }
-	      }
-	    } else {
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        return rejected ? rejected : Promise.resolve(this._bodyText)
 	      }
 	    }
 
@@ -11239,7 +11259,10 @@ module.exports =
 	  function Request(input, options) {
 	    options = options || {}
 	    var body = options.body
-	    if (Request.prototype.isPrototypeOf(input)) {
+
+	    if (typeof input === 'string') {
+	      this.url = input
+	    } else {
 	      if (input.bodyUsed) {
 	        throw new TypeError('Already read')
 	      }
@@ -11250,12 +11273,10 @@ module.exports =
 	      }
 	      this.method = input.method
 	      this.mode = input.mode
-	      if (!body) {
+	      if (!body && input._bodyInit != null) {
 	        body = input._bodyInit
 	        input.bodyUsed = true
 	      }
-	    } else {
-	      this.url = input
 	    }
 
 	    this.credentials = options.credentials || this.credentials || 'omit'
@@ -11273,7 +11294,7 @@ module.exports =
 	  }
 
 	  Request.prototype.clone = function() {
-	    return new Request(this)
+	    return new Request(this, { body: this._bodyInit })
 	  }
 
 	  function decode(body) {
@@ -11289,16 +11310,17 @@ module.exports =
 	    return form
 	  }
 
-	  function headers(xhr) {
-	    var head = new Headers()
-	    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
-	    pairs.forEach(function(header) {
-	      var split = header.trim().split(':')
-	      var key = split.shift().trim()
-	      var value = split.join(':').trim()
-	      head.append(key, value)
+	  function parseHeaders(rawHeaders) {
+	    var headers = new Headers()
+	    rawHeaders.split('\r\n').forEach(function(line) {
+	      var parts = line.split(':')
+	      var key = parts.shift().trim()
+	      if (key) {
+	        var value = parts.join(':').trim()
+	        headers.append(key, value)
+	      }
 	    })
-	    return head
+	    return headers
 	  }
 
 	  Body.call(Request.prototype)
@@ -11309,10 +11331,10 @@ module.exports =
 	    }
 
 	    this.type = 'default'
-	    this.status = options.status
+	    this.status = 'status' in options ? options.status : 200
 	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = options.statusText
-	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.statusText = 'statusText' in options ? options.statusText : 'OK'
+	    this.headers = new Headers(options.headers)
 	    this.url = options.url || ''
 	    this._initBody(bodyInit)
 	  }
@@ -11350,35 +11372,16 @@ module.exports =
 
 	  self.fetch = function(input, init) {
 	    return new Promise(function(resolve, reject) {
-	      var request
-	      if (Request.prototype.isPrototypeOf(input) && !init) {
-	        request = input
-	      } else {
-	        request = new Request(input, init)
-	      }
-
+	      var request = new Request(input, init)
 	      var xhr = new XMLHttpRequest()
-
-	      function responseURL() {
-	        if ('responseURL' in xhr) {
-	          return xhr.responseURL
-	        }
-
-	        // Avoid security warnings on getResponseHeader when not allowed by CORS
-	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	          return xhr.getResponseHeader('X-Request-URL')
-	        }
-
-	        return
-	      }
 
 	      xhr.onload = function() {
 	        var options = {
 	          status: xhr.status,
 	          statusText: xhr.statusText,
-	          headers: headers(xhr),
-	          url: responseURL()
+	          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
 	        }
+	        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
 	        var body = 'response' in xhr ? xhr.response : xhr.responseText
 	        resolve(new Response(body, options))
 	      }
