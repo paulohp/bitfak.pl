@@ -50,6 +50,10 @@ var _header = require('../components/header');
 
 var _header2 = _interopRequireDefault(_header);
 
+var _reactRecaptcha = require('react-recaptcha');
+
+var _reactRecaptcha2 = _interopRequireDefault(_reactRecaptcha);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var base = _reBase2.default.createClass({
@@ -79,8 +83,10 @@ var _class = function (_React$Component) {
       totalBtc: 0,
       isLoading: false
     };
+
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.openModal = _this.openModal.bind(_this);
+    _this.verifyCallbackCaptcha = _this.verifyCallbackCaptcha.bind(_this);
     return _this;
   }
 
@@ -90,6 +96,11 @@ var _class = function (_React$Component) {
       var nextState = {};
       nextState[field] = event.target.value;
       this.setState(nextState);
+    }
+  }, {
+    key: 'verifyCallbackCaptcha',
+    value: function verifyCallbackCaptcha() {
+      console.log('LOL');
     }
   }, {
     key: 'openModal',
@@ -239,6 +250,16 @@ var _class = function (_React$Component) {
                       color: 'isInfo'
                     } })
                 )
+              ),
+              _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_reactRecaptcha2.default, {
+                  sitekey: '6LezKAwUAAAAAKRNF7D3SpjLTbZ_PFtX8alTBR8u',
+                  render: 'explicit',
+                  verifyCallback: this.verifyCallbackCaptcha
+                }),
+                _react2.default.createElement('br', null)
               ),
               _react2.default.createElement(
                 _reBulma.Button,

@@ -31,7 +31,8 @@ exports.default = function (_ref) {
         pageTitle
       ),
       _react2.default.createElement('meta', { name: 'viewport', content: 'initial-scale=1.0, width=device-width' }),
-      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' })
+      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' }),
+      _react2.default.createElement('script', { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true })
     ),
     _react2.default.createElement(
       'div',

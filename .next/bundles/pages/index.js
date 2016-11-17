@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "b8e6c8840a5b93a210de"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -7333,7 +7333,8 @@ module.exports =
 	        pageTitle
 	      ),
 	      _react2.default.createElement('meta', { name: 'viewport', content: 'initial-scale=1.0, width=device-width' }),
-	      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' })
+	      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' }),
+	      _react2.default.createElement('script', { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true })
 	    ),
 	    _react2.default.createElement(
 	      'div',

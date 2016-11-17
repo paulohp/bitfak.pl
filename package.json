@@ -13,7 +13,6 @@
     "react-icons": "^2.2.1",
     "react-recaptcha": "^2.2.4",
     "sha3": "^1.2.0",
-    "sweetalert-react": "^0.4.4",
     "whatwg-fetch": "^1.0.0"
   },
   "scripts": {

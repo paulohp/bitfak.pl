@@ -6,6 +6,7 @@ import Rebase from 're-base'
 import 'whatwg-fetch'
 import Footer from '../components/footer'
 import Header from '../components/header'
+import Recaptcha from 'react-recaptcha'
 
 const base = Rebase.createClass({
   apiKey: "AIzaSyC28QlWR-605lobVbBbch3AzqZ0QwIDBZM ",
@@ -30,14 +31,19 @@ export default class extends React.Component {
       totalPrice: 0,
       totalBtc: 0,
       isLoading: false,
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.openModal = this.openModal.bind(this);
+    }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.openModal = this.openModal.bind(this)
+    this.verifyCallbackCaptcha = this.verifyCallbackCaptcha.bind(this)
   }
   handleChange(field, event) {
     let nextState = {}
     nextState[field] = event.target.value
     this.setState(nextState)
+  }
+  verifyCallbackCaptcha(){
+    console.log('LOL')
   }
   openModal(event){
     event.preventDefault();
@@ -122,6 +128,14 @@ export default class extends React.Component {
                   }} />
                 </Column>
               </Columns>
+              <div>
+                <Recaptcha
+                  sitekey="6LezKAwUAAAAAKRNF7D3SpjLTbZ_PFtX8alTBR8u"
+                  render="explicit"
+                  verifyCallback={this.verifyCallbackCaptcha}
+                />
+                <br />
+              </div>
               <Button state={(!this.state.beneficiary_name || !this.state.account || !this.state.amount) && 'isDisabled'} type="submit" color="isInfo">Checkout</Button> 
             </form>
             <Modal

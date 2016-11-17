@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "71f77542af212f936079"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "b8e6c8840a5b93a210de"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -8642,7 +8642,8 @@ module.exports =
 	        pageTitle
 	      ),
 	      _react2.default.createElement('meta', { name: 'viewport', content: 'initial-scale=1.0, width=device-width' }),
-	      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' })
+	      _react2.default.createElement('link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' }),
+	      _react2.default.createElement('script', { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true })
 	    ),
 	    _react2.default.createElement(
 	      'div',
@@ -8714,6 +8715,10 @@ module.exports =
 
 	var _header2 = _interopRequireDefault(_header);
 
+	var _reactRecaptcha = __webpack_require__(187);
+
+	var _reactRecaptcha2 = _interopRequireDefault(_reactRecaptcha);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass({
@@ -8743,8 +8748,10 @@ module.exports =
 	      totalBtc: 0,
 	      isLoading: false
 	    };
+
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
 	    _this.openModal = _this.openModal.bind(_this);
+	    _this.verifyCallbackCaptcha = _this.verifyCallbackCaptcha.bind(_this);
 	    return _this;
 	  }
 
@@ -8754,6 +8761,11 @@ module.exports =
 	      var nextState = {};
 	      nextState[field] = event.target.value;
 	      this.setState(nextState);
+	    }
+	  }, {
+	    key: 'verifyCallbackCaptcha',
+	    value: function verifyCallbackCaptcha() {
+	      console.log('LOL');
 	    }
 	  }, {
 	    key: 'openModal',
@@ -8903,6 +8915,16 @@ module.exports =
 	                      color: 'isInfo'
 	                    } })
 	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_reactRecaptcha2.default, {
+	                  sitekey: '6LezKAwUAAAAAKRNF7D3SpjLTbZ_PFtX8alTBR8u',
+	                  render: 'explicit',
+	                  verifyCallback: this.verifyCallbackCaptcha
+	                }),
+	                _react2.default.createElement('br', null)
 	              ),
 	              _react2.default.createElement(
 	                _reBulma.Button,
@@ -11414,6 +11436,12 @@ module.exports =
 	  self.fetch.polyfill = true
 	})(typeof self !== 'undefined' ? self : this);
 
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	!function(e,t){ true?module.exports=t(__webpack_require__(87)):"function"==typeof define&&define.amd?define(["react"],t):"object"==typeof exports?exports.ReactRecaptcha=t(require("react")):e.ReactRecaptcha=t(e.React)}(this,function(e){return function(e){function t(a){if(r[a])return r[a].exports;var o=r[a]={exports:{},id:a,loaded:!1};return e[a].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){"use strict";function a(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var r=0;r<t.length;r++){var a=t[r];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,r,a){return r&&e(t.prototype,r),a&&e(t,a),t}}(),s=r(1),c=a(s),l={className:s.PropTypes.string,onloadCallbackName:s.PropTypes.string,elementID:s.PropTypes.string,onloadCallback:s.PropTypes.func,verifyCallback:s.PropTypes.func,expiredCallback:s.PropTypes.func,render:s.PropTypes.string,sitekey:s.PropTypes.string,theme:s.PropTypes.string,type:s.PropTypes.string,verifyCallbackName:s.PropTypes.string,expiredCallbackName:s.PropTypes.string,size:s.PropTypes.string,tabindex:s.PropTypes.string},d={elementID:"g-recaptcha",onloadCallback:void 0,onloadCallbackName:"onloadCallback",verifyCallback:void 0,verifyCallbackName:"verifyCallback",expiredCallback:void 0,expiredCallbackName:"expiredCallback",render:"onload",theme:"light",type:"image",size:"normal",tabindex:"0"},u=function(){return"undefined"!=typeof window&&"undefined"!=typeof window.grecaptcha},f=void 0,y=function(e){function t(e){o(this,t);var r=n(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return r._renderGrecaptcha=r._renderGrecaptcha.bind(r),r.reset=r.reset.bind(r),r.state={ready:u()},r.state.ready||(f=setInterval(r._updateReadyState.bind(r),1e3)),r}return i(t,e),p(t,[{key:"componentDidMount",value:function(){this.state.ready&&this._renderGrecaptcha()}},{key:"componentDidUpdate",value:function(e,t){var r=this.props,a=r.render,o=r.onloadCallback;"explicit"===a&&o&&this.state.ready&&!t.ready&&this._renderGrecaptcha()}},{key:"reset",value:function(){this.state.ready&&grecaptcha.reset()}},{key:"_updateReadyState",value:function(){u()&&(this.setState({ready:!0}),clearInterval(f))}},{key:"_renderGrecaptcha",value:function(){grecaptcha.render(this.props.elementID,{sitekey:this.props.sitekey,callback:this.props.verifyCallback?this.props.verifyCallback:void 0,theme:this.props.theme,type:this.props.type,size:this.props.size,tabindex:this.props.tabindex,"expired-callback":this.props.expiredCallback?this.props.expiredCallback:void 0}),this.props.onloadCallback()}},{key:"render",value:function(){return"explicit"===this.props.render&&this.props.onloadCallback?c["default"].createElement("div",{id:this.props.elementID,"data-onloadcallbackname":this.props.onloadCallbackName,"data-verifycallbackname":this.props.verifyCallbackName}):c["default"].createElement("div",{className:"g-recaptcha","data-sitekey":this.props.sitekey,"data-theme":this.props.theme,"data-type":this.props.type,"data-size":this.props.size,"data-tabindex":this.props.tabindex})}}]),t}(s.Component);t["default"]=y,y.propTypes=l,y.defaultProps=d,e.exports=t["default"]},function(t,r){t.exports=e}])});
 
 /***/ }
 /******/ ]);
