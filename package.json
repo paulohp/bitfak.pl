@@ -8,7 +8,7 @@
     "isomorphic-fetch": "^2.2.1",
     "next": "latest",
     "re-base": "^2.2.0",
-    "re-bulma": "^0.2.2",
+    "re-bulma": "latest",
     "react-recaptcha": "^2.2.4",
     "whatwg-fetch": "^1.0.0",
     "react-intercom": "latest"
