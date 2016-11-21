@@ -50,8 +50,9 @@ export default class extends React.Component {
     this.setState({
       isOpen: true,
     });
-
-    fetch(`http://localhost:4000/api/v1/ticker/pln?amount=${this.state.amount}`)
+    
+    const totalWithPercentage = Number(this.state.amount) + (5 * Number(this.state.amount)) / 100;
+    fetch(`http://localhost:4000/api/v1/ticker/pln?amount=${totalWithPercentage}`)
       .then(result => result.json())
       .then(json => this.setState({
         bitcoinPrice: json.bitcoinPrice,
@@ -191,7 +192,7 @@ export default class extends React.Component {
                     <Tr>
                       <Td>Total:</Td>
                       <Td>
-                        <strong>{this.state.totalPrice}zł</strong>
+                        <strong>{this.state.totalPrice}zl</strong>
                       </Td>
                     </Tr>
                   </Tfoot>

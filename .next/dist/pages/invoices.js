@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
 var _getPrototypeOf = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -19,10 +23,6 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 var _possibleConstructorReturn2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/possibleConstructorReturn');
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/react/react.js');
 
@@ -112,7 +112,8 @@ var _class = function (_React$Component) {
         isOpen: true
       });
 
-      fetch('http://localhost:4000/api/v1/ticker/pln?amount=' + this.state.amount).then(function (result) {
+      var totalWithPercentage = Number(this.state.amount) + 5 * Number(this.state.amount) / 100;
+      fetch('http://localhost:4000/api/v1/ticker/pln?amount=' + totalWithPercentage).then(function (result) {
         return result.json();
       }).then(function (json) {
         return _this2.setState({
@@ -445,7 +446,7 @@ var _class = function (_React$Component) {
                           'strong',
                           null,
                           this.state.totalPrice,
-                          'z\u0142'
+                          'zl'
                         )
                       )
                     )
@@ -480,19 +481,9 @@ var styles = {
 };
     if (module.hot) {
       module.hot.accept()
-
-      var Component = module.exports.default || module.exports
-      Component.__route = "/invoices"
-
       if (module.hot.status() !== 'idle') {
-        var components = next.router.components
-        for (var r in components) {
-          if (!components.hasOwnProperty(r)) continue
-
-          if (components[r].Component.__route === "/invoices") {
-            next.router.update(r, Component)
-          }
-        }
+        var Component = module.exports.default || module.exports
+        next.router.update('/invoices', Component)
       }
     }
   

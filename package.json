@@ -8,10 +8,10 @@
     "isomorphic-fetch": "^2.2.1",
     "next": "latest",
     "re-base": "^2.2.0",
-    "re-bulma": "latest",
+    "re-bulma": "0.2.3",
+    "react-intercom": "latest",
     "react-recaptcha": "^2.2.4",
-    "whatwg-fetch": "^1.0.0",
-    "react-intercom": "latest"
+    "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
     "dev": "next",

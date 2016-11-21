@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
 var _regenerator = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -27,10 +31,6 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 var _possibleConstructorReturn2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/possibleConstructorReturn');
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/react/react.js');
 
@@ -196,6 +196,15 @@ var _class = function (_React$Component) {
                                     _react2.default.createElement(_reBulma.Title, null)
                                 )
                             )
+                        ),
+                        _react2.default.createElement(
+                            _reBulma.Columns,
+                            null,
+                            this.props.payment.transactions && _react2.default.createElement(
+                                _reBulma.Column,
+                                null,
+                                'AS'
+                            )
                         )
                     )
                 ),
@@ -226,7 +235,6 @@ var _class = function (_React$Component) {
                                     return fetch('http://localhost:4000/api/v1/address/' + filteredData[0].address.address + '/transactions').then(function (res) {
                                         return res.json();
                                     }).then(function (transactions) {
-                                        console.log(transactions);
                                         var paymentData = filteredData[0];
                                         paymentData.transactions = transactions;
                                         return { payment: paymentData };
@@ -283,19 +291,9 @@ var styles = {
 };
     if (module.hot) {
       module.hot.accept()
-
-      var Component = module.exports.default || module.exports
-      Component.__route = "/pay"
-
       if (module.hot.status() !== 'idle') {
-        var components = next.router.components
-        for (var r in components) {
-          if (!components.hasOwnProperty(r)) continue
-
-          if (components[r].Component.__route === "/pay") {
-            next.router.update(r, Component)
-          }
-        }
+        var Component = module.exports.default || module.exports
+        next.router.update('/pay', Component)
       }
     }
   

@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
 var _getPrototypeOf = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -20,10 +24,6 @@ var _possibleConstructorReturn2 = require('/Users/paulohp/Workspace/Github/paulo
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
 var _react = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modules/react/react.js');
 
 var _react2 = _interopRequireDefault(_react);
@@ -32,9 +32,7 @@ var _css = require('/Users/paulohp/Workspace/Github/paulohp/bitfak.pl/node_modul
 
 var _css2 = _interopRequireDefault(_css);
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Error = function (_React$Component) {
   (0, _inherits3.default)(Error, _React$Component);
@@ -51,7 +49,29 @@ var Error = function (_React$Component) {
 
       var title = statusCode === 404 ? 'This page could not be found' : 'Internal Server Error';
 
-      return _react2.default.createElement('div', { className: (0, _css.merge)(styles.error, styles['error_' + statusCode]) }, _react2.default.createElement('div', { className: styles.text }, _react2.default.createElement('h1', { className: styles.h1 }, statusCode), _react2.default.createElement('div', { className: styles.desc }, _react2.default.createElement('h2', { className: styles.h2 }, title, '.'))));
+      return _react2.default.createElement(
+        'div',
+        { className: (0, _css.merge)(styles.error, styles['error_' + statusCode]) },
+        _react2.default.createElement(
+          'div',
+          { className: styles.text },
+          _react2.default.createElement(
+            'h1',
+            { className: styles.h1 },
+            statusCode
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: styles.desc },
+            _react2.default.createElement(
+              'h2',
+              { className: styles.h2 },
+              title,
+              '.'
+            )
+          )
+        )
+      );
     }
   }], [{
     key: 'getInitialProps',
@@ -68,6 +88,7 @@ var Error = function (_React$Component) {
 
 exports.default = Error;
 
+
 var styles = {
   error: (0, _css2.default)({
     color: '#000',
@@ -77,7 +98,7 @@ var styles = {
     left: 0,
     right: 0,
     position: 'absolute',
-    fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif',
+    fontFamily: '-apple-system, "SF UI Text", "Helvetica Neue", "Lucida Grande", sans-serif',
     textAlign: 'center',
     paddingTop: '20%'
   }),
@@ -108,21 +129,3 @@ var styles = {
     padding: 0
   })
 };
-    if (module.hot) {
-      module.hot.accept()
-
-      var Component = module.exports.default || module.exports
-      Component.__route = "/_error"
-
-      if (module.hot.status() !== 'idle') {
-        var components = next.router.components
-        for (var r in components) {
-          if (!components.hasOwnProperty(r)) continue
-
-          if (components[r].Component.__route === "/_error") {
-            next.router.update(r, Component)
-          }
-        }
-      }
-    }
-  

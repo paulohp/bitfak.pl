@@ -66,7 +66,7 @@ module.exports =
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e971c2a6d39bdd2e0dac"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1b818f641fb69ef581d4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -585,7 +585,7 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(91);
+	__webpack_require__(92);
 	module.exports = __webpack_require__(214);
 
 
@@ -598,7 +598,7 @@ module.exports =
 
 /***/ },
 
-/***/ 91:
+/***/ 92:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -638,7 +638,7 @@ module.exports =
 					check();
 				}
 
-				__webpack_require__(92)(updatedModules, updatedModules);
+				__webpack_require__(93)(updatedModules, updatedModules);
 
 				if(upToDate()) {
 					console.log("[HMR] App is up to date.");
@@ -668,7 +668,7 @@ module.exports =
 
 /***/ },
 
-/***/ 92:
+/***/ 93:
 /***/ function(module, exports) {
 
 	/*
@@ -724,19 +724,9 @@ module.exports =
 	};
 	    if (true) {
 	      module.hot.accept()
-
-	      var Component = module.exports.default || module.exports
-	      Component.__route = "/withdrawl"
-
 	      if (module.hot.status() !== 'idle') {
-	        var components = next.router.components
-	        for (var r in components) {
-	          if (!components.hasOwnProperty(r)) continue
-
-	          if (components[r].Component.__route === "/withdrawl") {
-	            next.router.update(r, Component)
-	          }
-	        }
+	        var Component = module.exports.default || module.exports
+	        next.router.update('/withdrawl', Component)
 	      }
 	    }
 	  

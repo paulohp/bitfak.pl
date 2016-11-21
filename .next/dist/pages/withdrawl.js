@@ -19,19 +19,9 @@ exports.default = function () {
 };
     if (module.hot) {
       module.hot.accept()
-
-      var Component = module.exports.default || module.exports
-      Component.__route = "/withdrawl"
-
       if (module.hot.status() !== 'idle') {
-        var components = next.router.components
-        for (var r in components) {
-          if (!components.hasOwnProperty(r)) continue
-
-          if (components[r].Component.__route === "/withdrawl") {
-            next.router.update(r, Component)
-          }
-        }
+        var Component = module.exports.default || module.exports
+        next.router.update('/withdrawl', Component)
       }
     }
   

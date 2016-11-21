@@ -36,7 +36,6 @@ export default class extends React.Component {
             return fetch(`http://localhost:4000/api/v1/address/${filteredData[0].address.address}/transactions`)
               .then(res => res.json())
               .then(transactions => {
-                console.log(transactions)
                 let paymentData = filteredData[0]
                 paymentData.transactions = transactions 
                 return {payment: paymentData}
@@ -88,6 +87,13 @@ export default class extends React.Component {
                                 </Title>
                                 </div>  
                             </Column>
+                        </Columns>
+                        <Columns>
+                            {this.props.payment.transactions &&
+                                <Column>
+                                 
+                                </Column>
+                            }
                         </Columns>
                     </Section>
                 </Container>
